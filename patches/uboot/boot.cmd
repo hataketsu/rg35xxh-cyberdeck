@@ -6,7 +6,6 @@
 
 setenv bootargs "root=/dev/mmcblk0p2 rw rootwait \
   console=ttyS0,115200 console=tty1 \
-  fbcon=rotate:1 \
   loglevel=8 ignore_loglevel \
   systemd.log_target=kmsg systemd.log_level=debug \
   systemd.journald.forward_to_console=1 printk.devkmsg=on"
