@@ -19,21 +19,23 @@ parted -s "$IMG" mklabel gpt
 parted -s "$IMG" mkpart BOOT   fat32 16MiB 272MiB
 parted -s "$IMG" mkpart rootfs ext4  272MiB 100%
 
-LOOP=$(losetup --find --show -P "$IMG")
-trap 'losetup -d "$LOOP" 2>/dev/null || true' EXIT
-partprobe "$LOOP" 2>/dev/null || true
+LOOP=$(losetup --find --show "$IMG")
+KPMAP=$(basename "$LOOP")  # e.g. loop24
+trap 'kpartx -d "$LOOP" 2>/dev/null || true; losetup -d "$LOOP" 2>/dev/null || true' EXIT
+kpartx -a -s "$LOOP"
 udevadm settle
+P1=/dev/mapper/${KPMAP}p1
+P2=/dev/mapper/${KPMAP}p2
 for i in 1 2 3 4 5; do
-  [ -b "${LOOP}p2" ] && break
+  [ -b "$P2" ] && break
   sleep 1
-  partprobe "$LOOP" 2>/dev/null || true
   udevadm settle
 done
-[ -b "${LOOP}p2" ] || { echo "loop partitions did not appear"; ls -la /dev/loop*; exit 1; }
+[ -b "$P2" ] || { echo "kpartx failed to create $P2"; ls -la /dev/mapper/; exit 1; }
 
 # Format
-mkfs.vfat -F 32 -n BOOT   "${LOOP}p1"
-mkfs.ext4 -F   -L rootfs "${LOOP}p2"
+mkfs.vfat -F 32 -n BOOT   "$P1"
+mkfs.ext4 -F   -L rootfs "$P2"
 
 # Install u-boot SPL @ 8KB
 UBOOT="$WORK/rocknix/build.ROCKNIX-${DEVICE}.${ARCH}/install_pkg/u-boot-"*"/usr/share/bootloader/u-boot-sunxi-with-spl.bin"
@@ -42,9 +44,9 @@ dd if="$UBOOT" of="$LOOP" bs=1024 seek=8 conv=notrunc
 
 # Mount and populate
 MNT=$(mktemp -d)
-mount "${LOOP}p2" "$MNT"
+mount "$P2" "$MNT"
 mkdir -p "$MNT/boot"
-mount "${LOOP}p1" "$MNT/boot"
+mount "$P1" "$MNT/boot"
 
 # Copy kernel + DTB + boot.scr
 KSRC="$WORK/rocknix/build.ROCKNIX-${DEVICE}.${ARCH}/build/${KERNEL_NAME}"
@@ -74,6 +76,7 @@ sync
 umount "$MNT/boot"
 umount "$MNT"
 rmdir "$MNT"
+kpartx -d "$LOOP" 2>/dev/null || true
 losetup -d "$LOOP"; trap - EXIT
 
 # Bmap + xz
