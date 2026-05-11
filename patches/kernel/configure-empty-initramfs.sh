@@ -30,7 +30,7 @@ export CROSS_COMPILE=aarch64-rocknix-linux-gnu-
   -e MMC -e MMC_BLOCK -e MMC_SUNXI \
   -e HIDRAW -m UHID -e HID_BATTERY_STRENGTH
 
-yes "" | make olddefconfig
+make olddefconfig </dev/null
 
 # 3. Force regen cpio + relink Image
 rm -f usr/initramfs_data.cpio usr/initramfs_data.cpio.gz \
