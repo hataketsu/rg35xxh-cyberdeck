@@ -21,7 +21,15 @@ parted -s "$IMG" mkpart rootfs ext4  272MiB 100%
 
 LOOP=$(losetup --find --show -P "$IMG")
 trap 'losetup -d "$LOOP" 2>/dev/null || true' EXIT
-sleep 1
+partprobe "$LOOP" 2>/dev/null || true
+udevadm settle
+for i in 1 2 3 4 5; do
+  [ -b "${LOOP}p2" ] && break
+  sleep 1
+  partprobe "$LOOP" 2>/dev/null || true
+  udevadm settle
+done
+[ -b "${LOOP}p2" ] || { echo "loop partitions did not appear"; ls -la /dev/loop*; exit 1; }
 
 # Format
 mkfs.vfat -F 32 -n BOOT   "${LOOP}p1"
