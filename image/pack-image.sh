@@ -15,9 +15,12 @@ rm -f "$IMG"
 truncate -s "$SIZE_BYTES" "$IMG"
 
 # GPT: u-boot in gap 8KB..16MB, p1 FAT (256MB), p2 ext4 rest
-parted -s "$IMG" mklabel gpt
-parted -s "$IMG" mkpart BOOT   fat32 16MiB 272MiB
-parted -s "$IMG" mkpart rootfs ext4  272MiB 100%
+# MBR (DOS) layout — GPT primary header lives at LBA 1-33 which overlaps with
+# u-boot SPL written at offset 8KB. ROCKNIX/Anbernic stock images use MBR.
+parted -s "$IMG" mklabel msdos
+parted -s "$IMG" mkpart primary fat32 16MiB 272MiB
+parted -s "$IMG" mkpart primary ext4  272MiB 100%
+parted -s "$IMG" set 1 boot on
 
 LOOP=$(losetup --find --show "$IMG")
 KPMAP=$(basename "$LOOP")  # e.g. loop24
