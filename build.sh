@@ -35,8 +35,13 @@ stage_docker() {
   docker image inspect rocknix-builder >/dev/null 2>&1 && return 0
   ( cd "$WORK/rocknix" && \
     docker build -t rocknix-builder -f tools/docker/jammy/Dockerfile tools/docker/jammy/ )
-  docker run --rm -v "$WORK/rocknix:/work" --user root rocknix-builder \
-    bash -c "apt-get update -qq && apt-get install -y -qq wget xmlstarlet automake parted xxd python-is-python3"
+  # Install extra build deps and commit them into the image (otherwise --rm discards them)
+  local cid
+  cid="$(docker create --user root rocknix-builder \
+    bash -c "apt-get update -qq && apt-get install -y -qq wget xmlstarlet automake parted xxd python-is-python3")"
+  docker start -a "$cid"
+  docker commit "$cid" rocknix-builder >/dev/null
+  docker rm "$cid" >/dev/null
 }
 
 stage_kernel() {
