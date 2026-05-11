@@ -1,0 +1,6 @@
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.xfce.power.backlight-helper" &&
+        (subject.user == "root" || subject.user == "hataketsu")) {
+        return polkit.Result.YES;
+    }
+});

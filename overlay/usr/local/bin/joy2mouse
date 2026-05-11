@@ -1,0 +1,135 @@
+#!/usr/bin/env python3
+"""H700 Gamepad -> virtual mouse/keyboard for desktop (Layout A)."""
+import time, threading, sys
+from evdev import InputDevice, UInput, ecodes as e, list_devices
+
+GAMEPAD_NAME = "H700 Gamepad"
+DEADZONE = 200
+MAX_SPEED = 6
+TICK = 0.012
+ACCEL_EXP = 1.8
+SCROLL_DEADZONE = 400
+SCROLL_INTERVAL = 0.08  # seconds per tick at full deflection
+
+
+def find_gamepad():
+    for path in list_devices():
+        try:
+            d = InputDevice(path)
+            if d.name == GAMEPAD_NAME:
+                return d
+        except Exception:
+            pass
+    return None
+
+
+dev = None
+for _ in range(60):
+    dev = find_gamepad()
+    if dev:
+        break
+    time.sleep(1)
+if not dev:
+    print(f"{GAMEPAD_NAME} not found", file=sys.stderr); sys.exit(1)
+
+print(f"Using: {dev.path} {dev.name}")
+dev.grab()
+
+ui = UInput({
+    e.EV_KEY: [
+        e.BTN_LEFT, e.BTN_RIGHT, e.BTN_MIDDLE,
+        e.KEY_UP, e.KEY_DOWN, e.KEY_LEFT, e.KEY_RIGHT,
+        e.KEY_LEFTALT, e.KEY_F4, e.KEY_LEFTMETA,
+        e.KEY_ENTER, e.KEY_BACKSPACE, e.KEY_TAB,
+    ],
+    e.EV_REL: [e.REL_X, e.REL_Y, e.REL_WHEEL, e.REL_HWHEEL],
+}, name="rocknix-joy2mouse")
+
+state = {"x": 0, "y": 0, "rx": 0, "ry": 0}
+
+
+def mouse_loop():
+    while True:
+        def scale(v):
+            if abs(v) < DEADZONE: return 0
+            sign = 1 if v > 0 else -1
+            n = min(1.0, (abs(v) - DEADZONE) / (1800.0 - DEADZONE))
+            return int(sign * (n ** ACCEL_EXP) * MAX_SPEED)
+        dx, dy = scale(state["x"]), scale(state["y"])
+        if dx or dy:
+            if dx: ui.write(e.EV_REL, e.REL_X, dx)
+            if dy: ui.write(e.EV_REL, e.REL_Y, dy)
+            ui.syn()
+        time.sleep(TICK)
+
+
+def scroll_loop():
+    acc_v = 0.0
+    acc_h = 0.0
+    last = time.time()
+    while True:
+        now = time.time(); dt = now - last; last = now
+        def rate(v):
+            if abs(v) < SCROLL_DEADZONE: return 0.0
+            sign = 1 if v > 0 else -1
+            n = min(1.0, (abs(v) - SCROLL_DEADZONE) / (1800.0 - SCROLL_DEADZONE))
+            return sign * (n ** 1.5) / SCROLL_INTERVAL
+        acc_v += rate(state["ry"]) * dt
+        acc_h += rate(state["rx"]) * dt
+        if abs(acc_v) >= 1.0:
+            ticks = int(acc_v)
+            ui.write(e.EV_REL, e.REL_WHEEL, -ticks)  # invert: stick up -> scroll up
+            ui.syn(); acc_v -= ticks
+        if abs(acc_h) >= 1.0:
+            ticks = int(acc_h)
+            ui.write(e.EV_REL, e.REL_HWHEEL, ticks)
+            ui.syn(); acc_h -= ticks
+        time.sleep(0.02)
+
+
+threading.Thread(target=mouse_loop, daemon=True).start()
+threading.Thread(target=scroll_loop, daemon=True).start()
+
+BTN_CLICK = {
+    e.BTN_SOUTH: e.BTN_LEFT,
+    e.BTN_EAST:  e.BTN_RIGHT,
+    e.BTN_NORTH: e.BTN_MIDDLE,
+}
+
+DPAD_KEY = {
+    e.BTN_DPAD_UP: e.KEY_UP, e.BTN_DPAD_DOWN: e.KEY_DOWN,
+    e.BTN_DPAD_LEFT: e.KEY_LEFT, e.BTN_DPAD_RIGHT: e.KEY_RIGHT,
+}
+
+# Layout A: X=Enter, L2=Backspace, R2=Tab
+BTN_KEY = {
+    e.BTN_WEST: e.KEY_ENTER,
+    e.BTN_TL2:  e.KEY_BACKSPACE,
+    e.BTN_TR2:  e.KEY_TAB,
+}
+
+def tap(*keys):
+    for k in keys: ui.write(e.EV_KEY, k, 1); ui.syn()
+    for k in reversed(keys): ui.write(e.EV_KEY, k, 0); ui.syn()
+
+for ev in dev.read_loop():
+    if ev.type == e.EV_ABS:
+        if ev.code == e.ABS_X: state["x"] = ev.value
+        elif ev.code == e.ABS_Y: state["y"] = ev.value
+        elif ev.code == e.ABS_RX: state["rx"] = ev.value
+        elif ev.code == e.ABS_RY: state["ry"] = ev.value
+    elif ev.type == e.EV_KEY:
+        if ev.code in BTN_CLICK:
+            ui.write(e.EV_KEY, BTN_CLICK[ev.code], ev.value); ui.syn()
+        elif ev.code in DPAD_KEY:
+            ui.write(e.EV_KEY, DPAD_KEY[ev.code], ev.value); ui.syn()
+        elif ev.code in BTN_KEY:
+            ui.write(e.EV_KEY, BTN_KEY[ev.code], ev.value); ui.syn()
+        elif ev.code == e.BTN_TR and ev.value == 1:
+            ui.write(e.EV_REL, e.REL_WHEEL, 1); ui.syn()
+        elif ev.code == e.BTN_TL and ev.value == 1:
+            ui.write(e.EV_REL, e.REL_WHEEL, -1); ui.syn()
+        elif ev.code == e.BTN_SELECT and ev.value == 1:
+            tap(e.KEY_LEFTALT, e.KEY_F4)
+        elif ev.code == e.BTN_START and ev.value == 1:
+            tap(e.KEY_LEFTMETA)

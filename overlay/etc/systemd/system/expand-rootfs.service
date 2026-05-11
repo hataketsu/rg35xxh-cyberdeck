@@ -1,0 +1,15 @@
+[Unit]
+Description=Expand root partition to fill SD on first boot
+After=local-fs.target
+ConditionPathExists=!/var/lib/expand-rootfs.done
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c '\
+  growpart /dev/mmcblk0 2 || true; \
+  resize2fs /dev/mmcblk0p2 || true; \
+  touch /var/lib/expand-rootfs.done'
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,21 @@
+# Build artifacts
+dist/
+work/
+rocknix/
+*.img
+*.img.xz
+*.img.bmap
+*.deb
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+build.log
+
+# OS
+.DS_Store
+Thumbs.db

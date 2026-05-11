@@ -1,0 +1,20 @@
+# Pinned versions for reproducible build
+# Bump only when intentionally rebasing.
+
+ROCKNIX_REPO=https://github.com/ROCKNIX/distribution.git
+ROCKNIX_COMMIT=8e4055f93f
+ROCKNIX_BRANCH=next
+
+DEBIAN_RELEASE=trixie
+DEBIAN_MIRROR=http://deb.debian.org/debian
+
+KERNEL_NAME=linux-7.0.2
+TOOLCHAIN_GCC=15.2
+
+UBOOT_PKG=u-boot
+DEVICE=H700
+ARCH=aarch64
+DTB_NAME=sun50i-h700-anbernic-rg35xx-h.dtb
+
+IMAGE_SIZE_GB=6
+TARGET_USER=hataketsu

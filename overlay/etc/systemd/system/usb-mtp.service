@@ -1,0 +1,13 @@
+[Unit]
+Description=USB MTP Gadget (expose folder to PC as Android-style MTP device)
+After=local-fs.target
+Conflicts=usb-massstorage.service
+
+[Service]
+Type=forking
+ExecStart=/usr/local/bin/usb-mtp-setup
+ExecStop=/usr/local/bin/usb-mtp-stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

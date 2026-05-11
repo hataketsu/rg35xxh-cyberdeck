@@ -1,0 +1,13 @@
+[Unit]
+Description=WiFi watchdog (ping gateway, reconnect on failure)
+After=NetworkManager.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/wifi-watchdog
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

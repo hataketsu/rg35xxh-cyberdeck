@@ -1,0 +1,30 @@
+#!/bin/bash
+# play480 — auto-downscale a video to 480p (cached) then play with mpv
+# Usage: play480 <video>
+# Cache: ~/.cache/play480/  (one file per src, keyed by size+mtime hash)
+set -e
+SRC="$1"
+[ -z "$SRC" ] && { echo "Usage: play480 <video>"; exit 1; }
+[ -f "$SRC" ] || { echo "Not found: $SRC"; exit 1; }
+
+CACHE_DIR="$HOME/.cache/play480"
+mkdir -p "$CACHE_DIR"
+HASH=$(stat -c "%s-%Y" "$SRC" | md5sum | cut -c1-12)
+BASE=$(basename "$SRC")
+DST="$CACHE_DIR/${BASE%.*}.${HASH}.480p.mp4"
+
+if [ ! -f "$DST" ]; then
+    H=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$SRC")
+    if [ "${H:-9999}" -le 480 ]; then
+        DST="$SRC"
+    else
+        echo "[play480] transcoding to 480p..."
+        ffmpeg -y -nostdin -i "$SRC" \
+            -vf scale=-2:480 \
+            -c:v libx264 -preset ultrafast -crf 24 \
+            -c:a aac -b:a 128k \
+            "$DST" 2>&1 | tail -3
+    fi
+fi
+
+exec mpv "$DST"

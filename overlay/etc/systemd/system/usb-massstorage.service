@@ -1,0 +1,12 @@
+[Unit]
+Description=USB Mass Storage Gadget (expose RG35XXH as USB drive when plugged into PC)
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/usb-massstorage-setup
+ExecStop=/usr/local/bin/usb-massstorage-stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,74 @@
+name: build
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install host build deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            docker.io debootstrap qemu-user-static binfmt-support \
+            kpartx parted gdisk dosfstools xz-utils bmap-tools \
+            device-tree-compiler rsync u-boot-tools git curl python3
+          sudo systemctl restart binfmt-support
+
+      - name: Cache ROCKNIX build tree
+        uses: actions/cache@v4
+        with:
+          path: work/rocknix
+          key: rocknix-${{ hashFiles('VERSIONS') }}
+
+      - name: Build kernel + u-boot
+        run: |
+          ./build.sh fetch
+          ./build.sh docker
+          ./build.sh kernel
+          ./scripts/build-joypad-module.sh
+
+      - name: Build rootfs
+        run: sudo ./build.sh rootfs
+
+      - name: Pack image
+        run: sudo ./build.sh image
+
+      - name: Compute checksums
+        run: |
+          cd dist
+          sha256sum *.img.xz *.bmap > SHA256SUMS
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rg35xxh-cyberdeck-image
+          path: dist/*
+          retention-days: 14
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: rg35xxh-cyberdeck-image
+          path: dist
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-alpha') || contains(github.ref, '-beta') }}
