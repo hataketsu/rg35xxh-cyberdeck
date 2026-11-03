@@ -19,10 +19,11 @@ Data inicial: 2026-11-03. Cap consola ni Heltec connectat a aquesta sessió. Emp
 | boot.scr SP standard/v2 | COMPLETAT | Generat i llegit per mkimage |
 | Meshtastic venv host i --help | COMPLETAT | x86_64; no és prova ARM64 ni connexió |
 | Rootfs ARM64 minimal/desktop | COMPLETAT | Debian 13 actualitzat, permisos, usuari, Meshtastic, dpkg i systemd verificats |
-| Kernel i U-Boot complets | EN CURS | Construcció real amb Docker |
+| Kernel i U-Boot complets | COMPLETAT amb avisos | Linux 7.0.2, U-Boot v2025.07-rc3 i gamepad en els dos perfils SP standard |
+| CPIO sense init ROCKNIX | COMPLETAT | 512 bytes, entrades inspeccionades; cas negatiu amb init rebutjat |
 | Empaquetat FAT/ext4 sobre fitxers | COMPLETAT | fsck, propietaris, permisos i symlinks; evidence/file-pack-smoke.txt |
-| Imatge final i SHA256 | PENDENT | No hi ha `.img.xz` |
-| Validació estructural d'imatge final | PENDENT | MBR sintètic provat; cap imatge final real |
+| Imatges finals i SHA256 | COMPLETAT | Minimal/desktop e807755, xz -t i sha256sum -c correctes |
+| Validació estructural d'imatges finals | COMPLETAT | fsck FAT/ext4, contingut de particions, MBR/SPL, PARTUUID i permisos |
 
 ## Proves físiques
 

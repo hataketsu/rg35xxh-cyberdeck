@@ -2,7 +2,9 @@
 
 Port experimental de `hataketsu/rg35xxh-cyberdeck` per a **RG35XXSP**. Debian 13 ARM64, perfil mínim per provar l'arrencada i perfil XFCE/LightDM amb Meshtastic USB/BLE.
 
-**Estat a 3 de novembre de 2026:** codi adaptat i comprovacions locals executades. DTB compilats de les fonts correctes. Kernel complet, rootfs i imatge encara no compilats; cap arrencada ni funció comprovada físicament. No hi ha una imatge per gravar.
+**Estat a 3 de novembre de 2026:** imatges SP **standard minimal i desktop** compilades i validades estructuralment, amb SHA256 verificats. Debian 13 ARM64, Linux 7.0.2 i Meshtastic 2.7.11; desktop amb XFCE/LightDM. **Arrencada i totes les funcions físiques PENDENTS.** És un port experimental.
+
+Les dues imatges són a `dist/rg35xxsp-cyberdeck-standard-{minimal,desktop}-e807755.img.xz`. Vegeu [rutes, sumes i resultats](docs/IMPLEMENTATION_STATUS.md#4-imatges-i-sha256). Comenceu la prova física amb el perfil mínim en una microSD nova.
 
 | Objectiu | Pantalla | Selecció |
 |---|---|---|

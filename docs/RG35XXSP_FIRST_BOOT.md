@@ -1,6 +1,6 @@
 # Primer arrencament
 
-**No existeix encara una imatge produïda en aquesta sessió.** Apliqueu aquest procediment només després d'una compilació acabada i comprovacions estructurals correctes. Totes les proves físiques són PENDENTS.
+Hi ha imatges **minimal i desktop per al panell standard**, compilades i validades estructuralment: [rutes i SHA256](IMPLEMENTATION_STATUS.md#4-imatges-i-sha256). Aquest resultat no valida l'arrencada. Totes les proves físiques són **PENDENTS**.
 
 1. Conserveu la microSD original i les seves dades. Prepareu una microSD nova d'almenys 8 GB (16 GB dona marge), sense informació que calgui conservar.
 2. Verifiqueu SHA256 i integritat xz. Useu una eina gràfica de gravació que permeti seleccionar una imatge pròpia i validar l'escriptura. Comproveu visualment marca/capacitat del suport de destí: gravar-lo n'esborra el contingut. No hi ha cap ordre automàtica de gravació en aquest projecte.
@@ -8,7 +8,7 @@
 4. Arrenqueu amb bateria carregada. No connecteu encara el Heltec. Observeu pantalla i temperatura; deixeu passar almenys un minut per comprovar el possible tall de panell de l'original.
 5. El perfil mínim mostra login de consola: usuari `cyberdeck` i contrasenya escollida. Necessita un teclat USB/OTG; proveu l'enumeració. No hi ha autologin root.
 6. Comproveu `uname -r`, `cat /proc/device-tree/model`, `systemctl --failed`, `lsblk`, `ip link`, `upower -d` i `/sys/class/power_supply/*/uevent`. Registreu els resultats a la checklist.
-7. Apagueu amb `sudo systemctl poweroff`. Després de validar el mínim, compileu i graveu separadament `desktop`. Aquest inicia LightDM directament a XFCE amb l'usuari normal; root continua bloquejat.
+7. Apagueu amb `sudo systemctl poweroff`. Després de validar el mínim, graveu separadament la imatge `desktop`. Està configurada per iniciar LightDM directament a XFCE amb l'usuari normal; root continua bloquejat.
 
 ## Escriptori
 

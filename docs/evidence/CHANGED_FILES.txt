@@ -1,3 +1,4 @@
+.gitattributes
 .github/workflows/build.yml
 .github/workflows/rg35xxsp-checks.yml
 .gitignore
@@ -8,6 +9,7 @@ build.sh
 config/meshtastic-requirements.txt
 config/targets/rg35xxh.conf
 config/targets/rg35xxsp.conf
+docker/rootfs.Dockerfile
 docs/BUILD.md
 docs/IMPLEMENTATION_STATUS.md
 docs/MESHTASTIC_SETUP.md
@@ -21,9 +23,15 @@ docs/WSL2_SETUP.md
 docs/evidence/CHANGED_FILES.txt
 docs/evidence/DTB.SHA256
 docs/evidence/dtc-sp-warnings.txt
+docs/evidence/empty-initramfs.txt
+docs/evidence/file-pack-smoke.txt
+docs/evidence/image-desktop-content-validation.txt
+docs/evidence/image-minimal-content-validation.txt
 docs/evidence/kernel-patch-audit.txt
 docs/evidence/panel-validation.txt
 docs/evidence/preflight.txt
+docs/evidence/rootfs-desktop-validation.txt
+docs/evidence/rootfs-minimal-validation.txt
 docs/evidence/shellcheck.txt
 docs/evidence/static-checks.txt
 docs/evidence/systemd-verify.txt
@@ -47,6 +55,11 @@ overlay-rg35xxsp/usr/share/applications/cyberdeck-poweroff.desktop
 overlay-rg35xxsp/usr/share/applications/cyberdeck-terminal.desktop
 overlay-rg35xxsp/usr/share/applications/meshtastic.desktop
 patches/kernel/configure-empty-initramfs.sh
+patches/rocknix/7zip-source-url.patch
+patches/rocknix/bdf2psf-source-url.patch
+patches/rocknix/configtools-source-url.patch
+patches/rocknix/linux-no-initramfs.patch
+patches/rocknix/xmlstarlet-source-url.patch
 rootfs/build-rg35xxsp.sh
 scripts/audit-dts.sh
 scripts/build-joypad-module.sh
@@ -55,7 +68,9 @@ scripts/load-config.sh
 scripts/make-password-hash.sh
 scripts/preflight.sh
 scripts/render-boot.sh
+scripts/run-root-docker.sh
 scripts/setup-wsl2.sh
 scripts/validate-dtb.sh
 scripts/validate-image.py
+scripts/verify-rootfs.py
 tests/test_port.py
