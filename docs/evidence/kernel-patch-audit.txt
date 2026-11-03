@@ -1,0 +1,182 @@
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/packages/linux/patches/mainline/0001-gpiolib-of-revert-api-changes-needed-for-joypad-driv.patch
+patching file drivers/gpio/gpiolib-of.c
+Hunk #2 succeeded at 431 (offset 37 lines).
+patching file include/linux/of_gpio.h
+patching file include/linux/of_gpio_legacy.h
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/packages/linux/patches/mainline/0002-input-add-input-polldev-driver.patch
+patching file drivers/input/Kconfig
+patching file drivers/input/Makefile
+Hunk #1 succeeded at 10 with fuzz 1.
+patching file drivers/input/input-polldev.c
+patching file include/linux/input-polldev.h
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/packages/linux/patches/mainline/0003-pwm-add-pwm_set_period.patch
+patching file include/linux/pwm.h
+Hunk #1 succeeded at 141 (offset 31 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/packages/linux/patches/mainline/0004-input-adc-keys-redirect-keycode-316-to-rocknix-joypa.patch
+patching file drivers/input/keyboard/adc-keys.c
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/packages/linux/patches/mainline/0005-Bluetooth-btrtl-Add-the-support-for-RTL8733BU.patch
+patching file drivers/bluetooth/btrtl.c
+Hunk #1 succeeded at 180 (offset 1 line).
+Hunk #2 succeeded at 675 (offset 4 lines).
+Hunk #3 succeeded at 1539 (offset 20 lines).
+patching file drivers/bluetooth/btusb.c
+Hunk #1 succeeded at 785 (offset 120 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/packages/linux/patches/7.0/9999-fix-rust-build-error.patch
+patching file tools/perf/Makefile.config
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0002-rg35xx-enable-HDMI-LCD.patch
+patching file drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+patching file drivers/clk/sunxi-ng/ccu-sun8i-de2.c
+patching file drivers/gpu/drm/sun4i/Kconfig
+patching file drivers/gpu/drm/sun4i/Makefile
+patching file drivers/gpu/drm/sun4i/sun50i_planes.c
+patching file drivers/gpu/drm/sun4i/sun50i_planes.h
+patching file drivers/gpu/drm/sun4i/sun8i_mixer.c
+Hunk #2 succeeded at 26 (offset 1 line).
+Hunk #3 succeeded at 259 (offset 1 line).
+Hunk #4 succeeded at 295 (offset 1 line).
+Hunk #5 succeeded at 319 (offset 1 line).
+Hunk #6 succeeded at 333 (offset 1 line).
+Hunk #7 succeeded at 354 (offset 1 line).
+Hunk #8 succeeded at 369 (offset 1 line).
+Hunk #9 succeeded at 399 (offset 1 line).
+Hunk #10 succeeded at 419 (offset 1 line).
+Hunk #11 succeeded at 441 (offset 1 line).
+Hunk #12 succeeded at 463 (offset 1 line).
+Hunk #13 succeeded at 480 (offset 1 line).
+Hunk #14 succeeded at 529 (offset 1 line).
+Hunk #15 succeeded at 558 (offset 1 line).
+Hunk #16 succeeded at 575 (offset 1 line).
+Hunk #17 succeeded at 585 (offset 1 line).
+Hunk #18 succeeded at 624 (offset 1 line).
+Hunk #19 succeeded at 685 (offset 1 line).
+Hunk #20 succeeded at 882 (offset 1 line).
+patching file drivers/gpu/drm/sun4i/sun8i_mixer.h
+Hunk #1 succeeded at 202 (offset 1 line).
+Hunk #2 succeeded at 215 (offset 1 line).
+Hunk #3 succeeded at 251 (offset 1 line).
+patching file drivers/gpu/drm/sun4i/sun4i_tcon.c
+patching file drivers/gpu/drm/sun4i/sun4i_tcon.h
+patching file drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
+patching file drivers/gpu/drm/sun4i/sun4i_drv.c
+Hunk #1 succeeded at 437 (offset 1 line).
+patching file arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+Hunk #5 succeeded at 1009 (offset 52 lines).
+patching file arch/arm64/boot/dts/allwinner/sun50i-h313-tanix-tx1.dts
+patching file arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero.dtsi
+patching file arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts
+patching file arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
+patching file arch/arm64/boot/dts/allwinner/sun50i-h618-orangepi-zero3.dts
+patching file arch/arm64/boot/dts/allwinner/sun50i-h618-transpeed-8k618-t.dts
+patching file arch/arm64/boot/dts/allwinner/sun50i-h618-yuzukihd-chameleon.dts
+patching file include/dt-bindings/clock/sun8i-tcon-top.h
+patching file Documentation/devicetree/bindings/bus/allwinner,sun50i-a64-de2.yaml
+patching file Documentation/devicetree/bindings/display/allwinner,sun4i-a10-display-engine.yaml
+patching file Documentation/devicetree/bindings/display/allwinner,sun8i-r40-tcon-top.yaml
+patching file Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
+patching file Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
+patching file drivers/gpu/drm/sun4i/sun4i_tcon.c
+patching file arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+patching file arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+Hunk #1 succeeded at 1207 (offset 53 lines).
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0003-Update-sun8i_tcon_top.c.patch
+patching file drivers/gpu/drm/sun4i/sun8i_tcon_top.c
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0007-rg35xx-add-GPU-opp.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+Hunk #1 succeeded at 241 (offset 17 lines).
+Hunk #2 succeeded at 295 (offset 17 lines).
+Hunk #3 succeeded at 370 (offset 29 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0008-sun20i-add-pwm-driver.patch
+patching file arch/arm64/configs/defconfig
+Hunk #1 succeeded at 1714 with fuzz 2 (offset 197 lines).
+patching file drivers/pwm/Kconfig
+Hunk #1 succeeded at 736 (offset 84 lines).
+patching file drivers/pwm/Makefile
+Hunk #1 succeeded at 67 with fuzz 1 (offset 7 lines).
+patching file drivers/pwm/pwm-sun20i.c
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0009-h616-add-pwm-node.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+Hunk #1 succeeded at 289 (offset 32 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0010-rg35xx-enable-pwm-backlight.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+Hunk #2 succeeded at 332 (offset 27 lines).
+Hunk #3 succeeded at 499 with fuzz 2 (offset 35 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0040-Revert-usb-musb-Fix-hardware-lockup-on-first-Rx-endp.patch
+patching file drivers/usb/musb/musb_gadget.c
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0110-v2_20250226_kikuchan98_drm_panel_add_generic_mipi_panel_driver.patch
+patching file Documentation/devicetree/bindings/vendor-prefixes.yaml
+Hunk #1 succeeded at 721 (offset 71 lines).
+patching file Documentation/devicetree/bindings/display/panel/panel-mipi.yaml
+patching file drivers/gpu/drm/panel/Kconfig
+Hunk #1 succeeded at 464 (offset 56 lines).
+patching file drivers/gpu/drm/panel/Makefile
+Hunk #1 succeeded at 45 (offset 5 lines).
+patching file drivers/gpu/drm/panel/panel-mipi.c
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0111-rg35xx-2024-use-panel-mipi-dpi-spi-driver.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+Hunk #1 succeeded at 220 (offset 18 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0124-battery-name.patch
+patching file drivers/power/supply/axp20x_battery.c
+Hunk #1 succeeded at 886 (offset -5 lines).
+Hunk #2 succeeded at 896 (offset -5 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0126-20241018_macroalpha82_rg35xx_add_additional_hardware_support.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+Hunk #2 succeeded at 274 with fuzz 2 (offset 96 lines).
+Hunk #3 succeeded at 324 (offset 126 lines).
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-h.dts
+Hunk #1 succeeded at 90 with fuzz 2 (offset 19 lines).
+Hunk #2 succeeded at 155 with fuzz 2 (offset 23 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0127-enable-mmc1-for-RG35XX-2024.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+Hunk #1 succeeded at 332 (offset -59 lines).
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-plus.dts
+Hunk #1 succeeded at 22 with fuzz 1 (offset -1 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0140-rg35xx-2024-use-rocknix-joypad-driver.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+Hunk #1 succeeded at 52 with fuzz 1 (offset 5 lines).
+Hunk #2 succeeded at 414 (offset 18 lines).
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-h.dts
+Hunk #2 succeeded at 49 (offset 19 lines).
+Hunk #3 succeeded at 57 (offset 19 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0144-Update-sun50i-h700-anbernic-rg35xx-h.dts.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-h.dts
+Hunk #1 succeeded at 49 (offset 19 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0150-add-forcefeedback.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+Hunk #1 succeeded at 63 (offset 5 lines).
+Hunk #2 succeeded at 420 (offset 18 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0151-phy-fix-OTG-host-mode.patch
+patching file drivers/phy/allwinner/phy-sun4i-usb.c
+Hunk #1 succeeded at 464 (offset -1 lines).
+Hunk #2 succeeded at 496 (offset -1 lines).
+Hunk #3 succeeded at 543 (offset -1 lines).
+Hunk #4 succeeded at 586 (offset -1 lines).
+Hunk #5 succeeded at 640 (offset -1 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0152-rg35xx-2024-enable-usb-otg.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+Hunk #1 succeeded at 333 (offset 11 lines).
+Hunk #2 succeeded at 603 (offset 22 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0153-enable-rgb-leds.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+Hunk #1 succeeded at 22 with fuzz 1 (offset -1 lines).
+Hunk #2 succeeded at 230 (offset 4 lines).
+Hunk #3 succeeded at 447 (offset 4 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0154-rocknix-dt-id.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-h.dts
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-plus.dts
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-sp.dts
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0155-sun4i-set-rgb-connector-as-DSI.patch
+patching file drivers/gpu/drm/sun4i/sun4i_rgb.c
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0200-h700-update-opps.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h616-cpu-opp.dtsi
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0204-dts-Enable-hdmi-sound.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+Hunk #1 succeeded at 889 (offset 76 lines).
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+Hunk #1 succeeded at 635 (offset 20 lines).
+/home/frans/anbernic/rg35xxsp-cyberdeck/work/research-rocknix/projects/ROCKNIX/devices/H700/patches/linux/0901-dts-rg35xx-2024-fix-led-1-color.patch
+patching file arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+Hunk #1 succeeded at 243 (offset 73 lines).

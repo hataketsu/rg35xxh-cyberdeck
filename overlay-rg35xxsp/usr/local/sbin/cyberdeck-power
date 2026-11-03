@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# Política de CPU només si el kernel ofereix schedutil. Cap límit de càrrega modificat.
+for policy in /sys/devices/system/cpu/cpufreq/policy*; do
+  [[ -r "$policy/scaling_available_governors" ]] || continue
+  if grep -qw schedutil "$policy/scaling_available_governors"; then
+    echo schedutil > "$policy/scaling_governor"
+  fi
+done

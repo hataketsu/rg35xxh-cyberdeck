@@ -19,3 +19,8 @@ build.log
 # OS
 .DS_Store
 Thumbs.db
+
+# Secrets locals i memòria cau Python
+*.password.hash
+__pycache__/
+*.pyc

@@ -1,0 +1,17 @@
+[Unit]
+Description=Cursor amb la creueta interna H700
+After=systemd-udev-trigger.service
+StartLimitIntervalSec=0
+
+[Service]
+ExecStart=/usr/local/bin/sp-gamepad
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+RestrictAddressFamilies=AF_UNIX
+
+[Install]
+WantedBy=multi-user.target

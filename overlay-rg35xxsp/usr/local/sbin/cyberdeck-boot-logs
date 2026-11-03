@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# Només escriu a BOOT si realment està muntat; dades locals sensibles.
+mountpoint -q /boot || exit 0
+install -d -m700 /boot/logs
+stamp=$(date -u +%Y%m%dT%H%M%SZ)
+{ uname -a; cat /proc/cmdline; systemctl --failed --no-pager; journalctl -b -p warning --no-pager -n 300; } > "/boot/logs/boot-$stamp.txt"
+python3 - <<'PY'
+from pathlib import Path
+for old in sorted(Path('/boot/logs').glob('boot-*.txt'))[:-5]:
+    old.unlink()
+PY
+sync /boot

@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+setprop() {
+  local channel=$1 property=$2 type=$3 value=$4
+  xfconf-query -c "$channel" -p "$property" -s "$value" 2>/dev/null || xfconf-query -c "$channel" -p "$property" -n -t "$type" -s "$value"
+}
+# XFCE 4.20: LID_TRIGGER_NOTHING=4 (0 és DPMS).
+# Aplicar seguretat de tapa en cada sessió; personalització només el primer cop.
+for supply in ac battery; do
+  setprop xfce4-power-manager "/xfce4-power-manager/lid-action-on-$supply" uint 4
+  setprop xfce4-power-manager "/xfce4-power-manager/inactivity-on-$supply" uint 0
+ done
+setprop xfce4-power-manager /xfce4-power-manager/logind-handle-power-key bool true
+setprop xfce4-power-manager /xfce4-power-manager/logind-handle-lid-switch bool true
+if [[ ! -f "$HOME/.config/cyberdeck-desktop.done" ]]; then
+  setprop xsettings /Net/ThemeName string Greybird-dark
+  setprop xsettings /Gtk/FontName string 'DejaVu Sans 9'
+  setprop xfce4-keyboard-shortcuts '/commands/custom/<Primary><Alt>t' string xfce4-terminal
+  setprop xfce4-power-manager /xfce4-power-manager/show-tray-icon bool true
+  mkdir -p "$HOME/.config"
+  touch "$HOME/.config/cyberdeck-desktop.done"
+fi
+# Només un mode que el connector intern anuncia; no s'injecten timings.
+output=$(xrandr --query | awk '/^(DSI|DPI|Unknown|None|eDP|LVDS)[^ ]* connected/{print $1; exit}')
+if [[ -n "$output" ]] && xrandr --query | awk -v o="$output" '
+  /^[^ ]/ {active=($1==o)} active && $1=="640x480" {found=1} END {exit !found}'; then
+  xrandr --output "$output" --mode 640x480
+fi
+xset s 300
+xset dpms 0 0 600

@@ -1,0 +1,3 @@
+Validació fora de línia amb unitats dependents mínimes; no executa serveis ni substitueix la prova a Debian ARM64.
+Option --root is only supported for cat-config right now.
+Exit code: 1

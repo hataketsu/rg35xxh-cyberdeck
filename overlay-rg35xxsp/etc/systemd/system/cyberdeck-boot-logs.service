@@ -1,0 +1,8 @@
+[Unit]
+Description=Desar errors d'arrencada a BOOT
+After=local-fs.target
+ConditionPathIsMountPoint=/boot
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/cyberdeck-boot-logs

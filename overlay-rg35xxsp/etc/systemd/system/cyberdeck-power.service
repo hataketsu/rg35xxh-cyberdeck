@@ -1,0 +1,11 @@
+[Unit]
+Description=Estalvi de CPU sense modificar bateria ni reguladors
+After=systemd-udev-trigger.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/cyberdeck-power
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

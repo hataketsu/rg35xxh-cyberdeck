@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Apagar amb seguretat
+Exec=xfce4-session-logout --halt
+Icon=system-shutdown
+Categories=System;

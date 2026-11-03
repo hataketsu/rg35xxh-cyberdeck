@@ -1,0 +1,3 @@
+Docker no està disponible
+Cal autenticar sudo des del terminal: sudo -v
+Cal binfmt qemu-aarch64 habilitat amb flag F

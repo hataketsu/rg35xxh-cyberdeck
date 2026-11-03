@@ -27,8 +27,8 @@ jobs:
       - name: Cache ROCKNIX build tree
         uses: actions/cache@v4
         with:
-          path: work/rocknix
-          key: rocknix-${{ hashFiles('VERSIONS') }}
+          path: work/rg35xxh-standard-desktop/rocknix
+          key: rocknix-${{ hashFiles('VERSIONS', 'patches/kernel/**', 'config/**') }}
 
       - name: Build kernel + u-boot
         run: |

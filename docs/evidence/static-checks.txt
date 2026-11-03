@@ -1,0 +1,16 @@
+test_cancelled_send_never_invokes_client (test_port.PortTests.test_cancelled_send_never_invokes_client) ... ok
+test_dpad_press_release_and_opposite_keys (test_port.PortTests.test_dpad_press_release_and_opposite_keys) ... ok
+test_empty_message_never_invokes_client (test_port.PortTests.test_empty_message_never_invokes_client) ... ok
+test_mbr_reject_out_of_bounds_and_missing_spl (test_port.PortTests.test_mbr_reject_out_of_bounds_and_missing_spl) ... ok
+test_reject_unknown_target_and_wrong_panel (test_port.PortTests.test_reject_unknown_target_and_wrong_panel) ... ok
+test_serial_requires_unambiguous_selection (test_port.PortTests.test_serial_requires_unambiguous_selection) ... ok
+test_target_isolation_and_variants (test_port.PortTests.test_target_isolation_and_variants) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.046s
+
+OK
+Destí: ^all
+Text: prova
+Cancel·lat
+Sintaxi Python, XML, INI, unitats i llançadors: OK

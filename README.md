@@ -1,3 +1,5 @@
+> **Port RG35XXSP experimental:** vegeu [README-RG35XXSP.md](README-RG35XXSP.md). La documentació i credencials històriques de la H que segueixen no descriuen el perfil SP. Cap prova física SP completada.
+
 # RG35XXH Cyberdeck
 
 Turn an [Anbernic RG35XXH](https://anbernic.com/) (Allwinner H700) handheld into a portable Debian Trixie cyberdeck — full XFCE desktop, working WiFi/Bluetooth, joystick-as-mouse, USB-OTG MTP file share, Tailscale, audio, brightness keys, battery widget.

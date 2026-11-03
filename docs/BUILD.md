@@ -1,3 +1,5 @@
+> Nota del port: el controlador actual separa treball per model/panell/perfil, rebutja rootfs existents i accepta una sola etapa per ordre. Els exemples històrics següents poden estar obsolets; seguiu [la guia actual de compilació](RG35XXSP_BUILD.md).
+
 # Build internals
 
 ## Pipeline

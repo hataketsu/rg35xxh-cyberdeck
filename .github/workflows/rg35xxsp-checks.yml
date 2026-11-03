@@ -1,0 +1,13 @@
+name: rg35xxsp-static
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  static:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Comprovacions sense imatge ni maquinari
+        run: ./scripts/check-static.sh

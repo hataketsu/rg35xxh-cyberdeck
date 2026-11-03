@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+"""Client local Meshtastic: no envia text sense confirmació interactiva."""
+import argparse
+import glob
+import os
+import pathlib
+import shutil
+import stat
+import subprocess
+
+CLI = '/opt/meshtastic/venv/bin/meshtastic'
+
+
+def ports():
+    persistent = sorted(glob.glob('/dev/serial/by-id/*'))
+    paths = persistent + sorted(glob.glob('/dev/ttyACM*')) + sorted(glob.glob('/dev/ttyUSB*'))
+    seen, result = set(), []
+    for path in paths:
+        target = os.path.realpath(path)
+        if target not in seen:
+            seen.add(target); result.append(path)
+    return result
+
+
+def connection(port=None, ble=None):
+    if ble:
+        return ['--ble', ble]
+    if not port:
+        available = ports()
+        if len(available) != 1:
+            raise ValueError('Cal --port explícit. Ports: ' + ', '.join(available))
+        port = available[0]
+    if not stat.S_ISCHR(pathlib.Path(port).stat().st_mode):
+        raise ValueError('El port no és un dispositiu de caràcters')
+    return ['--port', port]
+
+
+def diagnose():
+    print('Ports sèrie (sense obrir-los):')
+    for path in ports():
+        print(path, 'lectura/escriptura:', os.access(path, os.R_OK | os.W_OK))
+    for command in [['lsusb'], ['rfkill', 'list'], ['bluetoothctl', 'show']]:
+        if shutil.which(command[0]):
+            try: subprocess.run(command, timeout=10, check=False)
+            except subprocess.TimeoutExpired: print('Temps exhaurit:', command[0])
+    print('Client:', CLI, 'present:', os.path.isfile(CLI))
+    print('Aquesta diagnosi no obre cap node ni envia missatges de ràdio.')
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    transport = parser.add_mutually_exclusive_group()
+    transport.add_argument('--port', help='Preferentment /dev/serial/by-id/...')
+    transport.add_argument('--ble', help='Nom o adreça BLE explícita (opcional)')
+    parser.add_argument('action', nargs='?', default='menu', choices=['menu','diagnose','info','nodes','send'])
+    args = parser.parse_args()
+    if args.action == 'diagnose':
+        diagnose(); return
+    if args.action == 'menu':
+        print('1 Informació del node\n2 Nodes coneguts\n3 Escriure missatge\n4 Diagnosi USB/BLE\n0 Sortir')
+        args.action = {'1':'info','2':'nodes','3':'send','4':'diagnose'}.get(input('Opció: '), 'quit')
+        if args.action == 'quit': return
+        if args.action == 'diagnose': diagnose(); return
+        if not args.port and not args.ble:
+            available = ports()
+            for i, path in enumerate(available, 1): print(i, path)
+            if not available: raise ValueError('Cap port sèrie. Executeu diagnose o indiqueu --ble.')
+            index = int(input('Número del port: '))
+            if index < 1 or index > len(available): raise ValueError('Selecció invàlida')
+            args.port = available[index-1]
+    command = [CLI] + connection(args.port, args.ble)
+    if args.action == 'send':
+        destination = input('Destí (!id o ^all per difusió): ').strip()
+        if destination != '^all' and not (destination.startswith('!') and len(destination) == 9 and all(c in '0123456789abcdefABCDEF' for c in destination[1:])):
+            raise ValueError('Destí invàlid')
+        message = input('Text: ')
+        if not message.strip(): raise ValueError('Text buit')
+        print(f'Destí: {destination}\nText: {message}')
+        if input('Escriviu ENVIAR per confirmar: ') != 'ENVIAR':
+            print('Cancel·lat'); return
+        command += ['--dest', destination, '--sendtext', message]
+    else:
+        command += ['--info' if args.action == 'info' else '--nodes']
+    subprocess.run(command, check=True, timeout=90)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except (ValueError, OSError, subprocess.SubprocessError, EOFError, KeyboardInterrupt) as exc:
+        raise SystemExit(f'Meshtastic: {exc}')

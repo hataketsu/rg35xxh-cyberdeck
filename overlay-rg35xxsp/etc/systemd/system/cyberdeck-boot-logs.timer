@@ -1,0 +1,9 @@
+[Unit]
+Description=Diagnosi un minut després d'arrencar
+
+[Timer]
+OnBootSec=60s
+Unit=cyberdeck-boot-logs.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Meshtastic USB / BLE
+Comment=Consultar el node o enviar un missatge amb confirmació
+Exec=xfce4-terminal --hold --command=/usr/local/bin/mesh-console
+Icon=utilities-terminal
+Categories=Network;

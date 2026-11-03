@@ -1,0 +1,25 @@
+<stdout>: Warning (unit_address_vs_reg): /soc: node has a reg or ranges property, but no unit name
+<stdout>: Warning (simple_bus_reg): /soc/ahub_dam_mach: missing or empty reg/ranges property
+<stdout>: Warning (simple_bus_reg): /soc/ahub1_plat: missing or empty reg/ranges property
+<stdout>: Warning (simple_bus_reg): /soc/ahub1_mach_hdmi: missing or empty reg/ranges property
+<stdout>: Warning (interrupt_provider): /soc/pinctrl@300b000: Missing #address-cells in interrupt provider
+<stdout>: Warning (interrupt_provider): /soc/interrupt-controller@3021000: Missing #address-cells in interrupt provider
+<stdout>: Warning (interrupt_provider): /soc/interrupt-controller@7010320: Missing #address-cells in interrupt provider
+<stdout>: Warning (interrupt_provider): /soc/i2c@7081400/pmic@34: Missing #address-cells in interrupt provider
+<stdout>: Warning (graph_child_address): /soc/tcon-top@6510000/ports/port@0: graph node has single child node 'endpoint@0', #address-cells/#size-cells are not necessary
+<stdout>: Warning (graph_child_address): /soc/tcon-top@6510000/ports/port@4: graph node has single child node 'endpoint@0', #address-cells/#size-cells are not necessary
+<stdout>: Warning (graph_child_address): /soc/lcd-controller@6511000/ports/port@1: graph node has single child node 'endpoint@0', #address-cells/#size-cells are not necessary
+DTB llegible i compatible declarat correcte: sun50i-h700-anbernic-rg35xx-sp-v2-panel.dtb (no prova el maquinari)
+<stdout>: Warning (unit_address_vs_reg): /soc: node has a reg or ranges property, but no unit name
+<stdout>: Warning (simple_bus_reg): /soc/ahub_dam_mach: missing or empty reg/ranges property
+<stdout>: Warning (simple_bus_reg): /soc/ahub1_plat: missing or empty reg/ranges property
+<stdout>: Warning (simple_bus_reg): /soc/ahub1_mach_hdmi: missing or empty reg/ranges property
+<stdout>: Warning (interrupt_provider): /soc/pinctrl@300b000: Missing #address-cells in interrupt provider
+<stdout>: Warning (interrupt_provider): /soc/interrupt-controller@3021000: Missing #address-cells in interrupt provider
+<stdout>: Warning (interrupt_provider): /soc/interrupt-controller@7010320: Missing #address-cells in interrupt provider
+<stdout>: Warning (interrupt_provider): /soc/i2c@7081400/pmic@34: Missing #address-cells in interrupt provider
+<stdout>: Warning (graph_child_address): /soc/tcon-top@6510000/ports/port@0: graph node has single child node 'endpoint@0', #address-cells/#size-cells are not necessary
+<stdout>: Warning (graph_child_address): /soc/tcon-top@6510000/ports/port@4: graph node has single child node 'endpoint@0', #address-cells/#size-cells are not necessary
+<stdout>: Warning (graph_child_address): /soc/lcd-controller@6511000/ports/port@1: graph node has single child node 'endpoint@0', #address-cells/#size-cells are not necessary
+DTB llegible i compatible declarat correcte: sun50i-h700-anbernic-rg35xx-h-rev6-panel.dtb (no prova el maquinari)
+Panell incompatible: anbernic,rg35xx-plus-panel panel-mipi-dpi-spi
