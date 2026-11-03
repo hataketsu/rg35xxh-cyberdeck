@@ -2,8 +2,8 @@
 
 Hi ha imatges **minimal i desktop per al panell standard**, compilades i validades estructuralment: [rutes i SHA256](IMPLEMENTATION_STATUS.md#4-imatges-i-sha256). Aquest resultat no valida l'arrencada. Totes les proves físiques són **PENDENTS**.
 
-1. Conserveu la microSD original i les seves dades. Prepareu una microSD nova d'almenys 8 GB (16 GB dona marge), sense informació que calgui conservar.
-2. Verifiqueu SHA256 i integritat xz. Useu una eina gràfica de gravació que permeti seleccionar una imatge pròpia i validar l'escriptura. Comproveu visualment marca/capacitat del suport de destí: gravar-lo n'esborra el contingut. No hi ha cap ordre automàtica de gravació en aquest projecte.
+1. Conserveu la microSD original i les seves dades. Prepareu una microSD nova d'almenys 8 GB (16 GB dona marge), sense informació que calgui conservar. Per a una prova mínima en una targeta petita, la variant explícita `minimal-compact` ocupa 960 MiB i exigeix almenys 1.006.632.960 bytes reals; vegeu [compilació compacta](RG35XXSP_BUILD.md#minimal-compacta-per-a-una-sd-petita).
+2. Verifiqueu SHA256 i integritat xz. Useu una eina gràfica de gravació que permeti seleccionar una imatge pròpia i validar l'escriptura. Comproveu visualment marca/capacitat del suport de destí: gravar-lo n'esborra el contingut. L'empaquetador no escriu a discos físics. La gravació des de Windows requereix una eina externa i la identificació explícita de la targeta. Si Imager no pot llegir una ruta compartida de WSL, copieu la imatge a una carpeta local de Windows i torneu-ne a comprovar el SHA256 abans de gravar.
 3. Graveu primer la imatge `minimal` del panell escollit. Expulseu la SD de manera segura, amb la consola apagada, i inseriu-la a TF1. Per la primera prova deixeu TF2 buida, sense tocar les dades de la seva targeta.
 4. Arrenqueu amb bateria carregada. No connecteu encara el Heltec. Observeu pantalla i temperatura; deixeu passar almenys un minut per comprovar el possible tall de panell de l'original.
 5. El perfil mínim mostra login de consola: usuari `cyberdeck` i contrasenya escollida. Necessita un teclat USB/OTG; proveu l'enumeració. No hi ha autologin root.

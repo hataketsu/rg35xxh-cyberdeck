@@ -1,0 +1,15 @@
+2026-11-04 — Gravació autoritzada per l'usuari
+Imatge: rg35xxsp-cyberdeck-standard-minimal-compact-50f7932.img
+Mida: 1006632960 bytes (960 MiB)
+Destí: disc Windows 1, Generic STORAGE DEVICE USB, 1018691584 bytes.
+Volum anterior: D: BLACKBERRY2. Identitat revalidada abans de gravar.
+Eina: Raspberry Pi Imager 2.0.12, instal·lador i executable amb signatura vàlida de Raspberry Pi Limited.
+SHA256 instal·lador: 98bff90afe23339d0768915f6f68d35ac254740ec1eac2082ebeaa9ba41bc8e3
+SHA256 imatge i verificació: 29aadcb88b1904e0a607ec04db3813e2a6e8549029ea7fddc88bfd4e1f18d484
+Resultat CLI: codi 0, Write successful.
+Escriptura: 210 segons. Verificació per relectura: 50,393 segons.
+Expulsió: Background eject finished, succeeded: true.
+Cap personalització d'Imager aplicada. Verificació activada; escriptura a discos de sistema no habilitada.
+Els primers intents van fallar en llegir la ruta UNC de WSL. La còpia local de Windows es va comprovar amb SHA256 abans de gravar.
+Registres locals complets: work/flash-tools/imager-write.log, imager-console.log i flash-result.json.
+Arrencada i funcionalitats de la consola: PENDENTS de prova física.

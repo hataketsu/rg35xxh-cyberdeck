@@ -8,7 +8,7 @@ S'han implementat perfils explícits H/SP i variants de panell, espais de trebal
 
 Les dues imatges **SP standard minimal i desktop s'han compilat i validat estructuralment**. L'arrencada i totes les funcions físiques continuen **PENDENTS**; no és un port anunciat com a funcional al maquinari.
 
-Actualització 2026-11-04: també s'ha generat `dist/rg35xxsp-cyberdeck-standard-minimal-compact-50f7932.img.xz`, amb una imatge descomprimida de 960 MiB i 234,5 MiB disponibles per a l'usuari. fsck FAT/ext4, comparació de particions, MBR/SPL, integritat xz i SHA256 han passat. SHA256 de l'XZ: `1135ba6988b8985996622d4d4146aa389614f9e8b9cdeb97ac8edcb0540e4ffe`; de la imatge descomprimida: `29aadcb88b1904e0a607ec04db3813e2a6e8549029ea7fddc88bfd4e1f18d484`. Registre: [empaquetat compacte](../dist/image-minimal-compact-live.log). **Gravació física i prova d'arrencada pendents.**
+Actualització 2026-11-04: també s'ha generat `dist/rg35xxsp-cyberdeck-standard-minimal-compact-50f7932.img.xz`, amb una imatge descomprimida de 960 MiB i 234,5 MiB disponibles per a l'usuari. fsck FAT/ext4, comparació de particions, MBR/SPL, integritat xz i SHA256 han passat. SHA256 de l'XZ: `1135ba6988b8985996622d4d4146aa389614f9e8b9cdeb97ac8edcb0540e4ffe`; de la imatge descomprimida: `29aadcb88b1904e0a607ec04db3813e2a6e8549029ea7fddc88bfd4e1f18d484`. Registre: [empaquetat compacte](../dist/image-minimal-compact-live.log). **Gravació física, verificació per relectura i expulsió completades** el 2026-11-04 amb Raspberry Pi Imager 2.0.12, després de confirmació explícita de l'usuari. [Evidència de gravació](evidence/sd-minimal-compact-write.txt). La prova d'arrencada a la consola continua **PENDENT**.
 
 ## 2. Fitxers
 
