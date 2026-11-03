@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
 # Run inside the rocknix-builder Docker container as user `docker`.
 #
-# CRITICAL: ROCKNIX's `scripts/build linux` wrapper invokes `usr/gen_initramfs.sh`
-# with their own initramfs source dir (build.ROCKNIX-*/initramfs/) — bypassing
-# CONFIG_INITRAMFS_SOURCE. Editing .config alone leaves the embedded cpio intact.
-#
-# Real fix: empty the initramfs staging dir AND empty .config setting AND
-# regenerate cpio + Image. Also flip MMC drivers to builtin so kernel can
-# mount mmcblk0p2 without any initramfs.
+# La recepta local ja omet l'initramfs ROCKNIX. Netejar també qualsevol staging
+# anterior, regenerar el CPIO i verificar-ne les entrades. MMC/ext4 han de ser
+# incorporats perquè el kernel pugui muntar directament el rootfs Debian.
 set -euo pipefail
 
 KSRC=/work/build.ROCKNIX-H700.aarch64/build/${KERNEL_NAME:?}
@@ -49,13 +45,27 @@ for symbol in MMC MMC_BLOCK MMC_SUNXI EXT4_FS DEVTMPFS USB_ACM INPUT_UINPUT; do
   grep -qx "CONFIG_${symbol}=y" .config || { echo "Falta $symbol=y"; exit 1; }
 done
 
-# 4. Verify the embedded cpio is gone
-if grep -aob "TRAILER!!!" arch/arm64/boot/Image | head -1 | grep -q .; then
-  # tiny empty cpio still has TRAILER but only ~120 bytes — any rocknix paths inside?
-  if strings arch/arm64/boot/Image | grep -qE "^/storage|^/flash|rocknix-init"; then
-    echo "[FAIL] kernel Image still contains ROCKNIX initramfs strings" >&2
-    exit 1
-  fi
-  echo "[ok] only empty cpio TRAILER present (no rocknix paths)"
-fi
+# 4. Comprovar l'arxiu real, sense dependre de strings sobre una Image comprimida.
+grep -qx 'CONFIG_INITRAMFS_SOURCE=""' .config
+python3 - <<'PY'
+from pathlib import Path
+data = Path('usr/initramfs_data.cpio').read_bytes()
+assert 0 < len(data) <= 4096, 'CPIO inesperadament gran'
+offset = 0
+names = []
+while offset + 110 <= len(data):
+    header = data[offset:offset+110]
+    assert header[:6] == b'070701', 'Format CPIO inesperat'
+    size, length = int(header[54:62], 16), int(header[94:102], 16)
+    assert 0 < length <= 256 and size == 0, 'Contingut inesperat al CPIO'
+    name = data[offset+110:offset+110+length-1].decode()
+    names.append(name)
+    offset = (offset+110+length+3) & ~3
+    if name == 'TRAILER!!!':
+        assert not any(data[offset:]), 'Dades addicionals al CPIO'
+        break
+assert names and names[-1] == 'TRAILER!!!', 'CPIO incomplet'
+assert set(names) <= {'dev', 'dev/console', 'root', 'TRAILER!!!'}, names
+print('[ok] CPIO sense programa init:', names)
+PY
 echo "[ok] kernel Image rebuilt without ROCKNIX initramfs"

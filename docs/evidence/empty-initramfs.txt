@@ -1,0 +1,5 @@
+Linux 7.0.2: CPIO de 512 bytes.
+Entrades: dev, dev/console, root, TRAILER!!!.
+Validador real: codi 0.
+Prova negativa amb entrada init de la mateixa mida: rebutjada.
+Cap programa init ni sistema ROCKNIX al CPIO regenerat.
