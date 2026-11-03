@@ -34,14 +34,23 @@ if [[ -z "$revision" ]]; then
   [[ -z $(git -C "$ROOT" status --porcelain --untracked-files=normal) ]] || revision="$revision-dirty"
 fi
 [[ "$revision" =~ ^[0-9a-f]+(-dirty)?$ ]] || { echo 'Revisió de font invàlida'; exit 1; }
-IMG="$DIST/$TARGET-cyberdeck-$PANEL-$PROFILE-$revision.img"
+image_mib=$((IMAGE_SIZE_GB*1024))
+boot_mib=256
+suffix=""
+if [[ "$RG_COMPACT" == 1 ]]; then
+  image_mib=960
+  boot_mib=64
+  suffix=-compact
+fi
+root_start_mib=$((16+boot_mib))
+IMG="$DIST/$TARGET-cyberdeck-$PANEL-$PROFILE$suffix-$revision.img"
 # noclobber rebutja també enllaços a dispositius existents.
 (set -o noclobber; : > "$IMG") || { echo 'La sortida ja existeix; no se sobreescriu'; exit 1; }
 [[ -f "$IMG" && ! -L "$IMG" ]] || exit 1
-truncate -s "$((IMAGE_SIZE_GB*1024*1024*1024))" "$IMG"
+truncate -s "$((image_mib*1024*1024))" "$IMG"
 parted -s "$IMG" mklabel msdos
-parted -s "$IMG" mkpart primary fat32 16MiB 272MiB
-parted -s "$IMG" mkpart primary ext4 272MiB 100%
+parted -s "$IMG" mkpart primary fat32 16MiB "${root_start_mib}MiB"
+parted -s "$IMG" mkpart primary ext4 "${root_start_mib}MiB" 100%
 parted -s "$IMG" set 1 boot on
 # Identificador MBR únic: el kernel resol PARTUUID sense initramfs.
 diskid=$(python3 - "$IMG" <<'PY'
@@ -83,6 +92,8 @@ ROCKNIX=$ROCKNIX_COMMIT
 KERNEL=$KVER
 DTB=$DTB_NAME
 JOYPAD=$JOYPAD_COMMIT
+IMAGE_SIZE_MIB=$image_mib
+BOOT_SIZE_MIB=$boot_mib
 HARDWARE_VALIDATED=no
 INFO
 cp "$MNT/boot/BUILD-INFO.txt" "$IMG.build-info.txt"
@@ -102,21 +113,32 @@ PYPACKAGES
 # Generar FAT i ext4 en fitxers nous. mke2fs -d preserva metadades del staging.
 mv "$MNT/boot" "$PACK/boot"
 mkdir "$MNT/boot"
-truncate -s 256M "$P1"
+truncate -s "${boot_mib}M" "$P1"
 mkfs.vfat -F32 -n BOOT "$P1"
 mcopy -i "$P1" "$PACK/boot/"* ::/
-truncate -s "$((IMAGE_SIZE_GB*1024*1024*1024-272*1024*1024))" "$P2"
+truncate -s "$(((image_mib-root_start_mib)*1024*1024))" "$P2"
 mkfs.ext4 -F -L rootfs -d "$MNT" "$P2"
 e2fsck -fn "$P2"
 fsck.vfat -n "$P1"
+if [[ "$RG_COMPACT" == 1 ]]; then
+  python3 - "$P2" <<'PYSPACE'
+import subprocess, sys
+result = subprocess.run(['dumpe2fs', '-h', sys.argv[1]], check=True, capture_output=True, text=True, env={'PATH': '/usr/sbin:/usr/bin:/sbin:/bin', 'LC_ALL': 'C'})
+fields = dict(line.split(':', 1) for line in result.stdout.splitlines() if ':' in line)
+available = (int(fields['Free blocks']) - int(fields['Reserved block count'])) * int(fields['Block size'])
+print(f'Espai ext4 disponible per a l’usuari: {available / 2**20:.1f} MiB')
+if available < 128 * 2**20:
+    raise SystemExit('La imatge compacta no deixa 128 MiB lliures; no es pot utilitzar')
+PYSPACE
+fi
 dd if="$UBOOT" of="$IMG" bs=1024 seek=8 conv=notrunc status=none
 dd if="$P1" of="$IMG" bs=1M seek=16 conv=notrunc,sparse status=none
-dd if="$P2" of="$IMG" bs=1M seek=272 conv=notrunc,sparse status=none
+dd if="$P2" of="$IMG" bs=1M seek="$root_start_mib" conv=notrunc,sparse status=none
 # Comparar el contingut incorporat: evita validar només els fitxers intermedis.
-python3 - "$IMG" "$P1" "$P2" <<'PYVERIFY'
+python3 - "$IMG" "$P1" "$P2" "$root_start_mib" <<'PYVERIFY'
 import sys
 with open(sys.argv[1], 'rb') as image:
-    for filename, offset in [(sys.argv[2], 16 << 20), (sys.argv[3], 272 << 20)]:
+    for filename, offset in [(sys.argv[2], 16 << 20), (sys.argv[3], int(sys.argv[4]) << 20)]:
         image.seek(offset)
         with open(filename, 'rb') as source:
             while chunk := source.read(8 << 20):
@@ -124,7 +146,7 @@ with open(sys.argv[1], 'rb') as image:
                     raise SystemExit('La partició incorporada no coincideix: '+filename)
 print('Contingut de les particions incorporades verificat')
 PYVERIFY
-python3 "$ROOT/scripts/validate-image.py" "$IMG"
+python3 "$ROOT/scripts/validate-image.py" "$IMG" "$boot_mib"
 bmaptool create -o "$IMG.bmap" "$IMG"
 xz -T0 -6 -k "$IMG"
 xz -t "$IMG.xz"

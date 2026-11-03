@@ -26,7 +26,7 @@ gamepad = load('gamepad', Path('overlay-rg35xxsp/usr/local/bin/sp-gamepad'))
 
 class PortTests(unittest.TestCase):
     def config(self, **env):
-        base = {k:v for k,v in os.environ.items() if k not in ('TARGET','PANEL','RG_WORK','PROFILE')}
+        base = {k:v for k,v in os.environ.items() if k not in ('TARGET','PANEL','RG_WORK','PROFILE','RG_COMPACT')}
         return subprocess.run([str(ROOT/'build.sh'),'config'], env={**base, **env}, text=True, capture_output=True)
 
     def test_target_isolation_and_variants(self):
@@ -39,8 +39,26 @@ class PortTests(unittest.TestCase):
         self.assertEqual(len(set(paths)),3)
 
     def test_reject_unknown_target_and_wrong_panel(self):
-        for env in ({'TARGET':'../bad'}, {'TARGET':'rg35xxsp','PANEL':'rev6'}, {'RG_WORK':'/dev/sda'}):
+        for env in ({'TARGET':'../bad'}, {'TARGET':'rg35xxsp','PANEL':'rev6'}, {'RG_WORK':'/dev/sda'},
+                    {'TARGET':'rg35xxsp','PROFILE':'desktop','RG_COMPACT':'1'}):
             self.assertNotEqual(self.config(**env).returncode,0)
+
+    def test_compact_mbr_requires_explicit_layout_and_fits_card(self):
+        self.assertEqual(self.config(TARGET='rg35xxsp', PROFILE='minimal', RG_COMPACT='1').returncode, 0)
+        with tempfile.TemporaryDirectory() as directory:
+            p = Path(directory)/'compact.img'
+            mbr = bytearray(512)
+            mbr[510:] = b'\x55\xaa'
+            struct.pack_into('<I',mbr,440,1234)
+            struct.pack_into('<B3sB3sII',mbr,446,0x80,b'\0'*3,0x0c,b'\0'*3,16*2048,64*2048)
+            struct.pack_into('<B3sB3sII',mbr,462,0,b'\0'*3,0x83,b'\0'*3,80*2048,880*2048)
+            with p.open('wb') as f:
+                f.write(mbr); f.seek(8196); f.write(b'eGON.BT0'); f.truncate(960*2**20)
+            image.validate(p, 64)
+            self.assertLess(p.stat().st_size, 1018691584)
+            with self.assertRaisesRegex(ValueError, 'Límits'): image.validate(p)
+            with p.open('r+b') as f: f.truncate(959*2**20)
+            with self.assertRaisesRegex(ValueError, 'fora'): image.validate(p, 64)
 
     def test_mbr_reject_out_of_bounds_and_missing_spl(self):
         with tempfile.TemporaryDirectory() as d:

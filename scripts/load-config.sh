@@ -11,6 +11,11 @@ case "$PROFILE" in minimal|desktop) ;; *) echo 'PROFILE invàlid' >&2; return 1 
 if [[ "$TARGET" == rg35xxh && "$PROFILE" != desktop ]]; then
   echo "El perfil minimal només està implementat per SP" >&2; return 1
 fi
+RG_COMPACT="${RG_COMPACT:-0}"
+case "$RG_COMPACT" in 0|1) ;; *) echo 'RG_COMPACT invàlid' >&2; return 1 ;; esac
+if [[ "$RG_COMPACT" == 1 && ( "$TARGET" != rg35xxsp || "$PROFILE" != minimal ) ]]; then
+  echo 'El format compacte només és per SP minimal' >&2; return 1
+fi
 # shellcheck disable=SC1090
 . "$ROOT/config/targets/$TARGET.conf"
 WORK="$(realpath -m "${RG_WORK:-$ROOT/work/$TARGET-$PANEL-$PROFILE}")"

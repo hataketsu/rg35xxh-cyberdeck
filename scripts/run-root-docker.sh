@@ -10,7 +10,7 @@ args=(--rm --user 0:0 --workdir "$ROOT"
   --mount "type=bind,source=$ROOT,target=$ROOT,readonly"
   --mount "type=bind,source=$WORK,target=$WORK"
   --mount "type=bind,source=$DIST,target=$DIST"
-  -e TARGET -e PANEL -e PROFILE -e "RG_WORK=$WORK" -e "RG_DIST=$DIST")
+  -e TARGET -e PANEL -e PROFILE -e RG_COMPACT -e "RG_WORK=$WORK" -e "RG_DIST=$DIST")
 if [[ "$stage" == rootfs ]]; then
   [[ "$TARGET" == rg35xxsp ]] || { echo 'Rootfs Docker només implementat per SP'; exit 1; }
   secret=$(realpath "${RG_PASSWORD_HASH_FILE:?Cal un fitxer privat de hash}")

@@ -6,7 +6,9 @@ import struct
 import sys
 
 
-def validate(path):
+def validate(path, boot_mib=256):
+    if boot_mib not in (64, 256):
+        raise ValueError("Mida BOOT no admesa")
     if not stat.S_ISREG(path.stat().st_mode) or path.is_symlink():
         raise ValueError('Cal un fitxer regular sense enllaços')
     with path.open('rb') as f:
@@ -17,7 +19,7 @@ def validate(path):
         a, b = entries[:2]
         if not (a[0] == 0x80 and a[2] in (0x0b, 0x0c) and b[2] == 0x83):
             raise ValueError('Tipus de particions incorrectes')
-        if a[4] != 32768 or a[5] != 524288 or b[4] != a[4]+a[5]:
+        if a[4] != 32768 or a[5] != boot_mib*2048 or b[4] != a[4]+a[5]:
             raise ValueError('Límits de particions inesperats')
         if not b[5] or (b[4]+b[5])*512 > path.stat().st_size:
             raise ValueError('Partició fora del fitxer')
@@ -31,5 +33,5 @@ def validate(path):
 
 
 if __name__ == '__main__':
-    validate(pathlib.Path(sys.argv[1]))
+    validate(pathlib.Path(sys.argv[1]), int(sys.argv[2]) if len(sys.argv) > 2 else 256)
     print('MBR i signatura SPL correctes. No valida arrencada ni funcionalitats.')
