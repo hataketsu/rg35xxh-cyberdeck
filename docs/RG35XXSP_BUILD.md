@@ -68,6 +68,18 @@ dist/rg35xxsp-standard-minimal-<data>-<etapa>.log
 
 L'arbre brut incorpora sufix `-dirty`; feu un commit abans d'una compilació destinada a compartir. Les sumes es verifiquen des de `dist` amb `sha256sum -c <fitxer>.SHA256` i `xz -t <imatge>.img.xz`.
 
+## Minimal compacta per a una SD petita
+
+`RG_COMPACT=1` selecciona explícitament una imatge de **960 MiB**, només per a `TARGET=rg35xxsp PROFILE=minimal`. Manté SPL a 8 KiB i BOOT a 16 MiB; BOOT ocupa 64 MiB i rootfs 880 MiB. El layout ordinari continua sent de 6 GiB. L'empaquetat rebutja una compacta amb menys de 128 MiB disponibles per a l'usuari a ext4.
+
+Amb les etapes kernel/rootfs minimal ja completades:
+
+```bash
+TARGET=rg35xxsp PANEL=standard PROFILE=minimal RG_COMPACT=1 RG_ROOT_BACKEND=docker ./build.sh image
+```
+
+La sortida incorpora `minimal-compact` al nom. La imatge `50f7932` deixa **234,5 MiB disponibles** i està pensada per a proves de consola, sense XFCE. No hi instal·leu el perfil desktop; utilitzeu una SD més gran i la imatge desktop corresponent. Una targeta ha de tenir almenys 1.006.632.960 bytes reals. La comprovació estructural no valida l'arrencada física.
+
 ## Validar només DTS sense root
 
 ```bash

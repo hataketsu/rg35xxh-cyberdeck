@@ -1,4 +1,4 @@
-# Informe d'implementació — 2026-11-03
+# Informe d'implementació — 2026-11-04
 
 ## 1. Resultat
 
@@ -7,6 +7,8 @@ Port de desenvolupament a `/home/frans/anbernic/rg35xxsp-cyberdeck`, branca **rg
 S'han implementat perfils explícits H/SP i variants de panell, espais de treball separats, kernel/mòduls coherents, boot.scr regenerat amb PARTUUID, empaquetat de fitxer imatge amb comprovacions i sumes, rootfs SP Debian 13 minimal/desktop, XFCE fosc amb autologin normal, controls de creueta, política de tapa conservadora, diagnòstic, venv Meshtastic i menú USB/BLE amb confirmació d'enviament. S'ha escrit tota la documentació demanada en català.
 
 Les dues imatges **SP standard minimal i desktop s'han compilat i validat estructuralment**. L'arrencada i totes les funcions físiques continuen **PENDENTS**; no és un port anunciat com a funcional al maquinari.
+
+Actualització 2026-11-04: també s'ha generat `dist/rg35xxsp-cyberdeck-standard-minimal-compact-50f7932.img.xz`, amb una imatge descomprimida de 960 MiB i 234,5 MiB disponibles per a l'usuari. fsck FAT/ext4, comparació de particions, MBR/SPL, integritat xz i SHA256 han passat. SHA256 de l'XZ: `1135ba6988b8985996622d4d4146aa389614f9e8b9cdeb97ac8edcb0540e4ffe`; de la imatge descomprimida: `29aadcb88b1904e0a607ec04db3813e2a6e8549029ea7fddc88bfd4e1f18d484`. Registre: [empaquetat compacte](../dist/image-minimal-compact-live.log). **Gravació física i prova d'arrencada pendents.**
 
 ## 2. Fitxers
 
@@ -25,7 +27,7 @@ Inventari complet a [CHANGED_FILES.txt](evidence/CHANGED_FILES.txt). Grups princ
 | Nivell | Resultat |
 |---|---|
 | Entorn | WSL2 confirmat; Docker accessible via grup docker; binfmt ARM64 amb flag F; espai suficient |
-| Sintaxi, configuracions i tests | Completats; 8 proves passen |
+| Sintaxi, configuracions i tests | Completats; 9 proves passen (inclòs layout compacte) |
 | ShellCheck | Sense advertències en els scripts nous/modificats seleccionats |
 | DTS/DTB | 4 variants compilades des de Linux 7.0.2 + 29 pedaços ROCKNIX; avisos heretats |
 | Selecció de panell | Comprovada; el validador rebutja DTB standard quan es demana SP v2 |
