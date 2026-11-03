@@ -84,5 +84,27 @@ class PortTests(unittest.TestCase):
         state.keys.add('right'); self.assertEqual(state.move(),(0,0))
         state.keys.clear(); self.assertEqual(state.move(),(0,0))
 
+    def test_kernel_preflight_does_not_request_sudo(self):
+        with tempfile.TemporaryDirectory() as directory:
+            tmp = Path(directory)
+            for command in ('docker', 'dtc', 'fdtget'):
+                script = tmp/command
+                script.write_text('#!/bin/sh\nexit 0\n')
+                script.chmod(0o755)
+            df = tmp/'df'
+            df.write_text("#!/bin/sh\nprintf '%s\\n' 'Filesystem Size Used Available Use Mounted' 'test 200000000000 0 200000000000 0 /'\n")
+            df.chmod(0o755)
+            sudo = tmp/'sudo'
+            sudo.write_text('#!/bin/sh\ntouch "$PREFLIGHT_SUDO_MARKER"\nexit 1\n')
+            sudo.chmod(0o755)
+            env = {**os.environ, 'PATH': str(tmp)+os.pathsep+os.environ['PATH'],
+                   'TARGET': 'rg35xxsp', 'PANEL': 'standard', 'PROFILE': 'minimal',
+                   'RG_ROOT_BACKEND': 'sudo', 'RG_WORK': str(tmp/'work'),
+                   'RG_DIST': str(tmp/'dist'), 'PREFLIGHT_SUDO_MARKER': str(tmp/'called')}
+            result = subprocess.run([str(ROOT/'scripts/preflight.sh'), 'kernel'], env=env,
+                                    text=True, capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stdout+result.stderr)
+            self.assertFalse((tmp/'called').exists())
+
 
 if __name__ == '__main__': unittest.main()

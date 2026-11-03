@@ -19,7 +19,7 @@ L'assistent executa `sudo apt update`, `sudo apt upgrade -y` i instal·la les de
 
 ## Un únic motor Docker
 
-No hi ha `docker` al PATH de la sessió; tampoc s'ha trobat Docker Desktop a la ruta estàndard de Windows. Això no exclou una instal·lació en una altra ruta.
+A la primera sessió no hi havia `docker` al PATH; tampoc s'ha trobat Docker Desktop a la ruta estàndard de Windows. Això no exclou una instal·lació en una altra ruta.
 
 Per Windows 11, l'opció preferida és **Docker Desktop amb backend WSL2** i integració amb Ubuntu, perquè evita mantenir un daemon addicional dins d'Ubuntu. La seva instal·lació/configuració és una acció de Windows: no s'ha executat. A Docker Desktop: Settings → General → WSL 2 engine; Settings → Resources → WSL Integration → Ubuntu. No instal·leu també `docker.io` dins d'Ubuntu. [Documentació de Docker](https://docs.docker.com/desktop/features/wsl/).
 
@@ -36,4 +36,6 @@ L'entrada binfmt ha de mostrar `enabled` i flag `F`; si cal, executeu `sudo upda
 
 Si una actualització o canvi de WSL requereix reinici: deseu la feina, tanqueu tasques actives i executeu **manualment a PowerShell** `wsl --shutdown`, després torneu a obrir Ubuntu. No s'ha executat aquest reinici. Consulteu la [guia de Microsoft](https://learn.microsoft.com/windows/wsl/basic-commands).
 
-El rootfs i l'empaquetat necessiten sudo local per a chroot, bind mounts i loop devices de **fitxers imatge nous**. El codi no rep un disc físic com a destí. Si WSL no disposa de device-mapper/loop o no pot crear els mapatges, utilitzeu un host Linux adequat; no connecteu discos físics per esquivar-ho.
+El backend predeterminat utilitza sudo local per al chroot i per preservar propietaris. Amb `RG_ROOT_BACKEND=docker` aquests passos s'executen dins del contenidor. L'empaquetat actual usa només fitxers de partició: no necessita loop/device-mapper ni discos físics. Vegeu la guia de compilació.
+
+En reprendre el treball, Docker 29.1.3 ja estava instal·lat i binfmt qemu-aarch64 habilitat amb flags PF. L'usuari ha afegit `frans` al grup docker; s'ha comprovat el servidor amb `sg docker -c 'docker info'`, sense reiniciar WSL. No instal·leu un segon motor.

@@ -1,7 +1,7 @@
 # Build artifacts
 dist/
 work/
-rocknix/
+/rocknix/
 *.img
 *.img.xz
 *.img.bmap

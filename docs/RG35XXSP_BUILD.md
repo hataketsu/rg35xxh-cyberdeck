@@ -2,7 +2,7 @@
 
 ## Requisits i estat
 
-Completeu [WSL2_SETUP.md](WSL2_SETUP.md). En aquesta sessió el preflight de compilació s'ha aturat per Docker, sudo i binfmt ARM64. No hi ha kernel complet, rootfs ni imatge generats. Els DTB i boot.scr de prova són artefactes parcials i no una imatge utilitzable.
+Completeu [WSL2_SETUP.md](WSL2_SETUP.md). En la primera sessió el preflight de compilació es va aturar per Docker, sudo i binfmt ARM64. Aquest és el resultat de la primera sessió; vegeu IMPLEMENTATION_STATUS.md per al resultat actual. Els DTB i boot.scr de prova són artefactes parcials i no una imatge utilitzable.
 
 El perfil mínim permet provar boot, consola i dispositius abans de personalitzar XFCE. El perfil desktop és Debian 13 ARM64 amb XFCE/LightDM. Cadascun té un directori propi; un rootfs existent es rebutja per conservar-lo i evitar barrejar instal·lacions.
 
@@ -49,10 +49,10 @@ Per la variant v2, canvieu `PANEL=v2`. Per continuar desenvolupant sense tocar u
 3. Compila Linux, elimina l'initramfs ROCKNIX i recompila amb MMC/ext4 incorporats, uinput i USB sèrie; instal·la els mòduls nous.
 4. Compila U-Boot/ATF i gamepad fixats. Compila explícitament els DTS de panell addicionals i valida el DTB seleccionat.
 5. Crea Debian amb debootstrap/QEMU i el perfil SP. Registra les versions Python instal·lades. Tot executable privilegiat i els mòduls s'instal·len amb propietat root.
-6. Genera un fitxer regular nou de 6 GiB, MBR, BOOT FAT de 256 MiB a 16 MiB i rootfs ext4. Escriu SPL a 8 KiB exclusivament dins del loop device del fitxer acabat de crear.
+6. Genera un fitxer regular nou de 6 GiB, MBR, BOOT FAT de 256 MiB a 16 MiB i rootfs ext4. Crea les particions en fitxers amb mtools/mke2fs i les incorpora a la imatge; SPL a 8 KiB. No utilitza loop devices ni munta la imatge.
 7. Regenera boot.cmd/boot.scr per variant amb root PARTUUID; verifica vermagic, sistemes de fitxers, MBR/SPL, comprimeix i calcula SHA256.
 
-Cap paràmetre accepta una targeta SD com a destí de l'empaquetador. Les sortides existents no se sobreescriuen. En cas d'error es desmunten recursos, però la imatge parcial es conserva per diagnosi i no s'ha de gravar.
+Cap paràmetre accepta una targeta SD com a destí de l'empaquetador. Les sortides existents no se sobreescriuen. En cas d'error el staging i la imatge parcial es conserven per diagnosi i no s'ha de gravar.
 
 Sortides esperades després d'una compilació reeixida:
 
@@ -62,6 +62,7 @@ dist/rg35xxsp-cyberdeck-standard-minimal-<commit>.img.bmap
 dist/rg35xxsp-cyberdeck-standard-minimal-<commit>.img.SHA256
 dist/rg35xxsp-cyberdeck-standard-minimal-<commit>.img.build-info.txt
 dist/rg35xxsp-cyberdeck-standard-minimal-<commit>.img.python-packages.txt
+dist/rg35xxsp-cyberdeck-standard-minimal-<commit>.img.deb-packages.txt
 dist/rg35xxsp-standard-minimal-<data>-<etapa>.log
 ```
 
@@ -82,3 +83,30 @@ export LD_LIBRARY_PATH="$PWD/work/host-tools/root/usr/lib/x86_64-linux-gnu:${LD_
 ```
 
 Aquesta validació no compila el kernel, no executa dt-schema i no prova el maquinari. No hi ha garantia de reproducció bit a bit: APT i dependències transitives Python no estan fixats a snapshots/hashes.
+
+## Construcció amb Docker també per al rootfs
+
+`RG_ROOT_BACKEND=docker` permet construir el rootfs i empaquetar sense sudo al host. Docker ha de ser accessible (`docker info`); la pertinença al grup docker dona accés privilegiat al daemon. Després d'afegir-hi l'usuari, inicieu una nova sessió o feu servir `sg docker -c 'ordre'` en la sessió existent.
+
+```bash
+export TARGET=rg35xxsp PANEL=standard PROFILE=minimal
+export RG_ROOT_BACKEND=docker
+export RG_PASSWORD_HASH_FILE="$HOME/.config/rg35xxsp/cyberdeck.password.hash"
+./build.sh kernel
+./build.sh rootfs
+./build.sh image
+```
+
+El contenidor de rootfs rep SYS_ADMIN per als bind mounts del chroot, amb AppArmor desactivat només per a aquest contenidor. No utilitza `--privileged` ni rep discos del host. El repositori està en lectura; només WORK i DIST són escrivibles i el hash és un bind mount de lectura. L'empaquetat s'executa sense SYS_ADMIN ni dispositius, escrivint fitxers regulars. Els permisos/propietaris del rootfs es conserven amb `mke2fs -d`; les particions incorporades es comparen byte a byte amb les verificades.
+
+Les comprovacions es fan per etapa: kernel requereix Docker, però no sudo ni binfmt; rootfs requereix binfmt ARM64 i el backend escollit; image requereix les eines d'empaquetat o el contenidor. `deps` comprova el pipeline complet. El backend sudo continua disponible per defecte.
+
+## Fonts retirades o temporalment inaccessibles
+
+`build.sh fetch` aplica els pedaços de `patches/rocknix/` després de verificar el commit fixat. Només canvien les URLs; es conserven les versions i els SHA256 exigits per ROCKNIX:
+
+- 7-Zip 25.00: la URL original retorna 404. S'utilitza l'[arxiu oficial de la mateixa versió](https://github.com/ip7z/7zip/releases/tag/25.00), SHA256 `bff9e69b6ca73a5b8715d7623870a39dc90ad6ce1f4d1070685843987af1af9b`.
+- GNU configtools `28ea239c53a2d5d8800c472bc2452eaa16e37af2`: la descàrrega de Savannah falla o expira. S'utilitza el [mirall de fonts de LibreELEC](https://sources.libreelec.tv/mirror/configtools/configtools-28ea239c53a2d5d8800c472bc2452eaa16e37af2.tar.gz), SHA256 `6e4ebaa2a60114cf8b72d478b30e559f0c8e025d290ae3303773095104bf7bcc`.
+- XMLStarlet 1.6.1: el domini del mirall netcologne ja no resol. S'utilitza el [distribuïdor de descàrregues de SourceForge](https://downloads.sourceforge.net/project/xmlstar/xmlstarlet/1.6.1/xmlstarlet-1.6.1.tar.gz), SHA256 `15d838c4f3375332fd95554619179b69e4ec91418a3a5296e7c631b7ed19e7ca`.
+
+Les còpies s'han descarregat i comparat amb el hash de la recepta. No són actualitzacions de dependències. Els registres dels intents fallits es conserven a `dist`; una nova execució de `kernel` reutilitza la memòria cau de construcció.

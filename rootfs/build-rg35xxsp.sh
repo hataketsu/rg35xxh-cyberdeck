@@ -19,13 +19,17 @@ mkdir -p "$ROOTFS"
 mounts=()
 cleanup() {
   local rc=$?
-  for ((i=${#mounts[@]}-1; i>=0; i--)); do umount "${mounts[i]}" || rc=1; done
+  for ((i=${#mounts[@]}-1; i>=0; i--)); do
+    if mountpoint -q "${mounts[i]}"; then umount "${mounts[i]}" || rc=1; fi
+  done
   rm -f "$ROOTFS/tmp/password.hash"
   exit "$rc"
 }
 trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
-debootstrap --arch=arm64 --foreign --variant=minbase --include=ca-certificates,systemd,systemd-sysv,dbus,sudo,locales trixie "$ROOTFS" https://deb.debian.org/debian
+debootstrap --force-check-gpg --arch=arm64 --foreign --variant=minbase --include=ca-certificates,systemd,systemd-sysv,dbus,sudo,locales trixie "$ROOTFS" https://deb.debian.org/debian
 install -m755 "$(command -v qemu-aarch64-static)" "$ROOTFS/usr/bin/qemu-aarch64-static"
 # Impedir que apt iniciï serveis dins del chroot.
 printf '#!/bin/sh\nexit 101\n' > "$ROOTFS/usr/sbin/policy-rc.d"
@@ -37,6 +41,10 @@ for m in proc sys dev dev/pts; do
 done
 cp -L /etc/resolv.conf "$ROOTFS/etc/resolv.conf"
 chroot "$ROOTFS" /debootstrap/debootstrap --second-stage
+# debootstrap desmunta proc/sys/pts en sortir; apt necessita el chroot complet.
+for m in proc sys dev dev/pts; do
+  mountpoint -q "$ROOTFS/$m" || mount --bind "/$m" "$ROOTFS/$m"
+done
 cat > "$ROOTFS/etc/apt/sources.list" <<'APT'
 deb https://deb.debian.org/debian trixie main contrib non-free non-free-firmware
 deb https://deb.debian.org/debian trixie-updates main contrib non-free non-free-firmware
@@ -100,4 +108,10 @@ ln -s /etc/machine-id "$ROOTFS/var/lib/dbus/machine-id"
 rm -f "$ROOTFS/etc/resolv.conf"
 ln -s /run/NetworkManager/resolv.conf "$ROOTFS/etc/resolv.conf"
 rm -f "$ROOTFS/usr/sbin/policy-rc.d" "$ROOTFS/usr/bin/qemu-aarch64-static"
+python3 "$ROOT/scripts/verify-rootfs.py" "$ROOTFS" "$PROFILE"
+# El marcador només es crea quan la neteja també ha acabat correctament.
+for ((i=${#mounts[@]}-1; i>=0; i--)); do
+  if mountpoint -q "${mounts[i]}"; then umount "${mounts[i]}"; fi
+done
+mounts=()
 printf '%s\n' "$BUILD_ID" > "$WORK/rootfs.target"

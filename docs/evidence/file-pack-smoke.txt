@@ -1,0 +1,54 @@
+e2fsck 1.46.5 (30-Dec-2021)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+/evidence/pack-smoke/root.part: 16/16384 files (6.3% non-contiguous), 2069/16384 blocks
+debugfs 1.46.5 (30-Dec-2021)
+Inode: 13   Type: regular    Mode:  0640   Flags: 0x80000
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:     0   Project:     0   Size: 4
+File ACL: 0
+Links: 1   Blockcount: 8
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6aea58a0:00000000 -- Tue Nov  3 21:56:48 2026
+ atime: 0x6aea58a0:00000000 -- Tue Nov  3 21:56:48 2026
+ mtime: 0x6aea58a0:00000000 -- Tue Nov  3 21:56:48 2026
+crtime: 0x6aea58a0:00000000 -- Tue Nov  3 21:56:48 2026
+Size of extra inode fields: 32
+Inode checksum: 0xc8f60123
+EXTENTS:
+(0):2066
+debugfs 1.46.5 (30-Dec-2021)
+Inode: 15   Type: directory    Mode:  0755   Flags: 0x80000
+Generation: 0    Version: 0x00000000:00000000
+User:  1000   Group:  1000   Project:     0   Size: 4096
+File ACL: 0
+Links: 2   Blockcount: 8
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6aea58a0:00000000 -- Tue Nov  3 21:56:48 2026
+ atime: 0x6aea58a0:00000000 -- Tue Nov  3 21:56:48 2026
+ mtime: 0x6aea58a0:00000000 -- Tue Nov  3 21:56:48 2026
+crtime: 0x6aea58a0:00000000 -- Tue Nov  3 21:56:48 2026
+Size of extra inode fields: 32
+Inode checksum: 0x1ba94f58
+EXTENTS:
+(0):2068
+debugfs 1.46.5 (30-Dec-2021)
+Inode: 16   Type: symlink    Mode:  0777   Flags: 0x0
+Generation: 0    Version: 0x00000000:00000000
+User:     0   Group:     0   Project:     0   Size: 10
+File ACL: 0
+Links: 1   Blockcount: 0
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6aea58a0:00000000 -- Tue Nov  3 21:56:48 2026
+ atime: 0x6aea58a0:00000000 -- Tue Nov  3 21:56:48 2026
+ mtime: 0x6aea58a0:00000000 -- Tue Nov  3 21:56:48 2026
+crtime: 0x6aea58a0:00000000 -- Tue Nov  3 21:56:48 2026
+Size of extra inode fields: 32
+Inode checksum: 0x1419fe54
+Fast link dest: "/etc/probe"
+mkfs.fat 4.2 (2021-01-31)
+testfsck.fat 4.2 (2021-01-31)
+/evidence/pack-smoke/boot.part: 1 files, 2/129022 clusters

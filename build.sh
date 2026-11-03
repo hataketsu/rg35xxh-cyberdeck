@@ -17,6 +17,15 @@ stage_fetch() {
   git -C "$WORK/rocknix" fetch --depth=1 origin "$ROCKNIX_COMMIT"
   git -C "$WORK/rocknix" checkout --detach "$ROCKNIX_COMMIT"
   [[ $(git -C "$WORK/rocknix" rev-parse HEAD) == "$ROCKNIX_COMMIT" ]] || die 'Commit incorrecte'
+  # Miralls de fonts amb la mateixa versió i SHA256; aplicació idempotent.
+  local patchfile
+  for patchfile in "$ROOT"/patches/rocknix/*.patch; do
+    if git -C "$WORK/rocknix" apply --check "$patchfile" 2>/dev/null; then
+      git -C "$WORK/rocknix" apply "$patchfile"
+    else
+      git -C "$WORK/rocknix" apply --reverse --check "$patchfile" || die "Pedaç no aplicable: $patchfile"
+    fi
+  done
 }
 stage_docker() {
   docker build -t rocknix-builder -f "$WORK/rocknix/tools/docker/jammy/Dockerfile" "$WORK/rocknix/tools/docker/jammy"
@@ -34,7 +43,7 @@ stage_kernel() {
     -e PROJECT=ROCKNIX -e DEVICE="$DEVICE" -e ARCH="$ARCH" -e KERNEL_NAME="$KERNEL_NAME" \
     -e CONCURRENCY_MAKE_LEVEL="$(nproc)" --user root -w /work cyberdeck-builder bash -euc '
       chown -R docker:docker /work
-      su -p docker -s /bin/bash -c "set -euo pipefail; ./scripts/build linux; bash ./configure-empty-initramfs.sh; ./scripts/build u-boot; ./scripts/build kernel-firmware"
+      su docker -s /bin/bash -c "set -euo pipefail; ./scripts/build linux; bash ./configure-empty-initramfs.sh; ./scripts/build u-boot; ./scripts/build kernel-firmware"
     '
   TARGET="$TARGET" PANEL="$PANEL" PROFILE="$PROFILE" RG_WORK="$WORK" "$ROOT/scripts/build-joypad-module.sh"
   local dtb="$KSRC/arch/arm64/boot/dts/allwinner/$DTB_NAME"
@@ -43,9 +52,20 @@ stage_kernel() {
   "$ROOT/scripts/validate-dtb.sh" "$dtb"
   printf '%s\n' "$BUILD_ID" > "$WORK/kernel.target"
 }
+stage_image() {
+  if [[ "${RG_ROOT_BACKEND:-sudo}" == docker ]]; then
+    "$ROOT/scripts/run-root-docker.sh" image
+  else
+    run_root "$ROOT/image/pack-image.sh"
+  fi
+}
 stage_rootfs() {
   if [[ "$TARGET" == rg35xxsp ]]; then
-    run_root "$ROOT/rootfs/build-rg35xxsp.sh"
+    if [[ "${RG_ROOT_BACKEND:-sudo}" == docker ]]; then
+      "$ROOT/scripts/run-root-docker.sh" rootfs
+    else
+      run_root "$ROOT/rootfs/build-rg35xxsp.sh"
+    fi
   else
     [[ ! -e "$WORK/rootfs" ]] || die 'Ja existeix rootfs; conserveu-lo amb un altre RG_WORK abans de reconstruir.'
     for stage in 00-debootstrap 10-base-pkgs 20-xfce 30-handheld 40-network; do run_root "$ROOT/rootfs/stages/$stage.sh" "$WORK/rootfs"; done
@@ -58,10 +78,10 @@ case "$STAGE" in
   config) printf '%s\n' "TARGET=$TARGET" "PANEL=$PANEL" "PROFILE=$PROFILE" "DTB_NAME=$DTB_NAME" "WORK=$WORK" "KERNEL=$KERNEL_NAME" ;;
   deps) "$ROOT/scripts/preflight.sh" ;;
   fetch) stage_fetch ;;
-  docker) stage_fetch; stage_docker ;;
-  kernel) "$ROOT/scripts/preflight.sh"; stage_fetch; stage_docker; stage_kernel ;;
-  rootfs) "$ROOT/scripts/preflight.sh"; stage_rootfs ;;
-  image) "$ROOT/scripts/preflight.sh"; run_root "$ROOT/image/pack-image.sh" ;;
-  all) "$ROOT/scripts/preflight.sh"; stage_fetch; stage_docker; stage_kernel; stage_rootfs; run_root "$ROOT/image/pack-image.sh" ;;
+  docker) "$ROOT/scripts/preflight.sh" docker; stage_fetch; stage_docker ;;
+  kernel) "$ROOT/scripts/preflight.sh" kernel; stage_fetch; stage_docker; stage_kernel ;;
+  rootfs) "$ROOT/scripts/preflight.sh" rootfs; stage_rootfs ;;
+  image) "$ROOT/scripts/preflight.sh" image; stage_image ;;
+  all) "$ROOT/scripts/preflight.sh"; stage_fetch; stage_docker; stage_kernel; stage_rootfs; stage_image ;;
   *) die 'Etapa: config|deps|fetch|docker|kernel|rootfs|image|all' ;;
 esac

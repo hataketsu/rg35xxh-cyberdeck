@@ -8,17 +8,18 @@ Data inicial: 2026-11-03. Cap consola ni Heltec connectat a aquesta sessió. Emp
 |---|---|---|
 | WSL2, espai >40 GiB | COMPLETAT | Ubuntu 22.04, 844 GiB disponibles inicialment |
 | Actualització Ubuntu / instal·lació global | PENDENT | Sudo requereix autenticació de terminal |
-| Docker i binfmt ARM64 | BLOQUEJAT | Preflight no supera aquests requisits |
+| Docker i binfmt ARM64 | COMPLETAT | Docker accessible amb grup docker; qemu-aarch64 habilitat amb flag F |
 | bash -n, Python AST, INI/desktop | COMPLETAT | scripts/check-static.sh |
 | ShellCheck advertències dels scripts nous/modificats | COMPLETAT | Sense advertències amb ShellCheck 0.8.0 |
-| Proves automatitzades | COMPLETAT | Aïllament de perfils, MBR, cancel·lació de ràdio, cursor |
+| Proves automatitzades | COMPLETAT | 8 proves: perfils, MBR, cancel·lació de ràdio, cursor, preflight kernel sense sudo |
 | Pedaços de kernel aplicables | COMPLETAT amb avisos | 29 fitxers, alguns offset/fuzz; vegeu evidence |
 | DTS → DTB | COMPLETAT amb avisos | SP standard/v2, H standard/rev6; 11 avisos per variant |
 | DTB compatible, tapa, OTG | COMPLETAT estàtic | fdtget; no funcional |
 | dt-schema / dtbs_check | PENDENT | No executat |
 | boot.scr SP standard/v2 | COMPLETAT | Generat i llegit per mkimage |
 | Meshtastic venv host i --help | COMPLETAT | x86_64; no és prova ARM64 ni connexió |
-| Kernel, U-Boot, rootfs ARM64 complets | PENDENT | No compilats en aquesta sessió |
+| Kernel, U-Boot, rootfs ARM64 complets | EN CURS | Construcció real amb Docker |
+| Empaquetat FAT/ext4 sobre fitxers | COMPLETAT | fsck, propietaris, permisos i symlinks; evidence/file-pack-smoke.txt |
 | Imatge final i SHA256 | PENDENT | No hi ha `.img.xz` |
 | Validació estructural d'imatge final | PENDENT | MBR sintètic provat; cap imatge final real |
 

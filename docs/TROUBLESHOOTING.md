@@ -8,7 +8,7 @@
 | Rootfs existent | Directori de treball del perfil | Conservar-lo i usar RG_WORK nou; no s'esborra automàticament |
 | Artefacte kernel/mòdul absent | Registre d'etapa i commit fixat | Reconstruir kernel; no empaquetar parcialment |
 | `vermagic` incompatible | Mòdul extern amb un altre kernel | Reconstruir el gamepad amb el toolchain de la mateixa compilació |
-| `kpartx` / device-mapper falla | Suport de kernel WSL i permisos loop | Aturar empaquetat; usar un host Linux adequat, no un disc físic alternatiu |
+| Error en mke2fs/mcopy | Registre i espai del staging `work/.../pack.*` | Conservar els fitxers parcials i corregir l’error; no usar discos físics alternatius |
 | Pantalla ratllada/blanca | Variant standard/v2, nom carregat a boot.cmd | Apagar i provar l'altra imatge compilada; no barrejar DTB de kernels |
 | Pantalla s'apaga al cap de ~30 s | Errors de reguladors al journal | Desar logs; la correcció H always-on no s'aplica a SP sense evidència |
 | Shell BusyBox o errors `/flash` | Initramfs ROCKNIX incrustat | Revisar registre de recompilació i configuració; no usar Image original |
