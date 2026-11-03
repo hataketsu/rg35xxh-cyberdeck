@@ -30,10 +30,11 @@ Inventari complet a [CHANGED_FILES.txt](evidence/CHANGED_FILES.txt). Grups princ
 | Selecció de panell | Comprovada; el validador rebutja DTB standard quan es demana SP v2 |
 | Scripts boot | SP standard/v2 generats i llegits amb mkimage |
 | Meshtastic host | 2.7.11 instal·lat en venv x86_64, --help/--version i pip check correctes |
-| Meshtastic ARM64 minimal | 2.7.11; --help, --version i pip check correctes sota QEMU, sense dispositius |
+| Meshtastic ARM64 minimal/desktop | 2.7.11; --help, --version i pip check correctes sota QEMU, sense dispositius |
 | Unitats systemd | verify amb systemd 257 ARM64 del rootfs mínim: codi 0 |
-| Rootfs ARM64 minimal | Completat; verificació de contingut i dpkg --audit correctes |
-| Kernel/U-Boot i rootfs desktop | Compilació en curs |
+| Rootfs ARM64 minimal/desktop | Completats i actualitzats; verificació de contingut i dpkg --audit correctes |
+| Desktop | XFCE/LightDM i LXPolKit instal·lats; autologin normal i autoinici d'agent verificats estàticament |
+| Kernel/U-Boot | Compilació en curs |
 | Empaquetat sense dispositius | Prova FAT/ext4 real superada; permisos, propietaris i enllaços conservats |
 | Imatge estructuralment validada | No; només hi ha proves del validador amb imatge sintètica |
 | Arrencada al maquinari | **PENDENT** |
@@ -45,7 +46,11 @@ S'ha afegit un contenidor de rootfs amb el keyring oficial de Debian trixie i ve
 
 L'empaquetat crea FAT/ext4 en fitxers regulars, els comprova i compara byte a byte les particions incorporades. No necessita loop devices, muntatges ni accés a discs físics. La prova independent és a [file-pack-smoke.txt](evidence/file-pack-smoke.txt). Les imatges SP passen una comprovació de contingut, arquitectura, permisos, usuari normal i serveis emmascarats abans d'empaquetar.
 
-Les verificacions del rootfs mínim són a [rootfs-minimal-validation.txt](evidence/rootfs-minimal-validation.txt). La compilació ha trobat URLs retirades/inaccessibles de 7-Zip i configtools: s'han fixat miralls amb els mateixos SHA256, documentats a [RG35XXSP_BUILD.md](RG35XXSP_BUILD.md).
+Les verificacions són a [rootfs-minimal-validation.txt](evidence/rootfs-minimal-validation.txt) i [rootfs-desktop-validation.txt](evidence/rootfs-desktop-validation.txt). S'han corregit les descàrregues retirades/inaccessibles de 7-Zip, configtools, XMLStarlet i bdf2psf, sense canviar-ne les versions. La recepta del kernel omet l'initramfs ROCKNIX descartat, que depenia d'un commit de splash inexistent. Els detalls i sumes són a [RG35XXSP_BUILD.md](RG35XXSP_BUILD.md).
+
+La instal·lació inicial del desktop va seleccionar UKUI com a agent Polkit. S'ha substituït per LXPolKit, habilitat per XFCE, i s'han retirat 80 dependències automàtiques sobrants (177 MB). També s'ha incorporat l'actualització de la base Debian al script i als dos rootfs: OpenSSL 3.5.7, certificats i biblioteques actualitzats, sense paquets pendents en aquella execució.
+
+L'embolcall `build.sh` d'una execució desktop va acabar amb un error de sintaxi després que se n'edités el fitxer mentre continuava en marxa. L'etapa de rootfs ja havia finalitzat. El script actual passa `bash -n`; el rootfs s'ha refinat i verificat posteriorment en execucions independents amb codi 0. Es conserva el registre de l'error, no s'ha considerat aquell retorn com una compilació integrada reeixida.
 
 ## 4. Imatge i SHA256
 

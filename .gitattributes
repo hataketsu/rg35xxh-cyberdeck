@@ -1,0 +1,2 @@
+# Els diffs unificats necessiten un espai inicial a les línies de context buides.
+*.patch -whitespace

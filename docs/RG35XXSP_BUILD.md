@@ -46,7 +46,7 @@ Per la variant v2, canvieu `PANEL=v2`. Per continuar desenvolupant sense tocar u
 
 1. Descarrega el commit complet fixat de ROCKNIX.
 2. Construeix el contenidor de compilació i les dependències addicionals.
-3. Compila Linux, elimina l'initramfs ROCKNIX i recompila amb MMC/ext4 incorporats, uinput i USB sèrie; instal·la els mòduls nous.
+3. Compila Linux sense construir ni incorporar l'initramfs ROCKNIX i reconstrueix amb MMC/ext4 incorporats, uinput i USB sèrie; instal·la els mòduls nous.
 4. Compila U-Boot/ATF i gamepad fixats. Compila explícitament els DTS de panell addicionals i valida el DTB seleccionat.
 5. Crea Debian amb debootstrap/QEMU i el perfil SP. Registra les versions Python instal·lades. Tot executable privilegiat i els mòduls s'instal·len amb propietat root.
 6. Genera un fitxer regular nou de 6 GiB, MBR, BOOT FAT de 256 MiB a 16 MiB i rootfs ext4. Crea les particions en fitxers amb mtools/mke2fs i les incorpora a la imatge; SPL a 8 KiB. No utilitza loop devices ni munta la imatge.
@@ -103,10 +103,15 @@ Les comprovacions es fan per etapa: kernel requereix Docker, però no sudo ni bi
 
 ## Fonts retirades o temporalment inaccessibles
 
-`build.sh fetch` aplica els pedaços de `patches/rocknix/` després de verificar el commit fixat. Només canvien les URLs; es conserven les versions i els SHA256 exigits per ROCKNIX:
+`build.sh fetch` aplica els pedaços de `patches/rocknix/` després de verificar el commit fixat. Els pedaços de descàrrega conserven les versions; els tres primers també conserven els SHA256 exigits per ROCKNIX:
 
 - 7-Zip 25.00: la URL original retorna 404. S'utilitza l'[arxiu oficial de la mateixa versió](https://github.com/ip7z/7zip/releases/tag/25.00), SHA256 `bff9e69b6ca73a5b8715d7623870a39dc90ad6ce1f4d1070685843987af1af9b`.
 - GNU configtools `28ea239c53a2d5d8800c472bc2452eaa16e37af2`: la descàrrega de Savannah falla o expira. S'utilitza el [mirall de fonts de LibreELEC](https://sources.libreelec.tv/mirror/configtools/configtools-28ea239c53a2d5d8800c472bc2452eaa16e37af2.tar.gz), SHA256 `6e4ebaa2a60114cf8b72d478b30e559f0c8e025d290ae3303773095104bf7bcc`.
 - XMLStarlet 1.6.1: el domini del mirall netcologne ja no resol. S'utilitza el [distribuïdor de descàrregues de SourceForge](https://downloads.sourceforge.net/project/xmlstar/xmlstarlet/1.6.1/xmlstarlet-1.6.1.tar.gz), SHA256 `15d838c4f3375332fd95554619179b69e4ec91418a3a5296e7c631b7ed19e7ca`.
+- bdf2psf 1.236: retirat del pool corrent de Debian, recuperat de [Debian Snapshot](https://snapshot.debian.org/archive/debian/20250401T143957Z/pool/main/c/console-setup/bdf2psf_1.236_all.deb). La recepta no tenia SHA256: s'hi fixa `6f8cc48290f1be5963ffd12e29d8133b3d57e9b07ee2793f5b559450c04253eb`. El SHA1 coincideix amb el registre del snapshot (`c313b2ccb9e3ad64e5ba29ad52a56dc7481af35a`). Aquest paquet només era necessari per a l'initramfs descartat.
 
 Les còpies s'han descarregat i comparat amb el hash de la recepta. No són actualitzacions de dependències. Els registres dels intents fallits es conserven a `dist`; una nova execució de `kernel` reutilitza la memòria cau de construcció.
+
+El commit `9d295bcb74be2282e32c6b614efbea6036974ba8` de `rocknix-splash` retorna 404. El pedaç `linux-no-initramfs.patch` omet les dependències, la instal·lació i la inclusió de l'initramfs ROCKNIX des de la primera compilació del kernel. Aquest initramfs ja s'eliminava al cyberdeck original: Debian ha de muntar directament el seu rootfs. No se substitueix el splash per una versió arbitrària. La reconstrucció posterior i la comprovació de configuració/mòduls es mantenen tant per H com per SP.
+
+El rootfs SP actualitza també la base de debootstrap amb els repositoris trixie-updates/security. El perfil desktop selecciona explícitament LXPolKit i n'habilita l'autoinici a XFCE; evita la selecció automàtica d'UKUI i les seves dependències. L'agent continua requerint la contrasenya de l'usuari per a les operacions que ho necessitin.

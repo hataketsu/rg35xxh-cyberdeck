@@ -18,7 +18,8 @@ Data inicial: 2026-11-03. Cap consola ni Heltec connectat a aquesta sessió. Emp
 | dt-schema / dtbs_check | PENDENT | No executat |
 | boot.scr SP standard/v2 | COMPLETAT | Generat i llegit per mkimage |
 | Meshtastic venv host i --help | COMPLETAT | x86_64; no és prova ARM64 ni connexió |
-| Kernel, U-Boot, rootfs ARM64 complets | EN CURS | Construcció real amb Docker |
+| Rootfs ARM64 minimal/desktop | COMPLETAT | Debian 13 actualitzat, permisos, usuari, Meshtastic, dpkg i systemd verificats |
+| Kernel i U-Boot complets | EN CURS | Construcció real amb Docker |
 | Empaquetat FAT/ext4 sobre fitxers | COMPLETAT | fsck, propietaris, permisos i symlinks; evidence/file-pack-smoke.txt |
 | Imatge final i SHA256 | PENDENT | No hi ha `.img.xz` |
 | Validació estructural d'imatge final | PENDENT | MBR sintètic provat; cap imatge final real |

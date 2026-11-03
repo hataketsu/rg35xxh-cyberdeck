@@ -36,6 +36,8 @@ def verify(root, profile):
             raise ValueError('Paquet amb arquitectura incorrecta: '+fields.get('Package', '?'))
     if (root/'usr/bin/qemu-aarch64-static').exists():
         raise ValueError('QEMU de construcció encara és al rootfs')
+    if (root/'etc/machine-id').read_text().strip():
+        raise ValueError('La imatge no ha de compartir un machine-id de construcció')
     if os.readlink(root/'etc/resolv.conf') != '/run/NetworkManager/resolv.conf':
         raise ValueError('DNS no apunta a NetworkManager')
     target = os.readlink(root/'etc/systemd/system/default.target')
@@ -46,6 +48,12 @@ def verify(root, profile):
         login = (root/'etc/lightdm/lightdm.conf.d/50-cyberdeck.conf').read_text()
         if 'autologin-user=cyberdeck\n' not in login:
             raise ValueError('Autologin incorrecte')
+        agent = (root/'etc/xdg/autostart/lxpolkit.desktop').read_text()
+        if 'Exec=lxpolkit\n' not in agent or any(
+                line.startswith('NotShowIn=') and 'XFCE' in line for line in agent.splitlines()):
+            raise ValueError('Agent Polkit no configurat per XFCE')
+        if not (root/'usr/bin/lxpolkit').is_file():
+            raise ValueError('Falta l’agent Polkit')
     print('Rootfs: Debian 13 ARM64, usuari normal, permisos i polítiques verificats; maquinari pendent.')
 
 

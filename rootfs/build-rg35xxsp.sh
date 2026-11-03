@@ -53,6 +53,7 @@ APT
 install -m600 "$secret" "$ROOTFS/tmp/password.hash"
 chroot "$ROOTFS" /usr/bin/env DEBIAN_FRONTEND=noninteractive PROFILE="$PROFILE" bash -euo pipefail <<'CHROOT'
 apt-get update
+apt-get upgrade -y
 apt-get install -y --no-install-recommends locales sudo dbus dbus-user-session libpam-systemd kmod udev systemd-timesyncd \
   e2fsprogs dosfstools parted iproute2 iputils-ping curl less nano bash-completion \
   network-manager bluez rfkill firmware-realtek firmware-misc-nonfree \
@@ -68,10 +69,13 @@ locale-gen
 printf 'LANG=ca_ES.UTF-8\n' > /etc/default/locale
 ln -sf /usr/share/zoneinfo/Europe/Madrid /etc/localtime
 if [[ "$PROFILE" == desktop ]]; then
-  apt-get install -y --no-install-recommends xfce4 xfce4-terminal xfce4-power-manager xfce4-power-manager-plugins \
+  apt-get install -y --no-install-recommends lxpolkit xfce4 xfce4-terminal xfce4-power-manager xfce4-power-manager-plugins \
     lightdm lightdm-gtk-greeter xserver-xorg xserver-xorg-input-libinput \
     dbus-x11 network-manager-gnome blueman thunar gvfs pavucontrol \
     greybird-gtk-theme adwaita-icon-theme fonts-dejavu-core x11-xserver-utils
+  # Selecció explícita: evita UKUI/OpenCV/GDAL com a proveïdor de polkit-1-auth-agent.
+  # Debian exclou XFCE de l'autoinici de lxpolkit perquè altres instal·lacions ja tenen un agent.
+  sed -i '/^NotShowIn=/s/XFCE;//' /etc/xdg/autostart/lxpolkit.desktop
   mkdir -p /etc/lightdm/lightdm.conf.d
   printf '[Seat:*]\nautologin-user=cyberdeck\nautologin-user-timeout=0\nuser-session=xfce\n' > /etc/lightdm/lightdm.conf.d/50-cyberdeck.conf
   systemctl enable lightdm

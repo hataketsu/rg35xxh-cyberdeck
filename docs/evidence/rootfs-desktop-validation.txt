@@ -1,0 +1,8 @@
+OpenSSL 3.5.7 9 Jun 2026 (Library: OpenSSL 3.5.7 9 Jun 2026)
+2.7.11
+No broken requirements found.
+dpkg --audit i systemd-analyze ARM64 --man=no verify: codi 0, sense incidències.
+verify-rootfs.py després d’actualitzar la base: codi 0.
+LightDM, NetworkManager i Bluetooth: verify ARM64 codi 0 abans de les actualitzacions de biblioteques.
+LXPolKit seleccionat explícitament i habilitat per XFCE; 80 dependències automàtiques sobrants retirades (177 MB).
+Comprovacions sense xarxa ni dispositius. Arrencada i maquinari PENDENTS.

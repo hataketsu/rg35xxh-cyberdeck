@@ -17,7 +17,7 @@ stage_fetch() {
   git -C "$WORK/rocknix" fetch --depth=1 origin "$ROCKNIX_COMMIT"
   git -C "$WORK/rocknix" checkout --detach "$ROCKNIX_COMMIT"
   [[ $(git -C "$WORK/rocknix" rev-parse HEAD) == "$ROCKNIX_COMMIT" ]] || die 'Commit incorrecte'
-  # Miralls de fonts amb la mateixa versió i SHA256; aplicació idempotent.
+  # Pedaços locals fixats per al cyberdeck; aplicació idempotent.
   local patchfile
   for patchfile in "$ROOT"/patches/rocknix/*.patch; do
     if git -C "$WORK/rocknix" apply --check "$patchfile" 2>/dev/null; then

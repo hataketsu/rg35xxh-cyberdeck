@@ -1,6 +1,6 @@
+OpenSSL 3.5.7 9 Jun 2026 (Library: OpenSSL 3.5.7 9 Jun 2026)
 2.7.11
 No broken requirements found.
-dpkg --audit: sense incidències (sortida buida).
-systemd-analyze 257 ARM64 --man=no verify: codi 0 (sortida buida), /tmp i /run en tmpfs.
-verify-rootfs.py: codi 0; Debian 13 ARM64, usuari normal, permisos i polítiques.
-Cap prova de dispositius, xarxa ni ràdio; maquinari PENDENT.
+dpkg --audit i systemd-analyze ARM64 --man=no verify: codi 0, sense incidències.
+verify-rootfs.py després d’actualitzar la base: codi 0.
+Comprovacions sense xarxa ni dispositius. Arrencada i maquinari PENDENTS.
