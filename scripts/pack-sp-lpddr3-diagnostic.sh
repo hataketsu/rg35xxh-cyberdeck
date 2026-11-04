@@ -13,7 +13,7 @@ case "$CHECKPOINTS" in
 esac
 DRAM=${RG_DIAG_DRAM:-lpddr3}
 voltage=1200000
-power_checkpoint=0
+power_checkpoint=$CHECKPOINTS
 description=lpddr3-stock-timings
 case "$DRAM" in
   lpddr3) ;;
@@ -22,7 +22,6 @@ case "$DRAM" in
     DIAG="$ROOT/work/sp-lpddr4-checkpoints"
     variant=lpddr4-led
     voltage=1100000
-    power_checkpoint=1
     description=lpddr4-original-profile-checkpoints
     ;;
   *) echo 'RG_DIAG_DRAM must be lpddr3 or lpddr4'; exit 1 ;;
@@ -39,6 +38,12 @@ UBOOT="$DIAG/u-boot-sunxi-with-spl.bin"
 python3 "$ROOT/scripts/validate-spl-diagnostic.py" "$DIAG/u-boot/spl/u-boot-spl.sym"
 if [[ "$CHECKPOINTS" == 1 ]]; then
   [[ $(cat "$DIAG/led-checkpoints.txt") == 1 ]] || exit 1
+  # Older corrected LPDDR4 builds already had the identical power checkpoint.
+  if [[ -f "$DIAG/power-checkpoint.txt" ]]; then
+    [[ $(cat "$DIAG/power-checkpoint.txt") == 1 ]] || exit 1
+  else
+    [[ "$DRAM" == lpddr4 ]] || exit 1
+  fi
 fi
 if [[ "$DRAM" == lpddr4 ]]; then
   [[ $(cat "$DIAG/dram-profile.txt") == lpddr4 ]] || exit 1

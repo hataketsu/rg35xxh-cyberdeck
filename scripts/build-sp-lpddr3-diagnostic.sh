@@ -36,7 +36,7 @@ if [[ "$CHECKPOINTS" == 1 ]]; then
   patch --batch --fuzz=0 -d "$OUT/u-boot" -p1 < "$ROOT/patches/u-boot/h700-sp-diagnostic-led-checkpoints.patch"
   sed -i 's/-sp-lpddr3-diag/-sp-lpddr3-led/' "$OUT/diagnostic_defconfig"
 fi
-if [[ "$DRAM" == lpddr4 ]]; then
+if [[ "$CHECKPOINTS" == 1 ]]; then
   patch --batch --fuzz=0 -d "$OUT/u-boot" -p1 < "$ROOT/patches/u-boot/h700-sp-diagnostic-power-checkpoint.patch"
 fi
 sed -i -e 's/-sp-lpddr3-diag/-sp-lpddr3-gpio/' \
@@ -98,6 +98,7 @@ cp "$OUT/u-boot/u-boot-sunxi-with-spl.bin" "$OUT/u-boot-sunxi-with-spl.bin"
 sha256sum "$OUT/u-boot-sunxi-with-spl.bin" > "$OUT/UBOOT.SHA256"
 git -C "$ROOT" rev-parse HEAD > "$OUT/source-revision.txt"
 printf '%s\n' "$CHECKPOINTS" > "$OUT/led-checkpoints.txt"
+printf '%s\n' "$CHECKPOINTS" > "$OUT/power-checkpoint.txt"
 printf '%s\n' "$DRAM" > "$OUT/dram-profile.txt"
 printf '%s\n' direct-gpio > "$OUT/early-led-backend.txt"
 echo "Diagnostic bootloader ready in $OUT; hardware boot remains unverified."
