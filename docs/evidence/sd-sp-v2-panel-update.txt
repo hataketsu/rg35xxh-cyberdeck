@@ -17,4 +17,7 @@ BUILD-INFO.txt
   actualitzat: 1a468d0700faa612c15b80e5b149aa6fd113fb77ffbe46fe5595964e72e61a8a
 Registre i originals: work/panel-after-lpddr3/{update-result.json,boot-file-backup/}.
 La SD conserva canvis d’execució al rootfs: el SHA global no és el de la imatge v2 neta.
-Prova física v2 pendent: TF1, TF2 buida, comprovar text llegible i esperar almenys 90 segons.
+Resultat físic comunicat per l'usuari el 2026-11-04 després de l'actualització:
+«It boots and I get a  shell waiting for the password, this is soo cool!!!»
+Arrencada amb consola llegible fins al prompt de contrasenya confirmada.
+No acredita encara autenticació, durada de la prova, TF2 buida, estabilitat de RAM ni XFCE.

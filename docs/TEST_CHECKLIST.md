@@ -29,10 +29,10 @@ Data inicial: 2026-11-03. Cap consola ni Heltec connectat a aquesta sessió. Emp
 
 | Prova | Procediment / criteri | Estat |
 |---|---|---|
-| Arrencada mínima | TF1, TF2 buida, login console; repetir 3 arrencades fredes | **PARCIAL**: journal LPDDR3 `0c6f35f` confirma multi-user i getty als 9,583 s; falta login llegible i repeticions amb TF2 buida. Vegeu [evidència](evidence/sd-lpddr3-first-linux-boot.txt) |
+| Arrencada mínima | TF1, TF2 buida, login console; repetir 3 arrencades fredes | **PARCIAL**: journal LPDDR3 `0c6f35f` confirma multi-user i getty als 9,583 s; amb panell v2 l'usuari confirma prompt de contrasenya llegible; falten autenticació i repeticions amb TF2 buida. Vegeu [evidència](evidence/sd-lpddr3-first-linux-boot.txt) |
 | Identitat | model SP i variant correcta, uname i BUILD-INFO coherents | **PENDENT** |
-| Pantalla | 640×480, colors, text estable >10 min i després de 30 s | **FALLA** amb panell standard: línies verticals; prova v2 preparada |
-| Panell v2 | Provar només si correspon; registrar revisió | **PENDENT** |
+| Pantalla | 640×480, colors, text estable >10 min i després de 30 s | **PARCIAL**: standard mostrava línies verticals; amb v2, consola llegible confirmada el 2026-11-04. Falta estabilitat >10 min i colors |
+| Panell v2 | Provar només si correspon; registrar revisió | **VALIDAT per arrencada llegible** amb LPDDR3 el 2026-11-04; revisió física del panell no identificada |
 | Retroil·luminació | brightnessctl, rang llegible i recuperació després DPMS | **PENDENT** |
 | XFCE | LightDM inicia cyberdeck, terminal/Thunar/tema/escala | **PENDENT** |
 | Controls | evtest i mapa cursor/clics, mantenir/soltar i combinacions | **PENDENT** |
