@@ -1,0 +1,20 @@
+2026-11-04 — Comprovacions del sistema real per SSH
+Origen: sortida enganxada per l'usuari des de cyberdeck@rg35xxsp, no execució directa de l'agent.
+
+uname -a:
+Linux rg35xxsp 7.0.2 #2 SMP PREEMPT Tue Nov  3 22:48:00 UTC 2026 aarch64 GNU/Linux
+
+free -m (primera lectura):
+Mem: total 976, used 162, free 754, shared 0, buff/cache 128, available 814.
+Swap: total 0, used 0, free 0.
+
+free -h (lectura posterior):
+Mem: total 976Mi, used 166Mi, free 750Mi, shared 932Ki, buff/cache 128Mi, available 810Mi.
+Swap: total 0B, used 0B, free 0B.
+
+systemctl --failed --no-pager:
+0 loaded units listed.
+
+Confirma kernel 7.0.2 ARM64 esperat, memòria utilitzable de 976 MiB i cap unitat systemd en estat failed en aquest instant.
+No és una prova exhaustiva de RAM, d'estabilitat prolongada ni d'absència d'avisos al journal.
+XFCE, autonomia, perifèrics i ràdio continuen pendents de validació física.

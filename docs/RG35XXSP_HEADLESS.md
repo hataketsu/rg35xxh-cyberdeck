@@ -33,3 +33,5 @@ Si el nom `.local` no es resol, utilitzeu la IP mostrada al router per `rg35xxsp
 No cal modificar el router ni obrir ports cap a Internet. La primera connexió Wi-Fi i autenticació SSH estan confirmades per l'usuari. Queden pendents la verificació detallada de DHCP/DNS, resolució `.local`, reconexió després de reiniciar i estabilitat prolongada.
 
 Referències: [format NetworkManager keyfile](https://networkmanager.pages.freedesktop.org/NetworkManager/NetworkManager/nm-settings-keyfile.html) i [sshd_config de Debian 13](https://manpages.debian.org/trixie/openssh-server/sshd_config.5.en.html).
+
+Comprovació posterior per SSH: kernel 7.0.2 aarch64, 976 MiB de RAM utilitzable, 810 MiB disponibles i cap unitat systemd fallida en aquell instant. [Sortida aportada per l'usuari](evidence/headless-runtime-checks.txt).
