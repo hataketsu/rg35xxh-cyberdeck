@@ -27,12 +27,16 @@ case "$DRAM" in
     ;;
   *) echo 'RG_DIAG_DRAM must be lpddr3 or lpddr4'; exit 1 ;;
 esac
+DIAG="$DIAG-gpio"
+variant="$variant-gpio"
 DIST="${RG_DIAG_DIST:-$ROOT/dist}"
 [[ -d "$DIST" && -f "$BASE" && ! -L "$BASE" ]] || exit 1
 case "$DIST" in /dev|/dev/*) echo 'Device destinations are forbidden'; exit 1 ;; esac
 [[ $(sha256sum "$BASE" | cut -d ' ' -f1) == 2067865108e50bcbaea6a904f7977e26a82070e592ec9cc5cd0821c728b53c1f ]] || { echo 'Wrong base image'; exit 1; }
 UBOOT="$DIAG/u-boot-sunxi-with-spl.bin"
 [[ -s "$UBOOT" && -f "$DIAG/source-revision.txt" ]] || exit 1
+[[ $(cat "$DIAG/early-led-backend.txt") == direct-gpio ]] || exit 1
+python3 "$ROOT/scripts/validate-spl-diagnostic.py" "$DIAG/u-boot/spl/u-boot-spl.sym"
 if [[ "$CHECKPOINTS" == 1 ]]; then
   [[ $(cat "$DIAG/led-checkpoints.txt") == 1 ]] || exit 1
 fi
@@ -70,6 +74,7 @@ DRAM=${DRAM^^}
 DRAM_CLK_MHZ=672
 DRAM_SUPPLY_UV=$voltage
 EARLY_SPL_STATUS_LED=yes
+EARLY_LED_BACKEND=direct-gpio
 LED_CHECKPOINTS=$CHECKPOINTS
 POWER_CHECKPOINT=$power_checkpoint
 BOOT_STATUS=unverified

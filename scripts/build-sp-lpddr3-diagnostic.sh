@@ -20,6 +20,8 @@ case "$DRAM" in
     ;;
   *) echo 'RG_DIAG_DRAM must be lpddr3 or lpddr4'; exit 1 ;;
 esac
+# Preserve every earlier diagnostic, including the faulty generic-LED builds.
+OUT="$OUT-gpio"
 [[ -f "$SRC/Makefile" && -f "$SRC/u-boot-sunxi-with-spl.bin" ]] || { echo 'Missing original pinned U-Boot build'; exit 1; }
 [[ ! -e "$OUT" ]] || { echo 'Diagnostic workspace already exists; preserved for inspection'; exit 1; }
 mkdir "$OUT"
@@ -35,6 +37,11 @@ fi
 if [[ "$DRAM" == lpddr4 ]]; then
   patch --batch --fuzz=0 -d "$OUT/u-boot" -p1 < "$ROOT/patches/u-boot/h700-sp-diagnostic-power-checkpoint.patch"
 fi
+# Apply after the checkpoint patches; pre-DRAM LEDs must not touch BSS.
+patch --batch --fuzz=0 -d "$OUT/u-boot" -p1 < "$ROOT/patches/u-boot/h700-sp-early-led-no-bss.patch"
+sed -i -e 's/-sp-lpddr3-diag/-sp-lpddr3-gpio/' \
+  -e 's/-sp-lpddr3-led/-sp-lpddr3-gpio/' \
+  -e 's/-sp-lpddr4-led/-sp-lpddr4-gpio/' "$OUT/diagnostic_defconfig"
 # Keep the U-Boot control DT consistent with the documented LPDDR3 rail setting.
 if [[ "$DRAM" == lpddr3 ]]; then
 python3 - "$OUT/u-boot/dts/upstream/src/arm64/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts" <<'PY'
@@ -64,6 +71,7 @@ docker run --rm --network none --user "$(id -u):$(id -g)" \
       HOSTCC=gcc HOSTCFLAGS="-I$tc/include" HOSTLDFLAGS="-L$tc/lib -Wl,-rpath,$tc/lib" \
       HOSTSTRIP=true CONFIG_MKIMAGE_DTC_PATH=scripts/dtc/dtc
   '
+python3 "$ROOT/scripts/validate-spl-diagnostic.py" "$OUT/u-boot/spl/u-boot-spl.sym"
 python3 - "$OUT/u-boot" "$DRAM" <<'PY'
 from pathlib import Path
 import struct, sys
@@ -74,7 +82,6 @@ for setting in [f'CONFIG_SUNXI_DRAM_H616_{dram.upper()}=y', f'CONFIG_AXP_DCDC3_V
                 'CONFIG_SPL_DRIVERS_MISC=y', f'CONFIG_DRAM_SUNXI_TPR11={tpr11}']:
     if setting not in config: raise SystemExit('Missing expected config: '+setting)
 if f'CONFIG_SUNXI_DRAM_H616_{other}=y' in config: raise SystemExit('Wrong DRAM type')
-if 'status_led_init' not in (p/'spl/u-boot-spl.map').read_text(): raise SystemExit('SPL LED code absent')
 b = bytearray((p/'u-boot-sunxi-with-spl.bin').read_bytes())
 length = struct.unpack_from('<I', b, 16)[0]
 expected = struct.unpack_from('<I', b, 12)[0]
@@ -92,4 +99,5 @@ sha256sum "$OUT/u-boot-sunxi-with-spl.bin" > "$OUT/UBOOT.SHA256"
 git -C "$ROOT" rev-parse HEAD > "$OUT/source-revision.txt"
 printf '%s\n' "$CHECKPOINTS" > "$OUT/led-checkpoints.txt"
 printf '%s\n' "$DRAM" > "$OUT/dram-profile.txt"
+printf '%s\n' direct-gpio > "$OUT/early-led-backend.txt"
 echo "Diagnostic bootloader ready in $OUT; hardware boot remains unverified."

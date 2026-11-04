@@ -1,0 +1,8 @@
+--- a/board/sunxi/board.c
++++ b/board/sunxi/board.c
+@@ -559,3 +559,4 @@
+ #ifdef CONFIG_LED_STATUS
++	/* No status_led_init(): its BSS lives in uninitialized DRAM. */
+ 	if (IS_ENABLED(CONFIG_SPL_DRIVERS_MISC))
+-		status_led_init();
++		gpio_direction_output(SUNXI_GPI(11), 1);
