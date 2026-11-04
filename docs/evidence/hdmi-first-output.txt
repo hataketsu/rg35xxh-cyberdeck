@@ -1,0 +1,11 @@
+2026-11-04 — Primera sortida HDMI verificada físicament
+Origen: comunicació de l'usuari després de connectar la pantalla externa.
+«It's working out of the box there was no need to run the bash command».
+Confirma imatge HDMI amb la configuració actual, sense haver d'executar la comanda xrandr proposada.
+Context: SP amb LPDDR3 corregit, panell SP v2, Debian 13, Linux 7.0.2,
+XFCE instal·lat per SSH i composició desactivada amb millora de resposta.
+El kernel inclou CONFIG_DRM_SUN8I_DW_HDMI=y; el journal previ registra
+HDMI TX v2.12a i vinculació de 6000000.hdmi al motor de pantalla.
+No s'han comunicat model de monitor, resolució, refresc, disposició de pantalles,
+àudio HDMI, persistència després de reiniciar ni cicles repetits de connexió/desconnexió.
+No cal cap canvi de configuració a partir d'aquesta prova reeixida.

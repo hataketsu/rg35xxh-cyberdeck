@@ -47,3 +47,7 @@ S'han aplicat 29 fitxers de pedaços de la revisió fixada a Linux 7.0.2 i s'han
 Hi ha 11 avisos dtc per variant (14 línies): noms/adreces de bus, proveïdors d'interrupció i nodes del graf de pantalla, inclosos nodes HDMI. Alguns pedaços s'apliquen amb offset/fuzz. No s'han silenciat ni reinterpretat com a validació dt-schema. No s'ha executat `dtbs_check` amb esquemes ni una compilació completa del kernel.
 
 El pedaç original que manté set reguladors sempre encesos **no s'aplica a SP**: falta evidència física que sigui necessari i podria augmentar consum o interferir amb energia. Si la pantalla falla després de ~30 segons, recolliu logs abans de canviar reguladors; aquest punt pot impedir l'arrencada útil i resta pendent.
+
+## Validació posterior: HDMI
+
+El 2026-11-04 l'usuari confirma sortida de vídeo HDMI funcional amb el sistema LPDDR3/SP v2 i XFCE actual, sense necessitat d'executar la comanda de diagnòstic o canviar la configuració. [Evidència](evidence/hdmi-first-output.txt). Àudio HDMI, resolució/refresc exactes i estabilitat amb reconnexions continuen pendents.
