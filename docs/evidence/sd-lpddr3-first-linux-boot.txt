@@ -1,0 +1,39 @@
+2026-11-04 — Inspecció de la SD LPDDR3 amb pantalla corrupta
+Autorització: «32 GB test SD connected for inspection»; només lectura.
+SD USB de proves: 31927042048 bytes; identitat, particions i hashes BOOT validats.
+Imatge instal·lada: standard-minimal-lpddr3-led-gpio-0c6f35f.
+Snapshot privat: work/panel-after-lpddr3/sd-read/rootfs.bin (mode 0600, directori 0700).
+Ext4 clean, muntat a /, mount_count=1. Rellotge absolut no fiable; temps monotònics a sota.
+Journal extret amb debugfs, sense muntar ni modificar la SD o el snapshot.
+Avisos de chown de debugfs perquè s'executa sense root; contingut llegible.
+El journalctl d'Ubuntu 22.04 no admet el format; lectura amb Debian 13 en contenidor temporal, journal readonly.
+El journal registra una segona SD de 58.2 GiB. Repetir la prova següent amb TF2 buida.
+No hi ha exports BOOT: apagada als 54 s abans del temporitzador de 60 s.
+Arrencada fins a multi-user i servei getty confirmada; autenticació i llegibilitat no comprovades.
+Pendents separats: avisos DRM d'orientació, regulatory.db absent, wpa_supplicant no activable i avisos ALSA.
+L'actualització de panell v2 continua preparada, no aplicada.
+SHA256 journal: 6a0a08dfdfa68bfe04060100fa16941694050803ddbaa77f474c7145f34bb091
+
+[    3.212459] rg35xxsp kernel: Linux version 7.0.2 (docker@d8183b113e92) (aarch64-rocknix-linux-gnu-gcc-15.2.0 (GCC) 15.2.0, GNU ld (GNU Binutils) 2.44) #2 SMP PREEMPT Tue Nov  3 22:48:00 UTC 2026
+[    3.214036] rg35xxsp kernel: Kernel command line: root=PARTUUID=e321c653-02 rw rootwait console=ttyS0,115200 console=tty1 loglevel=4
+[    3.242455] rg35xxsp kernel: panel-mipi spi0.0: firmware: panels/anbernic,rg35xx-plus-panel.panel: loaded successfully
+[    3.243029] rg35xxsp kernel: panel-mipi spi0.0: Modeline "640x480": 60 24000 640 780 784 800 480 494 498 500 0x48 0xa added
+[    3.243803] rg35xxsp kernel: panel-mipi spi0.0: Modeline "640x480": 120 48000 640 780 784 800 480 494 498 500 0x40 0xa added
+[    3.249211] rg35xxsp kernel: WARNING: drivers/gpu/drm/drm_mode_object.c:46 at drm_mode_object_add+0x84/0x90, CPU#0: kworker/u16:2/47
+[    3.252362] rg35xxsp kernel: WARNING: drivers/gpu/drm/drm_mode_object.c:246 at drm_object_attach_property+0x6c/0xb0, CPU#0: kworker/u16:2/47
+[    3.256958] rg35xxsp kernel: panel-mipi spi0.0: MIPI Display ID: 000000
+[    3.259619] rg35xxsp kernel: sun4i-drm display-engine: [drm] fb0: sun4i-drmdrmfb frame buffer device
+[    3.270581] rg35xxsp kernel: EXT4-fs (mmcblk0p2): mounted filesystem a011ec4f-cb46-4698-8f87-d941706a50a0 r/w with ordered data mode. Quota mode: none.
+[    5.260928] rg35xxsp systemd[1]: Mounted boot.mount - /boot.
+[    9.562743] rg35xxsp systemd[1]: Started getty@tty1.service - Getty on tty1.
+[    9.576346] rg35xxsp systemd[1]: Reached target multi-user.target - Multi-User System.
+[    9.583672] rg35xxsp systemd[1]: Startup finished in 1.756s (kernel) + 7.827s (userspace) = 9.583s.
+[   12.455633] rg35xxsp NetworkManager[275]: <error> [1776109095.6089] device (wlan0): Couldn't initialize supplicant interface: Failed to D-Bus activate wpa_supplicant service
+[   26.014353] rg35xxsp NetworkManager[275]: <error> [1776109109.1676] device (wlan0): Couldn't initialize supplicant interface: Failed to D-Bus activate wpa_supplicant service
+[   39.011732] rg35xxsp NetworkManager[275]: <error> [1776109122.1649] device (wlan0): Couldn't initialize supplicant interface: Failed to D-Bus activate wpa_supplicant service
+[   52.013676] rg35xxsp NetworkManager[275]: <error> [1776109135.1669] device (wlan0): Couldn't initialize supplicant interface: Failed to D-Bus activate wpa_supplicant service
+[   52.566794] rg35xxsp systemd-logind[263]: Lid closed.
+[   54.575021] rg35xxsp systemd-logind[263]: Power key pressed short.
+[   54.575095] rg35xxsp systemd-logind[263]: Powering off...
+[   56.134234] rg35xxsp systemd[1]: Reached target poweroff.target - System Power Off.
+[   56.593216] rg35xxsp systemd-journald[149]: Journal stopped

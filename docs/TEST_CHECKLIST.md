@@ -29,21 +29,21 @@ Data inicial: 2026-11-03. Cap consola ni Heltec connectat a aquesta sessió. Emp
 
 | Prova | Procediment / criteri | Estat |
 |---|---|---|
-| Arrencada mínima | TF1, TF2 buida, login console; repetir 3 arrencades fredes | **PENDENT** |
+| Arrencada mínima | TF1, TF2 buida, login console; repetir 3 arrencades fredes | **PARCIAL**: journal LPDDR3 `0c6f35f` confirma multi-user i getty als 9,583 s; falta login llegible i repeticions amb TF2 buida. Vegeu [evidència](evidence/sd-lpddr3-first-linux-boot.txt) |
 | Identitat | model SP i variant correcta, uname i BUILD-INFO coherents | **PENDENT** |
-| Pantalla | 640×480, colors, text estable >10 min i després de 30 s | **PENDENT** |
+| Pantalla | 640×480, colors, text estable >10 min i després de 30 s | **FALLA** amb panell standard: línies verticals; prova v2 preparada |
 | Panell v2 | Provar només si correspon; registrar revisió | **PENDENT** |
 | Retroil·luminació | brightnessctl, rang llegible i recuperació després DPMS | **PENDENT** |
 | XFCE | LightDM inicia cyberdeck, terminal/Thunar/tema/escala | **PENDENT** |
 | Controls | evtest i mapa cursor/clics, mantenir/soltar i combinacions | **PENDENT** |
 | Teclat extern | USB, layout, hotplug, sense captura pel mapper | **PENDENT** |
-| Wi-Fi | Escaneig, credencials, DNS, trànsit i estabilitat 30 min | **PENDENT** |
+| Wi-Fi | Escaneig, credencials, DNS, trànsit i estabilitat 30 min | **PENDENT**: journal detecta ràdio, però falla l'activació de wpa_supplicant |
 | Bluetooth | Adaptador, aparellament teclat, reconnectar | **PENDENT** |
 | Àudio | Altaveu/auriculars/volum i absència de soroll anormal | **PENDENT** |
 | Bateria | Comparar sysfs i UPower durant ús, sense salt persistent a 0% | **PENDENT** |
 | Càrrega | Estat carregant/desconnectat, evolució i temperatura normal | **PENDENT** |
 | Protecció de bateria | Verificar política/driver sense forçar una descàrrega profunda | **PENDENT** |
-| Tapa | SW_LID canvia en obrir/tancar; no suspèn | **PENDENT** |
+| Tapa | SW_LID canvia en obrir/tancar; no suspèn | **PARCIAL**: journal registra tancament sense suspensió; falta reobertura i repeticions |
 | Suspensió/resume | Desactivada; només investigar en una fase posterior controlada | **PENDENT** |
 | USB OTG host | Rol, VBUS, teclat i reconnectar sense perdre estabilitat | **PENDENT** |
 | Hub i alimentació | Teclat+Heltec; no realimentació ni caigudes | **PENDENT** |
