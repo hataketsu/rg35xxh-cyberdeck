@@ -4,7 +4,9 @@
 
 **Actualització crítica de diagnosi:** s'ha identificat un defecte introduït als tres candidats amb LED inicial: `status_led_init()` escrivia a BSS a DRAM abans d'inicialitzar-la. Els resultats de vermell fix no permeten atribuir la fallada al PMIC ni decidir LPDDR3/LPDDR4. S'ha corregit amb GPIO directe i una comprovació que rebutja els SPL afectats. La causa de fallada de la minimal original continua pendent, i la correcció requereix prova física. [Evidència](evidence/early-led-bss-regression.txt).
 
-Nou candidat corregit `lpddr4-led-gpio-b261dd6`: compilació, inspecció del camí LED compilat, regressió amb els SPL anteriors i empaquetat completats. Imatge de 6 GiB gravada a la SD de proves de 32 GB amb autorització explícita, SHA256 verificat per relectura i expulsió correcta; [evidència](evidence/sd-lpddr4-gpio-write.txt). Arrencada física pendent. [Detalls i sumes](RG35XXSP_MEMORY_DIAGNOSTIC.md).
+Candidat corregit `lpddr4-led-gpio-b261dd6`: compilació, inspecció del camí LED compilat, regressió amb els SPL anteriors i empaquetat completats. Imatge de 6 GiB gravada a la SD de proves de 32 GB amb autorització explícita, SHA256 verificat per relectura i expulsió correcta; [evidència](evidence/sd-lpddr4-gpio-write.txt). L'usuari observa una seqüència vermella repetida amb pausa d'uns 2 segons, pantalla negra i botó alliberat. És coherent amb retorn del PMIC sense error i reinici durant DRAM; causa concreta no confirmada. [Observacions i límits](evidence/sd-lpddr4-gpio-loop.txt).
+
+Nova comparació `lpddr3-led-gpio-0c6f35f` preparada amb GPIO directe, els mateixos checkpoints de potència i el perfil LPDDR3 anterior. Compilació i imatge de 6 GiB comprovades; gravació i prova física pendents. [Detalls i sumes](RG35XXSP_MEMORY_DIAGNOSTIC.md).
 
 Port de desenvolupament a `/home/frans/anbernic/rg35xxsp-cyberdeck`, branca **rg35xxsp-port**, sobre upstream `81cec5d7dfc23385cbd7c21daaef13f65817827a`. Canvis conservats en Git local; cap push ni publicació.
 

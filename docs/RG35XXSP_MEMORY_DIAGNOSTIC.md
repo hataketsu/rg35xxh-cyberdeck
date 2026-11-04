@@ -2,13 +2,21 @@
 
 **Correcció del diagnòstic (2026-11-04):** les variants `lpddr3-diag-00ed466`, `lpddr3-led-ed24995` i `lpddr4-led-3ac38e1` contenen un error introduït en activar el LED inicial: `status_led_init()` escriu un flag a DRAM abans d'inicialitzar-la. Els resultats de vermell fix d'aquestes variants són **inconclusius per al tipus de RAM i el PMIC**. Els registres històrics es conserven; aquestes variants queden substituïdes pel candidat amb GPIO directe. [Evidència del defecte i correcció](evidence/early-led-bss-regression.txt).
 
-## Candidat corregit actual
+## Comparació LPDDR3 corregida preparada
+
+`dist/rg35xxsp-cyberdeck-standard-minimal-lpddr3-led-gpio-0c6f35f.img`, 6 GiB. SHA256: `18b085fdbf27866ea9fd5ea7dd13e13a1242f5a82247603ef6cdd95da3b940c1`; XZ: `1e09fc90155dfdea00c82f172c1e186b15ff3a9f71dd5e3e96a90c1c1b91bd8b`. Bootloader: `2363bc8b435e1552ecddb50829e80865216c102e911179e87aa492dc0ba64bba`.
+
+Utilitza els timings LPDDR3 anteriors extrets del perfil per defecte de boot0, 672 MHz, correcció PHY LPDDR3 i DCDC3 1200 mV coherent als DT d'U-Boot/Linux. La configuració de memòria/potència coincideix amb el candidat LPDDR3 anterior, però el codi LED ara és GPIO directe. El fitxer `board/sunxi/board.c` amb els checkpoints PMIC/DRAM/U-Boot és idèntic al de la comparació LPDDR4 corregida.
+
+Compilació, regressió del LED/BSS, checksum SPL, FIT, empaquetat, fsck FAT, hashes BOOT, integritat XZ i comparació byte a byte de MBR/rootfs superats. Registres: `work/boot-failure-lpddr4-gpio/lpddr3-gpio-{build,pack}.log`. Preparada, encara no gravada ni provada físicament. Reproducció: els scripts habituals amb `RG_DIAG_DRAM=lpddr3 RG_DIAG_CHECKPOINTS=1`; workspace `work/sp-lpddr3-checkpoints-gpio`.
+
+## Comparació LPDDR4 corregida provada
 
 `dist/rg35xxsp-cyberdeck-standard-minimal-lpddr4-led-gpio-b261dd6.img`, 6 GiB. Conserva els paràmetres LPDDR4/PMIC originals i els checkpoints de la comparació anterior, però usa GPIO directe abans d'inicialitzar DRAM. SHA256: `b4f009fe974ee20913b00a597750e6e5ae0998d065eca76f67fc8d919aad0ae3`; XZ: `09372180f1920523e836b2bafa2c951c6515c88b53905e4e46337f6348cfdc88`.
 
 Compilació i empaquetat completats amb codi 0. El validador rebutja els tres SPL defectuosos i accepta el corregit. S'han inspeccionat els símbols i el desassemblatge del camí LED; el flag i la funció genèrics ja no apareixen al SPL. Checksum SPL, FIT, fsck FAT, hashes BOOT, integritat XZ i comparació byte a byte de MBR/rootfs correctes. Registres a `work/early-led-bss-audit/`.
 
-Aquest candidat s'ha gravat a la SD de proves de 32 GB amb autorització explícita el 2026-11-04: SHA256 verificat per relectura, codi 0 i expulsió correcta. [Evidència](evidence/sd-lpddr4-gpio-write.txt). Prova d'arrencada física pendent. La correcció del defecte de diagnòstic no acredita encara l'arrencada de Debian. Els apartats següents conserven l'historial dels candidats anteriors.
+Aquest candidat s'ha gravat a la SD de proves de 32 GB amb autorització explícita el 2026-11-04: SHA256 verificat per relectura, codi 0 i expulsió correcta. [Evidència](evidence/sd-lpddr4-gpio-write.txt). La prova física mostra un flaix vermell feble, dos de més intensos, aproximadament 2 segons fix i repetició amb el botó alliberat; pantalla negra. És coherent amb els checkpoints del PMIC seguits d'un reinici durant DRAM. El timeout d'1 segon de DRAM pot cridar `panic()` i reiniciar, però aquesta causa concreta requereix confirmació; [observacions i límits](evidence/sd-lpddr4-gpio-loop.txt). No s'ha confirmat arrencada de Debian. Els apartats següents conserven l'historial dels candidats anteriors.
 
 La minimal LPDDR4 `e807755` no arrenca en aquesta unitat, també en una SD nova de 32 GB; la SD original sí que arrenca. La relectura del suport confirma MBR/bootloader/BOOT correctes i cap muntatge registrat d'ext4. [Evidència](evidence/sd-minimal-32gb-boot-failure.txt).
 

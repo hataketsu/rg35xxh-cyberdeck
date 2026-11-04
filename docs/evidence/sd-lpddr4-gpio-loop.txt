@@ -1,0 +1,20 @@
+2026-11-04 — Seqüència vermella repetida amb el diagnòstic LPDDR4 corregit
+Imatge provada: rg35xxsp-cyberdeck-standard-minimal-lpddr4-led-gpio-b261dd6.img.
+L'usuari descriu un parpelleig feble, dos de més intensos, vermell fix durant aproximadament 2 segons, i repetició.
+Confirma: tots els flaixos vermells, pantalla negra, repeteix amb el botó d'encesa completament alliberat.
+No s'ha observat el checkpoint verd posterior a DRAM ni el de tots dos LEDs d'U-Boot principal.
+
+Correspondència amb el codi compilat:
+- Entrada al SPL: PI11 vermell activat amb GPIO directe.
+- Retorn del PMIC sense error: dos parpelleigs de 250 ms i pausa d'1 segon abans de DRAM.
+- Retorn d'error del PMIC: bucle uniforme de 750 ms apagat/250 ms encès, sense la pausa fixa de 2 segons descrita.
+- mctl_await_completion() de dram_helpers.c crida panic si un registre DRAM no assoleix el valor esperat en 1 segon.
+- CONFIG_PANIC_HANG no està activat; panic_finish() executa do_reset().
+
+Inferència: la seqüència és coherent amb retorn del PMIC sense error i reinici durant la inicialització de DRAM, possiblement per timeout. No és una prova del timeout concret, del registre afectat ni dels voltatges físics; no hi ha traça sèrie. Altres causes de reset no queden excloses.
+La correcció GPIO ha canviat el comportament respecte dels diagnòstics afectats per BSS prematur. Les proves LPDDR3 anteriors no poden descartar aquell perfil.
+Següent comparació preparada amb el perfil LPDDR3 original del diagnòstic, GPIO directe i els mateixos checkpoints PMIC/DRAM/U-Boot; mantenint la coherència DCDC3 1200 mV als DT d'U-Boot i Linux.
+Imatge: rg35xxsp-cyberdeck-standard-minimal-lpddr3-led-gpio-0c6f35f.img, 6442450944 bytes.
+SHA256: 18b085fdbf27866ea9fd5ea7dd13e13a1242f5a82247603ef6cdd95da3b940c1.
+Build i pack amb codi 0. Registres: work/boot-failure-lpddr4-gpio/lpddr3-gpio-{build,pack}.log.
+Checks: LED sense funció/flag BSS defectuosos, SPL/FIT, fsck FAT, hashes BOOT, MBR/rootfs idèntics i integritat XZ. Gravació/prova física pendents.

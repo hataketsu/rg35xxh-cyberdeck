@@ -14,6 +14,6 @@ Resultat Imager i embolcall: codi 0; result.json SUCCESS.
 Registre natiu: Cycle ended, state: succeeded; expulsió PhysicalDrive1 succeeded: true.
 Finalització: 2026-11-04T11:22:47+01:00.
 Registres: work/flash-lpddr4-led-gpio-b261dd6/{flash.ps1,imager-write.log,progress.txt,result.json,stage.txt}.
-Prova d'arrencada física del candidat corregit: PENDENT.
+Prova física posterior: parpelleig vermell feble, dos de més intensos, fix aproximadament 2 segons i repetició; pantalla negra, botó alliberat. No s'ha confirmat arrencada. Vegeu sd-lpddr4-gpio-loop.txt per separar observacions i inferència de reinici durant DRAM.
 Conserva els checkpoints PMIC/DRAM/U-Boot, substituint la crida LED inicial defectuosa per GPIO directe.
 La gravació verificada no acredita que s'hagi resolt l'arrencada de Debian.
