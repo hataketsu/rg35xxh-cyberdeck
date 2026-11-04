@@ -12,6 +12,8 @@ Actualització 2026-11-04: també s'ha generat `dist/rg35xxsp-cyberdeck-standard
 
 Prova amb SD nova, 2026-11-04: s'ha gravat la **minimal ordinària de 6 GiB `e807755`** a la targeta nova de 32 GB demanada per l'usuari. Raspberry Pi Imager confirma escriptura, SHA256 de relectura coincident i expulsió correcta. [Evidència de la SD nova](evidence/sd-minimal-32gb-write.txt). L'intent anterior amb la SD antiga no va mostrar arrencada; la bateria baixa reportada després impedeix establir-ne la causa. L'usuari confirma que tampoc arrenca amb aquesta SD, mentre l'original funciona. La relectura física confirma bootloader i fitxers BOOT correctes; ext4 no registra cap muntatge. [Diagnosi de la fallada](evidence/sd-minimal-32gb-boot-failure.txt).
 
+S'ha preparat un [candidat diagnòstic LPDDR3](RG35XXSP_MEMORY_DIAGNOSTIC.md) basat en els paràmetres del boot0 original d'aquesta unitat i el perfil upstream. Compilació i estructura verificades; pendent de prova física. No substitueix els perfils normals ni constitueix una correcció confirmada.
+
 ## 2. Fitxers
 
 Inventari complet a [CHANGED_FILES.txt](evidence/CHANGED_FILES.txt). Grups principals:
