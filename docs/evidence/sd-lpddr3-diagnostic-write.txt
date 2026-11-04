@@ -16,6 +16,7 @@ Finalització: 2026-11-04T09:31:48+01:00.
 Registres: work/flash-lpddr3-00ed466/{flash.ps1,imager-write.log,progress.txt,result.json,stage.txt}.
 La gravació correcta no valida l'arrencada ni confirma la hipòtesi LPDDR3.
 Prova física posterior: l'usuari informa de pantalla negra i LED d'encesa vermell en lloc de verd.
+AUDITORIA POSTERIOR: el LED inicial accedia a BSS a DRAM abans d'inicialitzar-la; aquest resultat no permet concloure res sobre el tipus de RAM. Vegeu early-led-bss-regression.txt.
 Arrencada de Debian NO confirmada. Pendent confirmar si el LED també apareix sense carregador i si és fix o intermitent.
 Actualització posterior: confirmat vermell fix sense carregador; relectura i checkpoints següents a sd-lpddr3-red-led.txt.
 El candidat configura CONFIG_LED_STATUS_BIT=267 (PI11) i STATE=2 (encès fix).

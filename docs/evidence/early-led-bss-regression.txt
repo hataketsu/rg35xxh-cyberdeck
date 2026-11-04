@@ -1,0 +1,41 @@
+2026-11-04 — Error introduït a la instrumentació LED dels candidats diagnòstics
+
+Resultat físic més recent: l'usuari informa «steady red» amb lpddr4-led-3ac38e1, sense els dos parpelleigs del PMIC.
+
+Causa de programari demostrada:
+Activar CONFIG_SPL_DRIVERS_MISC feia executar status_led_init() abans de PMIC/DRAM a sunxi_board_init().
+status_led_init() encén PI11 mitjançant __led_init() i després escriu status_led_init_done=1.
+El mapa i símbols situen aquest flag a .bss, adreça DRAM 0x4ff80020; la DRAM encara no s'ha inicialitzat.
+Desassemblatge real de lpddr4-led-3ac38e1:
+  0x25584: bl __led_init
+  0x25588: adrp x0, 0x4ff80000
+  0x2558c: mov w1, #1
+  0x25594: str w1, [x0, #32]
+  0x25598: ret
+Aquesta escriptura prematura és un defecte de la instrumentació, coherent amb vermell fix abans dels checkpoints següents. La reacció exacta del bus al maquinari no s'ha mesurat.
+
+Afectats: lpddr3-diag-00ed466, lpddr3-led-ed24995 i lpddr4-led-3ac38e1.
+Els tres tenen status_led_init_done a 0x4ff80020 al SPL. Els seus resultats no permeten decidir entre LPDDR3/LPDDR4 ni atribuir la fallada al PMIC o al training.
+La minimal original e807755 no activava aquest camí LED al SPL; el seu problema d'arrencada continua sense causa confirmada.
+
+Correcció:
+Substituir només la crida inicial status_led_init() per gpio_direction_output(PI11, 1), abans d'afegir la resta de checkpoints.
+El camí GPIO SPL usa registres MMIO i pila SRAM, sense el flag de BSS.
+Conservar els binaris antics, fer builds nous amb sufix -gpio i impedir reempaquetar el camí defectuós.
+scripts/validate-spl-diagnostic.py rebutja status_led_init/status_led_init_done al símbols del SPL i exigeix sunxi_board_init/gpio_direction_output. És una regressió dirigida, no una auditoria completa de tots els accessos abans de DRAM.
+
+Validació:
+Els tres SPL defectuosos són rebutjats pel nou validador.
+Cadenes de pedaços provades amb fuzz=0 per LPDDR3 sense checkpoints, LPDDR3 amb checkpoints i LPDDR4 amb checkpoints de potència.
+Primers intents d'aplicar el pedaç fallits per context; conservats a work/early-led-bss-audit/lpddr4-gpio-build*.log i workspace -failed-patch. Cap d'aquests intents va produir una imatge per gravar.
+Compilació LPDDR4 corregida amb codi 0: status_led_init/status_led_init_done absents; checksum SPL i FIT correctes.
+Desassemblatge del resultat: sunxi_board_init crida directament gpio_direction_output per PI11/PI12 i després axp_init/axp_set_dcdc2/axp_set_dcdc3. El camí de la crida LED prematura ja no accedeix al flag DRAM.
+Comparació de .config amb el candidat LPDDR4 anterior: només CONFIG_LOCALVERSION difereix; memòria, PMIC i I2C idèntics.
+
+Registres: work/early-led-bss-audit/{unsafe-status-led-disassembly.txt,fixed-gpio-disassembly.txt,lpddr4-gpio-build-retry2.log,lpddr4-gpio-pack.log}.
+Bootloader corregit SHA256: 308e20435780304954940a3b1fb3e4b8f3e9248cefd5b39a22285291eed97596.
+Prova física de la correcció: pendent. No es declara arreglada l'arrencada de Debian.
+Imatge corregida preparada: rg35xxsp-cyberdeck-standard-minimal-lpddr4-led-gpio-b261dd6.img, 6442450944 bytes.
+SHA256 imatge: b4f009fe974ee20913b00a597750e6e5ae0998d065eca76f67fc8d919aad0ae3.
+SHA256 XZ: 09372180f1920523e836b2bafa2c951c6515c88b53905e4e46337f6348cfdc88.
+Empaquetat amb codi 0: regressió SPL, incorporació del bootloader, MBR/rootfs idèntics, fsck FAT, hashes BOOT, MBR/SPL i integritat XZ correctes.

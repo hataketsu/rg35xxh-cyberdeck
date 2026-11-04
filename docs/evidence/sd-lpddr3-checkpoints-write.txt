@@ -15,6 +15,7 @@ Registre natiu: Cycle ended, state: succeeded; expulsió PhysicalDrive1 succeede
 Finalització: 2026-11-04T09:57:46+01:00.
 Registres: work/flash-lpddr3-led-ed24995/{flash.ps1,imager-write.log,progress.txt,result.json,stage.txt}.
 Prova d'arrencada física posterior: l'usuari informa «just red steady»; no informa de cap transició verda ni de tots dos LEDs.
+AUDITORIA POSTERIOR: el LED inicial accedia a BSS a DRAM abans d'inicialitzar-la. Les inferències següents sobre PMIC/DRAM queden invalidades per aquest defecte de diagnòstic; vegeu early-led-bss-regression.txt.
 No s'ha observat el checkpoint posterior a DRAM. Això deixa oberta una aturada al PMIC o a la inicialització de DRAM; no demostra el tipus físic de RAM.
 Observar la seqüència completa: vermell inicial; verd després que DRAM retorni una mida no nul·la; tots dos en entrar a U-Boot principal.
 Els dos checkpoints posteriors duren almenys un segon. Cap d'ells acredita per si sol l'arrencada de Linux.

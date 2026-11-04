@@ -1,5 +1,15 @@
 # Diagnòstic de memòria — RG35XXSP de l'usuari
 
+**Correcció del diagnòstic (2026-11-04):** les variants `lpddr3-diag-00ed466`, `lpddr3-led-ed24995` i `lpddr4-led-3ac38e1` contenen un error introduït en activar el LED inicial: `status_led_init()` escriu un flag a DRAM abans d'inicialitzar-la. Els resultats de vermell fix d'aquestes variants són **inconclusius per al tipus de RAM i el PMIC**. Els registres històrics es conserven; aquestes variants queden substituïdes pel candidat amb GPIO directe. [Evidència del defecte i correcció](evidence/early-led-bss-regression.txt).
+
+## Candidat corregit actual
+
+`dist/rg35xxsp-cyberdeck-standard-minimal-lpddr4-led-gpio-b261dd6.img`, 6 GiB. Conserva els paràmetres LPDDR4/PMIC originals i els checkpoints de la comparació anterior, però usa GPIO directe abans d'inicialitzar DRAM. SHA256: `b4f009fe974ee20913b00a597750e6e5ae0998d065eca76f67fc8d919aad0ae3`; XZ: `09372180f1920523e836b2bafa2c951c6515c88b53905e4e46337f6348cfdc88`.
+
+Compilació i empaquetat completats amb codi 0. El validador rebutja els tres SPL defectuosos i accepta el corregit. S'han inspeccionat els símbols i el desassemblatge del camí LED; el flag i la funció genèrics ja no apareixen al SPL. Checksum SPL, FIT, fsck FAT, hashes BOOT, integritat XZ i comparació byte a byte de MBR/rootfs correctes. Registres a `work/early-led-bss-audit/`.
+
+No s'ha gravat aquest candidat ni s'ha provat al maquinari. La correcció del defecte de diagnòstic no acredita encara l'arrencada de Debian. Els apartats següents conserven l'historial dels candidats anteriors.
+
 La minimal LPDDR4 `e807755` no arrenca en aquesta unitat, també en una SD nova de 32 GB; la SD original sí que arrenca. La relectura del suport confirma MBR/bootloader/BOOT correctes i cap muntatge registrat d'ext4. [Evidència](evidence/sd-minimal-32gb-boot-failure.txt).
 
 El boot0 original desa LPDDR3 (tipus 7, 672 MHz) com a perfil per defecte, amb valors de training específics. També conté perfils alternatius i un DTB estàtic LPDDR4. Això justifica provar LPDDR3, però no demostra per si sol la memòria física ni la causa definitiva. [Paràmetres i fonts](evidence/stock-memory-diagnostic.txt).
@@ -26,6 +36,8 @@ Registres: `work/boot-failure-32gb/lpddr3-build.log` i `lpddr3-pack.log`. No s'h
 `scripts/build-sp-lpddr3-diagnostic.sh` exigeix el build original i un espai `work/sp-lpddr3-diagnostic` nou; rebutja sobreescriure'l. Utilitza Docker i el toolchain ja construït, sense xarxa.
 
 `scripts/pack-sp-lpddr3-diagnostic.sh` s'executa en el contenidor `cyberdeck-rootfs`, amb el repositori de lectura i `dist` d'escriptura. Exigeix `RG_DIAG_REVISION` i opcionalment `RG_DIAG_DIST`; comprova el SHA256 de la base i no sobreescriu sortides. Només opera sobre fitxers, mai sobre discos.
+
+Els scripts actuals afegeixen `-gpio` als workspaces i noms de variant, apliquen la correcció d'accés prematur a BSS i validen el SPL abans de construir/empaquetar. Els noms anteriors d'aquest document identifiquen els artefactes històrics.
 
 ## Prova física i diagnosi pendent
 
@@ -61,4 +73,4 @@ Imatge preparada: `dist/rg35xxsp-cyberdeck-standard-minimal-lpddr4-led-3ac38e1.i
 
 Compilació real i empaquetat completats amb codi 0; sintaxi i ShellCheck correctes. Configuració de RAM, PMIC i I²C comparada amb la compilació original: idèntica. Kernel, DTB Linux i scripts de boot conserven els hashes de la minimal original; MBR i rootfs comparats byte a byte. fsck FAT, checksum SPL, posició FIT i integritat XZ correctes. Registres: `work/boot-failure-lpddr3-checkpoints/lpddr4-{build,pack,comparison}.log`.
 
-Aquesta variant s'ha gravat a la SD de proves de 32 GB amb autorització explícita el 2026-11-04: SHA256 de relectura coincident, codi 0 i expulsió correcta. [Evidència](evidence/sd-lpddr4-checkpoints-write.txt). Prova d'arrencada física pendent. L'objectiu és comparar els perfils amb punts d'observació equivalents; no es considera una correcció confirmada.
+Aquesta variant s'ha gravat a la SD de proves de 32 GB amb autorització explícita el 2026-11-04: SHA256 de relectura coincident, codi 0 i expulsió correcta. [Evidència](evidence/sd-lpddr4-checkpoints-write.txt). L'usuari ha informat de vermell fix; l'auditoria posterior ha trobat el defecte del LED inicial descrit al principi. Aquest resultat no permet comparar els tipus de RAM.

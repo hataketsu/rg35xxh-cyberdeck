@@ -2,6 +2,10 @@
 
 ## 1. Resultat
 
+**Actualització crítica de diagnosi:** s'ha identificat un defecte introduït als tres candidats amb LED inicial: `status_led_init()` escrivia a BSS a DRAM abans d'inicialitzar-la. Els resultats de vermell fix no permeten atribuir la fallada al PMIC ni decidir LPDDR3/LPDDR4. S'ha corregit amb GPIO directe i una comprovació que rebutja els SPL afectats. La causa de fallada de la minimal original continua pendent, i la correcció requereix prova física. [Evidència](evidence/early-led-bss-regression.txt).
+
+Nou candidat corregit `lpddr4-led-gpio-b261dd6`: compilació, inspecció del camí LED compilat, regressió amb els SPL anteriors i empaquetat completats; imatge de 6 GiB preparada. Gravació i arrencada física pendents. [Detalls i sumes](RG35XXSP_MEMORY_DIAGNOSTIC.md).
+
 Port de desenvolupament a `/home/frans/anbernic/rg35xxsp-cyberdeck`, branca **rg35xxsp-port**, sobre upstream `81cec5d7dfc23385cbd7c21daaef13f65817827a`. Canvis conservats en Git local; cap push ni publicació.
 
 S'han implementat perfils explícits H/SP i variants de panell, espais de treball separats, kernel/mòduls coherents, boot.scr regenerat amb PARTUUID, empaquetat de fitxer imatge amb comprovacions i sumes, rootfs SP Debian 13 minimal/desktop, XFCE fosc amb autologin normal, controls de creueta, política de tapa conservadora, diagnòstic, venv Meshtastic i menú USB/BLE amb confirmació d'enviament. S'ha escrit tota la documentació demanada en català.
