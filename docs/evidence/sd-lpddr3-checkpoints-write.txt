@@ -1,0 +1,19 @@
+2026-11-04 — Gravació del candidat LPDDR3 amb checkpoints LED
+Autorització explícita: «Write the checkpoint image to the 32 GB test SD».
+Imatge: rg35xxsp-cyberdeck-standard-minimal-lpddr3-led-ed24995.img
+Mida: 6442450944 bytes (6 GiB)
+Destí: Windows Disk 1, Generic STORAGE DEVICE USB, 31927042048 bytes.
+Identitat, mida i layout de particions revalidats abans de gravar; disc no boot/system/readonly/offline.
+La mida exigida exclou la SD original de 62534975488 bytes. Original no modificada.
+Eina: Raspberry Pi Imager 2.0.12, signatura vàlida de Raspberry Pi Limited.
+Verificació activada, sense personalització de la imatge ni habilitació de discos de sistema.
+SHA256 de la còpia temporal i de la verificació per relectura coincidents:
+443c1d93ef979e1aac94197f3a289d097e9059e46f815f717c79ed0edd22e9aa
+Escriptura: 320 segons. Verificació: 194,371 segons.
+Resultat Imager i embolcall: codi 0; result.json SUCCESS.
+Registre natiu: Cycle ended, state: succeeded; expulsió PhysicalDrive1 succeeded: true.
+Finalització: 2026-11-04T09:57:46+01:00.
+Registres: work/flash-lpddr3-led-ed24995/{flash.ps1,imager-write.log,progress.txt,result.json,stage.txt}.
+Prova d'arrencada física d'aquesta variant: PENDENT.
+Observar la seqüència completa: vermell inicial; verd després que DRAM retorni una mida no nul·la; tots dos en entrar a U-Boot principal.
+Els dos checkpoints posteriors duren almenys un segon. Cap d'ells acredita per si sol l'arrencada de Linux.

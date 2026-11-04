@@ -47,4 +47,4 @@ Són checkpoints de control, no tests exhaustius de RAM ni proves d'arrencada de
 
 Imatge preparada i comprovada: `dist/rg35xxsp-cyberdeck-standard-minimal-lpddr3-led-ed24995.img` (6 GiB). SHA256: `443c1d93ef979e1aac94197f3a289d097e9059e46f815f717c79ed0edd22e9aa`. XZ: `a3faebf9a2eb85a1f6019c26e0ae2b0702e5466d8456a716decea07140649256`. Bootloader: `91bab359903b495e5e0026d5123fe9f0c58d49f959e55e6d89b57348a7ffad4f`.
 
-Compilació, checksum SPL, FIT, hashes BOOT, fsck FAT, integritat XZ i comparació byte a byte de MBR/rootfs superats. Registres: `work/boot-failure-lpddr3/checkpoints-{build,pack}.log`. Aquesta variant encara no s'ha gravat ni provat físicament.
+Compilació, checksum SPL, FIT, hashes BOOT, fsck FAT, integritat XZ i comparació byte a byte de MBR/rootfs superats. Registres: `work/boot-failure-lpddr3/checkpoints-{build,pack}.log`. Variant gravada a la SD de proves de 32 GB amb autorització explícita el 2026-11-04: SHA256 de relectura coincident, codi 0 i expulsió correcta. [Evidència](evidence/sd-lpddr3-checkpoints-write.txt). Prova d'arrencada física pendent.
