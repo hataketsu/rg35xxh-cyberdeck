@@ -13,3 +13,9 @@ Cap personalització d'Imager aplicada. Verificació activada; escriptura a disc
 Els primers intents van fallar en llegir la ruta UNC de WSL. La còpia local de Windows es va comprovar amb SHA256 abans de gravar.
 Registres locals complets: work/flash-tools/imager-write.log, imager-console.log i flash-result.json.
 Arrencada i funcionalitats de la consola: PENDENTS de prova física.
+
+Seguiment de la prova física, 2026-11-04:
+L'usuari informa que la minimal no mostra arrencada, mentre l'original torna a arrencar després de tancar/obrir la tapa. Confirma una prova amb minimal a TF1 i TF2 buida, però posteriorment informa de bateria baixa. No es pot determinar la causa amb aquestes observacions.
+Relectura no destructiva de la SD des de Windows: Image, DTB SP standard, boot.scr i boot.cmd coincideixen amb BOOT.SHA256; no existeix /boot/logs. Hi ha directoris multimèdia afegits que no provenen de la imatge. No s'ha modificat la SD durant aquesta inspecció.
+Auditoria de la imatge local: SPL amb checksum correcte, U-Boot/FIT/ATF coincideixen amb els binaris compilats; cerca boot.scr habilitada; PARTUUID coherent; MMC/ext4 incorporats al kernel. Aquestes comprovacions no proven compatibilitat física.
+La SD antiga no queda validada per a l'arrencada. L'usuari demana repetir amb una SD nova de 32 GB i la imatge minimal ordinària de 6 GiB.
