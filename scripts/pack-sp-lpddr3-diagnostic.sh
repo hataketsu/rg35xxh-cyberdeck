@@ -4,15 +4,25 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 BASE="$ROOT/dist/rg35xxsp-cyberdeck-standard-minimal-e807755.img"
 DIAG="$ROOT/work/sp-lpddr3-diagnostic"
+CHECKPOINTS=${RG_DIAG_CHECKPOINTS:-0}
+variant=lpddr3-diag
+case "$CHECKPOINTS" in
+  0) ;;
+  1) DIAG="$ROOT/work/sp-lpddr3-checkpoints"; variant=lpddr3-led ;;
+  *) echo 'RG_DIAG_CHECKPOINTS must be 0 or 1'; exit 1 ;;
+esac
 DIST="${RG_DIAG_DIST:-$ROOT/dist}"
 [[ -d "$DIST" && -f "$BASE" && ! -L "$BASE" ]] || exit 1
 case "$DIST" in /dev|/dev/*) echo 'Device destinations are forbidden'; exit 1 ;; esac
 [[ $(sha256sum "$BASE" | cut -d ' ' -f1) == 2067865108e50bcbaea6a904f7977e26a82070e592ec9cc5cd0821c728b53c1f ]] || { echo 'Wrong base image'; exit 1; }
 UBOOT="$DIAG/u-boot-sunxi-with-spl.bin"
 [[ -s "$UBOOT" && -f "$DIAG/source-revision.txt" ]] || exit 1
+if [[ "$CHECKPOINTS" == 1 ]]; then
+  [[ $(cat "$DIAG/led-checkpoints.txt") == 1 ]] || exit 1
+fi
 revision="${RG_DIAG_REVISION:?Set the committed packaging revision}"
 [[ "$revision" =~ ^[0-9a-f]{7,40}$ ]] || exit 1
-IMG="$DIST/rg35xxsp-cyberdeck-standard-minimal-lpddr3-diag-$revision.img"
+IMG="$DIST/rg35xxsp-cyberdeck-standard-minimal-$variant-$revision.img"
 [[ ! -e "$IMG" && ! -L "$IMG" ]] || { echo 'Output already exists; not overwritten'; exit 1; }
 cp --reflink=auto --sparse=always --no-clobber "$BASE" "$IMG"
 [[ -f "$IMG" && ! -L "$IMG" ]] || exit 1
@@ -39,6 +49,7 @@ DRAM=LPDDR3
 DRAM_CLK_MHZ=672
 DRAM_SUPPLY_UV=1200000
 EARLY_SPL_STATUS_LED=yes
+LED_CHECKPOINTS=$CHECKPOINTS
 BOOT_STATUS=unverified
 INFO
 (cd "$TMP"; sha256sum Image sun50i-h700-anbernic-rg35xx-sp.dtb boot.scr boot.cmd > BOOT.SHA256)

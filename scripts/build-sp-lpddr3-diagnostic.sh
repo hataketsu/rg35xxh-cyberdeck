@@ -5,12 +5,22 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 ROCKNIX="$ROOT/work/rg35xxsp-standard-minimal/rocknix"
 SRC="$ROCKNIX/build.ROCKNIX-H700.aarch64/build/u-boot-v2025.07-rc3"
 OUT="$ROOT/work/sp-lpddr3-diagnostic"
+CHECKPOINTS=${RG_DIAG_CHECKPOINTS:-0}
+case "$CHECKPOINTS" in
+  0) ;;
+  1) OUT="$ROOT/work/sp-lpddr3-checkpoints" ;;
+  *) echo 'RG_DIAG_CHECKPOINTS must be 0 or 1'; exit 1 ;;
+esac
 [[ -f "$SRC/Makefile" && -f "$SRC/u-boot-sunxi-with-spl.bin" ]] || { echo 'Missing original pinned U-Boot build'; exit 1; }
 [[ ! -e "$OUT" ]] || { echo 'Diagnostic workspace already exists; preserved for inspection'; exit 1; }
 mkdir "$OUT"
 cp -a "$SRC" "$OUT/u-boot"
 cp "$ROOT/config/diagnostics/rg35xxsp-lpddr3_defconfig" "$OUT/diagnostic_defconfig"
 patch --batch --fuzz=0 -d "$OUT/u-boot" -p1 < "$ROOT/patches/u-boot/h700-lpddr3-phy-byte.patch"
+if [[ "$CHECKPOINTS" == 1 ]]; then
+  patch --batch --fuzz=0 -d "$OUT/u-boot" -p1 < "$ROOT/patches/u-boot/h700-sp-diagnostic-led-checkpoints.patch"
+  sed -i 's/-sp-lpddr3-diag/-sp-lpddr3-led/' "$OUT/diagnostic_defconfig"
+fi
 # Keep the U-Boot control DT consistent with the documented LPDDR3 rail setting.
 python3 - "$OUT/u-boot/dts/upstream/src/arm64/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts" <<'PY'
 from pathlib import Path
@@ -62,4 +72,5 @@ PY
 cp "$OUT/u-boot/u-boot-sunxi-with-spl.bin" "$OUT/u-boot-sunxi-with-spl.bin"
 sha256sum "$OUT/u-boot-sunxi-with-spl.bin" > "$OUT/UBOOT.SHA256"
 git -C "$ROOT" rev-parse HEAD > "$OUT/source-revision.txt"
+printf '%s\n' "$CHECKPOINTS" > "$OUT/led-checkpoints.txt"
 echo "Diagnostic bootloader ready in $OUT; hardware boot remains unverified."

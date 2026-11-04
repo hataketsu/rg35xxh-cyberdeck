@@ -1,0 +1,35 @@
+--- a/board/sunxi/board.c
++++ b/board/sunxi/board.c
+@@ -191,6 +191,11 @@
+ {
+ 	__maybe_unused int id_pfr1, ret;
+ 
++	/* SP diagnostic: both LEDs mark entry into U-Boot proper. */
++	gpio_direction_output(SUNXI_GPI(12), 1);
++	gpio_direction_output(SUNXI_GPI(11), 1);
++	mdelay(1000);
++
+ 	gd->bd->bi_boot_params = (PHYS_SDRAM_0 + 0x100);
+ 
+ #if !defined(CONFIG_ARM64) && !defined(CONFIG_MACH_SUNIV)
+@@ -554,6 +559,8 @@
+ #ifdef CONFIG_LED_STATUS
+ 	if (IS_ENABLED(CONFIG_SPL_DRIVERS_MISC))
+ 		status_led_init();
++	/* Clear a green LED left on by a warm reset: SPL starts red only. */
++	gpio_direction_output(SUNXI_GPI(12), 0);
+ #endif
+ 
+ #ifdef CONFIG_SY8106A_POWER
+@@ -635,6 +642,11 @@
+ 	printf(" %d MiB\n", (int)(gd->ram_size >> 20));
+ 	if (!gd->ram_size)
+ 		hang();
++
++	/* SP diagnostic: green means DRAM init returned a nonzero size. */
++	gpio_direction_output(SUNXI_GPI(12), 1);
++	gpio_direction_output(SUNXI_GPI(11), 0);
++	mdelay(1000);
+ 
+ 	sunxi_spl_store_dram_size(gd->ram_size);
+ 
