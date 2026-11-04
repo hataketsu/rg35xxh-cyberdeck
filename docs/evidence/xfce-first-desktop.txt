@@ -24,3 +24,9 @@ Prova proposada: desactivar composició via xfconf a la sessió cyberdeck,
 comparar moviment de finestres i revertir amb true si no ajuda.
 Encara no s'ha rebut resultat de la prova ni s'ha modificat el perfil de compilació.
 Referència CLI: https://docs.xfce.org/xfce/xfconf/xfconf-query
+
+Resultat de la prova de composició: l'usuari respon «much better» després de desactivar /general/use_compositing.
+Millora de resposta confirmada qualitativament; no és una mesura FPS ni prova d'acceleració GPU.
+Es fixa use_compositing=false a la personalització del primer inici de futures imatges SP.
+No es força en cada login: es conserva la possibilitat de canviar la preferència.
+La SD actual ja té el canvi aplicat per l'usuari; persistència després de reiniciar pendent de comprovar.

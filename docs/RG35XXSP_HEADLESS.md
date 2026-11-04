@@ -63,4 +63,15 @@ sudo systemctl set-default multi-user.target
 
 Diagnòstic: `systemctl status lightdm --no-pager` i `sudo journalctl -b -u lightdm --no-pager -n 100`. Les còpies de configuració prèvia es desen a `/var/lib/cyberdeck/desktop-install/`. No cal regravar la SD per fer aquesta prova.
 
-Validació de l'instal·lador: `bash -n`, ShellCheck i comprovacions estàtiques del projecte correctes. L'usuari confirma el primer escriptori XFCE visible i funcional el 2026-11-04, amb certa lentitud; diagnòstic de rendiment i reinici pendents. [Evidència](evidence/xfce-first-desktop.txt). La primera execució va demanar conservar el fitxer de power-manager; es va indicar respondre `N`. L'instal·lador ara passa `--force-confold` a dpkg per conservar automàticament la configuració local. Configuració de sessió basada en [LightDM](https://github.com/ubuntu/lightdm/blob/main/data/lightdm.conf).
+Validació de l'instal·lador: `bash -n`, ShellCheck i comprovacions estàtiques del projecte correctes. L'usuari confirma el primer escriptori XFCE visible i funcional el 2026-11-04, amb lentitud inicial que millora clarament en desactivar la composició; estabilitat i reinici pendents. [Evidència](evidence/xfce-first-desktop.txt). La primera execució va demanar conservar el fitxer de power-manager; es va indicar respondre `N`. L'instal·lador ara passa `--force-confold` a dpkg per conservar automàticament la configuració local. Configuració de sessió basada en [LightDM](https://github.com/ubuntu/lightdm/blob/main/data/lightdm.conf).
+
+### Composició i resposta de l'escriptori
+
+L'usuari confirma resposta «much better» amb la composició desactivada. El primer inici de futures imatges SP estableix `xfwm4 /general/use_compositing=false`. A la SD existent s'ha aplicat per SSH amb `xfconf-query`; la configuració es desa al perfil de l'usuari. Per repetir el canvi des d'SSH, com a `cyberdeck`, sense sudo:
+
+```sh
+export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u)/bus"
+xfconf-query -c xfwm4 -p /general/use_compositing -n -t bool -s false
+```
+
+Per reactivar-la, canvieu `false` per `true`. La millora observada no identifica encara el renderer ni confirma acceleració gràfica. La persistència i l'arrencada gràfica després d'un reinici continuen pendents de prova física.

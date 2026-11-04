@@ -13,6 +13,8 @@ for supply in ac battery; do
 setprop xfce4-power-manager /xfce4-power-manager/logind-handle-power-key bool true
 setprop xfce4-power-manager /xfce4-power-manager/logind-handle-lid-switch bool true
 if [[ ! -f "$HOME/.config/cyberdeck-desktop.done" ]]; then
+  # Millora de resposta confirmada a la SP; l'usuari pot reactivar-ho després.
+  setprop xfwm4 /general/use_compositing bool false
   setprop xsettings /Net/ThemeName string Greybird-dark
   setprop xsettings /Gtk/FontName string 'DejaVu Sans 9'
   setprop xfce4-keyboard-shortcuts '/commands/custom/<Primary><Alt>t' string xfce4-terminal
