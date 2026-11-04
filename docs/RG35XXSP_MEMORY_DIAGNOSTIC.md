@@ -47,4 +47,18 @@ Són checkpoints de control, no tests exhaustius de RAM ni proves d'arrencada de
 
 Imatge preparada i comprovada: `dist/rg35xxsp-cyberdeck-standard-minimal-lpddr3-led-ed24995.img` (6 GiB). SHA256: `443c1d93ef979e1aac94197f3a289d097e9059e46f815f717c79ed0edd22e9aa`. XZ: `a3faebf9a2eb85a1f6019c26e0ae2b0702e5466d8456a716decea07140649256`. Bootloader: `91bab359903b495e5e0026d5123fe9f0c58d49f959e55e6d89b57348a7ffad4f`.
 
-Compilació, checksum SPL, FIT, hashes BOOT, fsck FAT, integritat XZ i comparació byte a byte de MBR/rootfs superats. Registres: `work/boot-failure-lpddr3/checkpoints-{build,pack}.log`. Variant gravada a la SD de proves de 32 GB amb autorització explícita el 2026-11-04: SHA256 de relectura coincident, codi 0 i expulsió correcta. [Evidència](evidence/sd-lpddr3-checkpoints-write.txt). Prova d'arrencada física pendent.
+Compilació, checksum SPL, FIT, hashes BOOT, fsck FAT, integritat XZ i comparació byte a byte de MBR/rootfs superats. Registres: `work/boot-failure-lpddr3/checkpoints-{build,pack}.log`. Variant gravada a la SD de proves de 32 GB amb autorització explícita el 2026-11-04: SHA256 de relectura coincident, codi 0 i expulsió correcta. [Evidència](evidence/sd-lpddr3-checkpoints-write.txt). L'usuari informa de vermell fix sense altres transicions: no s'ha observat el checkpoint posterior a DRAM. PMIC i inicialització DRAM continuen sent possibles punts d'aturada.
+
+## Comparació LPDDR4 amb checkpoints de potència
+
+La imatge LPDDR4 inicial no activava el LED en SPL. Per tant, l'absència de LED d'aquella prova no serveix per comparar l'etapa assolida amb els candidats LPDDR3. El tipus físic de RAM continua sense confirmar-se.
+
+`RG_DIAG_DRAM=lpddr4 RG_DIAG_CHECKPOINTS=1` als mateixos scripts crea una variant aïllada a `work/sp-lpddr4-checkpoints`, amb el perfil LPDDR4 original: 672 MHz, DCDC3 1100 mV i els mateixos timings de la minimal `e807755`. El DTB Linux conserva els valors originals de 1100000 µV. No s'hi aplica el pedaç del PHY LPDDR3.
+
+La variant manté els checkpoints verd (DRAM ha retornat una mida no nul·la) i tots dos LEDs (U-Boot principal). Afegeix dos parpelleigs vermells breus si les crides de configuració del PMIC retornen sense error. Si retornen error, s'atura abans de DRAM amb parpelleig vermell repetit; aquest és un comportament de diagnòstic, no una correcció del PMIC. Retorn sense error no equival a mesura física dels rails.
+
+Imatge preparada: `dist/rg35xxsp-cyberdeck-standard-minimal-lpddr4-led-3ac38e1.img`, 6 GiB. SHA256: `229fae619f18237019c96b36fae88d3c4c9ea409bf0471eea1cbac6ec1396033`; XZ: `3d9210c6608a4a4c4164142e0baab7fbc5910397a4070982b70bdd2e74d019e3`. Bootloader: `6f58e803b8f1644f22eb87c3dc924fa6ad9d4bac773aaa9ae050b09de0646ed4`.
+
+Compilació real i empaquetat completats amb codi 0; sintaxi i ShellCheck correctes. Configuració de RAM, PMIC i I²C comparada amb la compilació original: idèntica. Kernel, DTB Linux i scripts de boot conserven els hashes de la minimal original; MBR i rootfs comparats byte a byte. fsck FAT, checksum SPL, posició FIT i integritat XZ correctes. Registres: `work/boot-failure-lpddr3-checkpoints/lpddr4-{build,pack,comparison}.log`.
+
+Aquesta variant encara no s'ha gravat ni provat físicament. L'objectiu és comparar els perfils amb punts d'observació equivalents; no es considera una correcció confirmada.
