@@ -1,0 +1,19 @@
+2026-11-04 — Gravació del diagnòstic corregit amb GPIO directe
+Autorització explícita: «32 GB test SD connected; write the corrected image».
+Imatge: rg35xxsp-cyberdeck-standard-minimal-lpddr4-led-gpio-b261dd6.img
+Mida: 6442450944 bytes (6 GiB)
+Destí: Windows Disk 1, Generic STORAGE DEVICE USB, 31927042048 bytes.
+Identitat, mida i layout revalidats abans de gravar; disc no boot/system/readonly/offline.
+La mida exigida exclou la SD original de 62534975488 bytes; original no modificada.
+Eina: Raspberry Pi Imager 2.0.12, signatura vàlida de Raspberry Pi Limited.
+Verificació activada, sense personalització ni habilitació de discos de sistema.
+SHA256 de la còpia temporal i de la verificació per relectura coincidents:
+b4f009fe974ee20913b00a597750e6e5ae0998d065eca76f67fc8d919aad0ae3
+Escriptura: 319 segons. Verificació: 193,478 segons.
+Resultat Imager i embolcall: codi 0; result.json SUCCESS.
+Registre natiu: Cycle ended, state: succeeded; expulsió PhysicalDrive1 succeeded: true.
+Finalització: 2026-11-04T11:22:47+01:00.
+Registres: work/flash-lpddr4-led-gpio-b261dd6/{flash.ps1,imager-write.log,progress.txt,result.json,stage.txt}.
+Prova d'arrencada física del candidat corregit: PENDENT.
+Conserva els checkpoints PMIC/DRAM/U-Boot, substituint la crida LED inicial defectuosa per GPIO directe.
+La gravació verificada no acredita que s'hagi resolt l'arrencada de Debian.

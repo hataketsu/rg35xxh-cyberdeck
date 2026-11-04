@@ -8,7 +8,7 @@
 
 Compilació i empaquetat completats amb codi 0. El validador rebutja els tres SPL defectuosos i accepta el corregit. S'han inspeccionat els símbols i el desassemblatge del camí LED; el flag i la funció genèrics ja no apareixen al SPL. Checksum SPL, FIT, fsck FAT, hashes BOOT, integritat XZ i comparació byte a byte de MBR/rootfs correctes. Registres a `work/early-led-bss-audit/`.
 
-No s'ha gravat aquest candidat ni s'ha provat al maquinari. La correcció del defecte de diagnòstic no acredita encara l'arrencada de Debian. Els apartats següents conserven l'historial dels candidats anteriors.
+Aquest candidat s'ha gravat a la SD de proves de 32 GB amb autorització explícita el 2026-11-04: SHA256 verificat per relectura, codi 0 i expulsió correcta. [Evidència](evidence/sd-lpddr4-gpio-write.txt). Prova d'arrencada física pendent. La correcció del defecte de diagnòstic no acredita encara l'arrencada de Debian. Els apartats següents conserven l'historial dels candidats anteriors.
 
 La minimal LPDDR4 `e807755` no arrenca en aquesta unitat, també en una SD nova de 32 GB; la SD original sí que arrenca. La relectura del suport confirma MBR/bootloader/BOOT correctes i cap muntatge registrat d'ext4. [Evidència](evidence/sd-minimal-32gb-boot-failure.txt).
 
