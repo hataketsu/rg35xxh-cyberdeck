@@ -2,13 +2,13 @@
 
 **Correcció del diagnòstic (2026-11-04):** les variants `lpddr3-diag-00ed466`, `lpddr3-led-ed24995` i `lpddr4-led-3ac38e1` contenen un error introduït en activar el LED inicial: `status_led_init()` escriu un flag a DRAM abans d'inicialitzar-la. Els resultats de vermell fix d'aquestes variants són **inconclusius per al tipus de RAM i el PMIC**. Els registres històrics es conserven; aquestes variants queden substituïdes pel candidat amb GPIO directe. [Evidència del defecte i correcció](evidence/early-led-bss-regression.txt).
 
-## Comparació LPDDR3 corregida preparada
+## Comparació LPDDR3 corregida gravada
 
 `dist/rg35xxsp-cyberdeck-standard-minimal-lpddr3-led-gpio-0c6f35f.img`, 6 GiB. SHA256: `18b085fdbf27866ea9fd5ea7dd13e13a1242f5a82247603ef6cdd95da3b940c1`; XZ: `1e09fc90155dfdea00c82f172c1e186b15ff3a9f71dd5e3e96a90c1c1b91bd8b`. Bootloader: `2363bc8b435e1552ecddb50829e80865216c102e911179e87aa492dc0ba64bba`.
 
 Utilitza els timings LPDDR3 anteriors extrets del perfil per defecte de boot0, 672 MHz, correcció PHY LPDDR3 i DCDC3 1200 mV coherent als DT d'U-Boot/Linux. La configuració de memòria/potència coincideix amb el candidat LPDDR3 anterior, però el codi LED ara és GPIO directe. El fitxer `board/sunxi/board.c` amb els checkpoints PMIC/DRAM/U-Boot és idèntic al de la comparació LPDDR4 corregida.
 
-Compilació, regressió del LED/BSS, checksum SPL, FIT, empaquetat, fsck FAT, hashes BOOT, integritat XZ i comparació byte a byte de MBR/rootfs superats. Registres: `work/boot-failure-lpddr4-gpio/lpddr3-gpio-{build,pack}.log`. Preparada, encara no gravada ni provada físicament. Reproducció: els scripts habituals amb `RG_DIAG_DRAM=lpddr3 RG_DIAG_CHECKPOINTS=1`; workspace `work/sp-lpddr3-checkpoints-gpio`.
+Compilació, regressió del LED/BSS, checksum SPL, FIT, empaquetat, fsck FAT, hashes BOOT, integritat XZ i comparació byte a byte de MBR/rootfs superats. Registres: `work/boot-failure-lpddr4-gpio/lpddr3-gpio-{build,pack}.log`. Gravada a la SD de proves de 32 GB amb autorització explícita, SHA256 verificat per relectura, codi 0 i expulsió correcta el 2026-11-04; [evidència](evidence/sd-lpddr3-gpio-write.txt). Prova d'arrencada física pendent. Reproducció: els scripts habituals amb `RG_DIAG_DRAM=lpddr3 RG_DIAG_CHECKPOINTS=1`; workspace `work/sp-lpddr3-checkpoints-gpio`.
 
 ## Comparació LPDDR4 corregida provada
 

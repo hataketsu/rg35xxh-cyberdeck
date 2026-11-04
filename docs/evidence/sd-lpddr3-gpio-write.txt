@@ -1,0 +1,20 @@
+2026-11-04 — Gravació de la comparació LPDDR3 corregida amb GPIO directe
+Autorització explícita: «32 GB test SD connected; write corrected LPDDR3»; després l'usuari reconnecta el lector quan Windows no detectava la SD.
+El primer preflight no trobava Disk 1: cap escriptura fins a detectar i revalidar el suport.
+Imatge: rg35xxsp-cyberdeck-standard-minimal-lpddr3-led-gpio-0c6f35f.img
+Mida: 6442450944 bytes (6 GiB)
+Destí: Windows Disk 1, Generic STORAGE DEVICE USB, 31927042048 bytes.
+Identitat, mida i particions revalidades abans de gravar; disc no boot/system/readonly/offline.
+La mida exigida exclou la SD original de 62534975488 bytes; original no modificada.
+Eina: Raspberry Pi Imager 2.0.12, signatura vàlida de Raspberry Pi Limited.
+Verificació activada, sense personalització ni habilitació de discos de sistema.
+SHA256 de la còpia temporal i verificació per relectura coincidents:
+18b085fdbf27866ea9fd5ea7dd13e13a1242f5a82247603ef6cdd95da3b940c1
+Escriptura: 315 segons. Verificació: 193,811 segons.
+Resultat Imager i embolcall: codi 0; result.json SUCCESS.
+Registre natiu: Cycle ended, state: succeeded; expulsió PhysicalDrive1 succeeded: true.
+Finalització: 2026-11-04T12:10:43+01:00.
+Registres: work/flash-lpddr3-led-gpio-0c6f35f/{flash.ps1,imager-write.log,progress.txt,result.json,stage.txt,initial-detection-error.json}.
+Prova d'arrencada física d'aquesta comparació LPDDR3 corregida: PENDENT.
+Mateixos checkpoints GPIO/PMIC/DRAM/U-Boot que la comparació LPDDR4 corregida; perfil LPDDR3 amb DCDC3 coherent a 1200 mV.
+La gravació correcta no acredita l'arrencada de Debian ni confirma el tipus físic de RAM.
