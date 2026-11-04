@@ -1,0 +1,24 @@
+2026-11-04 — Àudio intern verificat per SSH i escolta de l'usuari
+Accés autoritzat amb clau temporal restringida de cyberdeck; host key ED25519 comprovada.
+ALSA: card 0 Codec, H616 Audio Codec, PCM CDC PCM Codec-0.
+PulseAudio 17 actiu, sortida stereo-fallback del codec, port analog-output-speaker.
+Speaker on; auriculars no disponibles. Mute no, volum Pulse inicial 100%.
+Nivells inicials: DAC 45/63 (-20.88 dB), Line Out 17/31 (-21 dB).
+Primera prova: Front_Center.wav dues vegades, paplay per-stream 32768/65536.
+Ambdues reproduccions retornen 0, però l'usuari no sent res.
+Segona prova: DAC 63/63 (0 dB), Line Out 23/31 (-12 dB), mateix per-stream 50%.
+Dues reproduccions retornen 0; l'usuari confirma «Yes, I heard it».
+Els nivells originals es restauren al final de la prova temporal, comprovats per relectura.
+Ajust final de reproducció normal: PulseAudio 50% (-18.06 dB), DAC 63, Line Out 23.
+Aproxima el nivell percebut de la prova reeixida amb streams normals al 100%.
+alsa-restore.service està active/exited i inclou ExecStop=alsactl store.
+Persistència esperada amb apagada ordenada; pendent de reinici real.
+Per guardar immediatament a nivell de sistema, l'usuari pot executar sudo alsactl store 0.
+No s'ha habilitat sudo sense contrasenya ni compartit cap contrasenya.
+Auriculars i qualitat a llarg termini encara no comprovats.
+HDMI audio fora d'abast per petició explícita posterior: «I don't need hdmi audio».
+Observació només: HDMI desconnectat, cap targeta ALSA HDMI; ahub1_plat,
+ahub1_mach_hdmi i ahub_dam_plat habilitats al DT però sense driver vinculat.
+No s'ha modificat DT, kernel ni configuració HDMI.
+En completar la prova s'elimina només la clau SSH temporal d'authorized_keys;
+altres claus i autenticació per contrasenya conservades.

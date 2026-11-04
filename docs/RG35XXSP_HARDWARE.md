@@ -50,4 +50,8 @@ El pedaç original que manté set reguladors sempre encesos **no s'aplica a SP**
 
 ## Validació posterior: HDMI
 
-El 2026-11-04 l'usuari confirma sortida de vídeo HDMI funcional amb el sistema LPDDR3/SP v2 i XFCE actual, sense necessitat d'executar la comanda de diagnòstic o canviar la configuració. [Evidència](evidence/hdmi-first-output.txt). Àudio HDMI, resolució/refresc exactes i estabilitat amb reconnexions continuen pendents.
+El 2026-11-04 l'usuari confirma sortida de vídeo HDMI funcional amb el sistema LPDDR3/SP v2 i XFCE actual, sense necessitat d'executar la comanda de diagnòstic o canviar la configuració. [Evidència](evidence/hdmi-first-output.txt). Resolució/refresc exactes i estabilitat amb reconnexions continuen pendents. L’usuari ha exclòs expressament l’àudio HDMI de l’abast.
+
+## Validació posterior: altaveu intern
+
+El 2026-11-04 es confirma per escolta de l'usuari la reproducció de Front_Center.wav via PulseAudio al codec H616. Els nivells inicials DAC/Line Out combinaven aproximadament 42 dB d'atenuació i la primera prova no era audible. Amb DAC 63 (0 dB) i Line Out 23 (-12 dB) la prova és audible; el volum normal PulseAudio es deixa al 50%. [Registre](evidence/audio-speaker-check.txt). La persistència després de reiniciar i els auriculars resten pendents; aquests valors encara no s'imposen a totes les futures imatges o sortides.

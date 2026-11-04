@@ -32,7 +32,7 @@ Data inicial: 2026-11-03. Cap consola ni Heltec connectat a aquesta sessió. Emp
 | Arrencada mínima | TF1, TF2 buida, login console; repetir 3 arrencades fredes | **PARCIAL**: journal LPDDR3 `0c6f35f` confirma multi-user i getty als 9,583 s; amb panell v2 l'usuari confirma prompt de contrasenya llegible; login SSH confirmat; falten login local i repeticions amb TF2 buida. Vegeu [evidència](evidence/sd-lpddr3-first-linux-boot.txt) |
 | Identitat | model SP i variant correcta, uname i BUILD-INFO coherents | **PARCIAL**: uname real confirma Linux 7.0.2 aarch64; lectura de BUILD-INFO en execució pendent |
 | Pantalla | 640×480, colors, text estable >10 min i després de 30 s | **PARCIAL**: standard mostrava línies verticals; amb v2, consola llegible confirmada el 2026-11-04. Falta estabilitat >10 min i colors |
-| Vídeo HDMI | Imatge en monitor extern | **VALIDAT en una prova**: funciona amb la configuració existent segons l’usuari el 2026-11-04; resolució/refresc, reconnexions i àudio pendents. [Evidència](evidence/hdmi-first-output.txt) |
+| Vídeo HDMI | Imatge en monitor extern | **VALIDAT en una prova**: funciona amb la configuració existent segons l’usuari el 2026-11-04; resolució/refresc i reconnexions pendents; àudio HDMI exclòs per l’usuari. [Evidència](evidence/hdmi-first-output.txt) |
 | Panell v2 | Provar només si correspon; registrar revisió | **VALIDAT per arrencada llegible** amb LPDDR3 el 2026-11-04; revisió física del panell no identificada |
 | Estat mínim en execució | RAM, kernel i unitats fallides | **VALIDAT puntualment**: 976 MiB RAM, 810 MiB disponibles, sense swap i 0 unitats fallides; [sortida SSH](evidence/headless-runtime-checks.txt). No substitueix una prova de RAM/estabilitat |
 | Retroil·luminació | brightnessctl, rang llegible i recuperació després DPMS | **PENDENT** |
@@ -41,7 +41,7 @@ Data inicial: 2026-11-03. Cap consola ni Heltec connectat a aquesta sessió. Emp
 | Teclat extern | USB, layout, hotplug, sense captura pel mapper | **PENDENT** |
 | Wi-Fi | Escaneig, credencials, DNS, trànsit i estabilitat 30 min | **PARCIAL**: primera connexió Wi-Fi amb login SSH confirmada per l'usuari el 2026-11-04; falten DNS, reconexió i estabilitat 30 min |
 | Bluetooth | Adaptador, aparellament teclat, reconnectar | **PENDENT** |
-| Àudio | Altaveu/auriculars/volum i absència de soroll anormal | **PENDENT** |
+| Àudio | Altaveu/auriculars/volum i absència de soroll anormal | **PARCIAL**: altaveu intern audible confirmat amb DAC 63, Line Out 23 i volum de prova reduït; volum normal ajustat al 50%. Auriculars i persistència pendents. [Evidència](evidence/audio-speaker-check.txt) |
 | Bateria | Comparar sysfs i UPower durant ús, sense salt persistent a 0% | **PENDENT** |
 | Càrrega | Estat carregant/desconnectat, evolució i temperatura normal | **PENDENT** |
 | Protecció de bateria | Verificar política/driver sense forçar una descàrrega profunda | **PENDENT** |
