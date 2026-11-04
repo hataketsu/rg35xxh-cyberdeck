@@ -28,6 +28,11 @@ case "$DRAM" in
 esac
 DIAG="$DIAG-gpio"
 variant="$variant-gpio"
+PANEL=${RG_DIAG_PANEL:-standard}
+case "$PANEL" in
+  standard|v2) ;;
+  *) echo 'RG_DIAG_PANEL must be standard or v2'; exit 1 ;;
+esac
 DIST="${RG_DIAG_DIST:-$ROOT/dist}"
 [[ -d "$DIST" && -f "$BASE" && ! -L "$BASE" ]] || exit 1
 case "$DIST" in /dev|/dev/*) echo 'Device destinations are forbidden'; exit 1 ;; esac
@@ -50,7 +55,7 @@ if [[ "$DRAM" == lpddr4 ]]; then
 fi
 revision="${RG_DIAG_REVISION:?Set the committed packaging revision}"
 [[ "$revision" =~ ^[0-9a-f]{7,40}$ ]] || exit 1
-IMG="$DIST/rg35xxsp-cyberdeck-standard-minimal-$variant-$revision.img"
+IMG="$DIST/rg35xxsp-cyberdeck-$PANEL-minimal-$variant-$revision.img"
 [[ ! -e "$IMG" && ! -L "$IMG" ]] || { echo 'Output already exists; not overwritten'; exit 1; }
 cp --reflink=auto --sparse=always --no-clobber "$BASE" "$IMG"
 [[ -f "$IMG" && ! -L "$IMG" ]] || exit 1
@@ -68,6 +73,15 @@ for prop in regulator-min-microvolt regulator-max-microvolt; do
   [[ $(fdtget -tu "$DTB" "$REG" "$prop") == "$voltage" ]] || exit 1
   [[ $(fdtget -tu "$DIAG/u-boot/u-boot.dtb" "$REG" "$prop") == "$voltage" ]] || exit 1
 done
+if [[ "$PANEL" == v2 ]]; then
+  # These are the two overrides in the pinned ROCKNIX SP v2 DTS.
+  # Keep the existing boot-script filename and LPDDR3 memory rail intact.
+  [[ $(fdtget -t s "$DTB" /spi/panel@0 compatible) == 'anbernic,rg35xx-plus-panel panel-mipi-dpi-spi' ]] || exit 1
+  [[ $(fdtget -t s "$DTB" / rocknix-dt-id) == sun50i-h700-anbernic-rg35xx-sp ]] || exit 1
+  fdtput -t s "$DTB" /spi/panel@0 compatible anbernic,rg35xx-sp-v2-panel panel-mipi-dpi-spi
+  fdtput -t s "$DTB" / rocknix-dt-id sun50i-h700-anbernic-rg35xx-sp-v2-panel
+  [[ $(fdtget -t s "$DTB" /spi/panel@0 compatible) == 'anbernic,rg35xx-sp-v2-panel panel-mipi-dpi-spi' ]] || exit 1
+fi
 uboot_hash=$(sha256sum "$UBOOT" | cut -d ' ' -f1)
 cat >> "$TMP/BUILD-INFO.txt" <<INFO
 DIAGNOSTIC=$description
@@ -82,6 +96,8 @@ EARLY_SPL_STATUS_LED=yes
 EARLY_LED_BACKEND=direct-gpio
 LED_CHECKPOINTS=$CHECKPOINTS
 POWER_CHECKPOINT=$power_checkpoint
+PANEL=$PANEL
+DTB_LOAD_NAME=sun50i-h700-anbernic-rg35xx-sp.dtb
 BOOT_STATUS=unverified
 INFO
 (cd "$TMP"; sha256sum Image sun50i-h700-anbernic-rg35xx-sp.dtb boot.scr boot.cmd > BOOT.SHA256)
