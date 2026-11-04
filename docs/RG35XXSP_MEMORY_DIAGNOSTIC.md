@@ -27,8 +27,10 @@ Registres: `work/boot-failure-32gb/lpddr3-build.log` i `lpddr3-pack.log`. No s'h
 
 `scripts/pack-sp-lpddr3-diagnostic.sh` s'executa en el contenidor `cyberdeck-rootfs`, amb el repositori de lectura i `dist` d'escriptura. Exigeix `RG_DIAG_REVISION` i opcionalment `RG_DIAG_DIST`; comprova el SHA256 de la base i no sobreescriu sortides. Només opera sobre fitxers, mai sobre discos.
 
-## Validació física pendent
+## Prova física i diagnosi pendent
 
 El 2026-11-04 s'ha gravat aquest candidat a la SD de proves de 32 GB amb autorització explícita. Raspberry Pi Imager ha verificat el SHA256 per relectura i ha expulsat la targeta correctament; codi de sortida 0. [Evidència de gravació](evidence/sd-lpddr3-diagnostic-write.txt).
 
 Aquest candidat **no està validat al maquinari**. Cal provar-lo a la SD de proves, amb bateria carregada, TF1, TF2 buida i apagada completa abans del canvi. Observar si apareix un LED, pantalla o consola; el LED per si sol només acredita un canvi de comportament inicial, no l'arrencada de Debian. Conservar l'original com a recuperació.
+
+Primera resposta de l'usuari: pantalla negra i LED vermell en lloc de verd. El LED inicial del candidat és PI11 (vermell), activat abans de configurar el PMIC i inicialitzar DRAM; el verd normal és PI12. Pendent confirmar el comportament sense carregador. Aquesta observació no prova que el canvi a LPDDR3 hagi resolt la inicialització de memòria ni que Linux hagi començat.

@@ -15,4 +15,9 @@ Registre Imager: Cycle ended, state: succeeded; expulsió de PhysicalDrive1 succ
 Finalització: 2026-11-04T09:31:48+01:00.
 Registres: work/flash-lpddr3-00ed466/{flash.ps1,imager-write.log,progress.txt,result.json,stage.txt}.
 La gravació correcta no valida l'arrencada ni confirma la hipòtesi LPDDR3.
-Prova física amb aquest candidat: PENDENT.
+Prova física posterior: l'usuari informa de pantalla negra i LED d'encesa vermell en lloc de verd.
+Arrencada de Debian NO confirmada. Pendent confirmar si el LED també apareix sense carregador i si és fix o intermitent.
+El candidat configura CONFIG_LED_STATUS_BIT=267 (PI11) i STATE=2 (encès fix).
+El pedaç ROCKNIX 0901-dts-rg35xx-2024-fix-led-1-color.patch identifica PI11 com a vermell; el verd és PI12.
+sunxi_board_init() inicialitza aquest LED abans del PMIC i de sunxi_dram_init().
+Per tant, aquest LED és coherent amb l'execució inicial del SPL; no acredita DRAM correcta ni localitza per si sol el bloqueig.
