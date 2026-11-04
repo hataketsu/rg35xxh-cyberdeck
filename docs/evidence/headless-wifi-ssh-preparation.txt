@@ -1,0 +1,27 @@
+2026-11-04 — Preparació privada de Wi-Fi i SSH
+Petició de l'usuari: configurar Wi-Fi de casa i servidor SSH perquè no té teclat.
+SD de 32 GB reconnectada; còpia nova només de lectura, prefix 272 MiB i rootfs 5872 MiB.
+Credencials introduïdes per l'usuari en terminal WSL, fitxer privat 0600; no publicades.
+Còpia de rootfs modificada via loop/chroot en contenidor; original preservat.
+Primera instal·lació aturada per permisos del resolv.conf temporal; corregits a 0644 i reintent completat.
+Paquets instal·lats:
+avahi-daemon	0.8-16	arm64
+openssh-server	1:10.0p1-7+deb13u4	arm64
+wireless-regdb	2026.05.30-1~deb13u1	all
+wpasupplicant	2:2.10-24	arm64
+Validacions: nmcli --offline; sshd -t i opcions efectives; root SSH prohibit,
+només cyberdeck, contrasenya habilitada; contrasenyes existents preservades.
+Unitats SSH, NetworkManager i Avahi habilitades. ssh.socket i suspensió emmascarats.
+Arquitectures ARM64/all, permisos perfil Wi-Fi i clau SSH 0600 root:root correctes.
+UUID ext4, fstab, hostname, machine-id, mòduls kernel i política de tapa preservats.
+Neteja de resolv.conf, QEMU temporal i policy-rc.d comprovada.
+e2fsck -fn sense errors; MBR/SPL i mida correctes; SHA rellegit després de crear imatge.
+Prefix complet (MBR/bootloader/BOOT) idèntic al de la SD que arrenca amb panell v2.
+Imatge privada: work/headless-wifi-ssh/rg35xxsp-private-headless.img
+Mida: 6442450944 bytes.
+SHA256: 7d7e20ea4a73500c120b0dfb238e20633187b4a25fd31cfafa649ff8fb6a35a2
+Empremta pública SSH ED25519: 256 SHA256:DGSO/ghRoOFwdf4c+dXSdoxlgbrXzY3H/vZ49O3m7WA root@f1cf834f688c (ED25519)
+Preflight Windows només de lectura correcte; Disk 1 USB de 31927042048 bytes,
+particions exactes i DTB v2 verificats; Raspberry Pi Imager signat.
+Sintaxi i suite scripts/check-static.sh correctes. Cap gravació nova encara.
+Pendent d'autorització per gravar i de prova física de Wi-Fi/SSH.

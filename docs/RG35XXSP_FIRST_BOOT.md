@@ -25,4 +25,6 @@ La tapa no suspèn ni apaga la pantalla deliberadament: la gestió fiable resta 
 
 No hi ha SSH accessible per defecte. Si més endavant el necessiteu, instal·leu-lo i configureu autenticació i xarxa explícitament; no depengueu d'SSH per recuperar la primera arrencada.
 
+Un cop validada l'arrencada, podeu preparar explícitament [accés Wi-Fi i SSH sense teclat](RG35XXSP_HEADLESS.md) amb les vostres credencials locals.
+
 Els errors posteriors a l'arrencada de systemd es desen a `/boot/logs` després de 60 segons. Un bloqueig anterior pot no deixar cap fitxer. [Recuperació i diagnosi](TROUBLESHOOTING.md).

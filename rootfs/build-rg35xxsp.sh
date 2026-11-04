@@ -56,7 +56,7 @@ apt-get update
 apt-get upgrade -y
 apt-get install -y --no-install-recommends locales sudo dbus dbus-user-session libpam-systemd kmod udev systemd-timesyncd \
   e2fsprogs dosfstools parted iproute2 iputils-ping curl less nano bash-completion \
-  network-manager bluez rfkill firmware-realtek firmware-misc-nonfree \
+  network-manager wpasupplicant wireless-regdb bluez rfkill firmware-realtek firmware-misc-nonfree \
   python3 python3-venv python3-pip python3-evdev python3-serial usbutils evtest \
   upower brightnessctl alsa-utils pulseaudio pulseaudio-utils rsync
 for group in sudo video audio plugdev dialout netdev bluetooth; do groupadd -f "$group"; done

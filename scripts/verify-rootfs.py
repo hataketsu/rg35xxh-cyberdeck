@@ -30,10 +30,16 @@ def verify(root, profile):
             info = path.stat()
             if info.st_uid != 0 or info.st_mode & 0o022:
                 raise ValueError('Propietat o permisos insegurs: '+str(path.relative_to(root)))
+    installed = set()
     for paragraph in (root/'var/lib/dpkg/status').read_text().split('\n\n'):
         fields = dict(line.split(': ', 1) for line in paragraph.splitlines() if ': ' in line and not line.startswith(' '))
+        if fields.get('Status') == 'install ok installed':
+            installed.add(fields.get('Package'))
         if fields.get('Status') == 'install ok installed' and fields.get('Architecture') not in ('arm64', 'all'):
             raise ValueError('Paquet amb arquitectura incorrecta: '+fields.get('Package', '?'))
+    required_wifi = {'network-manager', 'wpasupplicant', 'wireless-regdb'}
+    if required_wifi - installed:
+        raise ValueError('Falten paquets Wi-Fi: '+', '.join(sorted(required_wifi - installed)))
     if (root/'usr/bin/qemu-aarch64-static').exists():
         raise ValueError('QEMU de construcció encara és al rootfs')
     if (root/'etc/machine-id').read_text().strip():
