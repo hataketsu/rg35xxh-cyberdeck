@@ -8,3 +8,19 @@ No identifica la causa de lentitud ni valida acceleració gràfica, ús de RAM,
 estat final de totes les unitats, aplicacions, controls o arrencada gràfica després de reiniciar.
 Es demanaran mesures de RAM, càrrega, processos i governor abans d'ajustar rendiment.
 Millora de l'instal·lador: --force-confold preserva conffiles locals i evita el prompt observat.
+
+Mesures posteriors aportades per l'usuari, 2026-11-04:
+free -h: total 976 MiB, used 602 MiB, free 65 MiB, shared 35 MiB,
+buff/cache 431 MiB, available 374 MiB; swap 0.
+vmstat 1 5: després de la primera fila acumulada, CPU idle 99/94/99/98%,
+iowait 0/1/0/0%, swap-in/out 0; cap procés bloquejat en aquestes mostres.
+ps: Xorg 6.6% CPU i 11.8% MEM; xfce4-panel 2.4/4.4;
+blueman-manager 1.7/6.7; xfwm4 1.5/3.9. El ps mateix mostra 150% CPU,
+una mesura breu del procés de consulta, no càrrega sostinguda.
+No indica saturació de RAM, CPU ni I/O durant la captura; no prova què passa
+mentre es reprodueix la lentitud ni identifica el renderer gràfic.
+El paquet XFWM4 de referència té use_compositing=true als defaults.
+Prova proposada: desactivar composició via xfconf a la sessió cyberdeck,
+comparar moviment de finestres i revertir amb true si no ajuda.
+Encara no s'ha rebut resultat de la prova ni s'ha modificat el perfil de compilació.
+Referència CLI: https://docs.xfce.org/xfce/xfconf/xfconf-query
