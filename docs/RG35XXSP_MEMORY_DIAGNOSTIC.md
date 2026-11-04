@@ -33,4 +33,18 @@ El 2026-11-04 s'ha gravat aquest candidat a la SD de proves de 32 GB amb autorit
 
 Aquest candidat **no està validat al maquinari**. Cal provar-lo a la SD de proves, amb bateria carregada, TF1, TF2 buida i apagada completa abans del canvi. Observar si apareix un LED, pantalla o consola; el LED per si sol només acredita un canvi de comportament inicial, no l'arrencada de Debian. Conservar l'original com a recuperació.
 
-Primera resposta de l'usuari: pantalla negra i LED vermell en lloc de verd. El LED inicial del candidat és PI11 (vermell), activat abans de configurar el PMIC i inicialitzar DRAM; el verd normal és PI12. Pendent confirmar el comportament sense carregador. Aquesta observació no prova que el canvi a LPDDR3 hagi resolt la inicialització de memòria ni que Linux hagi començat.
+Primera resposta de l'usuari: pantalla negra i LED vermell fix, també sense carregador. El LED inicial del candidat és PI11 (vermell), activat abans de configurar el PMIC i inicialitzar DRAM; el verd normal és PI12. La relectura confirma el bootloader i els hashes BOOT; ext4 no registra muntatges. Aquesta observació no prova que el canvi a LPDDR3 hagi resolt la inicialització de memòria ni que Linux hagi començat. [Evidència](evidence/sd-lpddr3-red-led.txt).
+
+## Checkpoints addicionals
+
+`RG_DIAG_CHECKPOINTS=1` als dos scripts genera una variant separada `lpddr3-led` a partir del mateix perfil de memòria. El workspace és `work/sp-lpddr3-checkpoints`; no modifica el candidat anterior.
+
+- Vermell: entrada inicial al SPL, abans del PMIC i la DRAM.
+- Verd durant almenys un segon: la inicialització DRAM ha retornat una mida no nul·la.
+- Tots dos LEDs durant almenys un segon: s'ha arribat a `board_init()` d'U-Boot principal.
+
+Són checkpoints de control, no tests exhaustius de RAM ni proves d'arrencada de Linux. Cal observar tota la seqüència, perquè el codi posterior pot canviar els LEDs. No es canvien timings, freqüència ni voltatges respecte del candidat anterior.
+
+Imatge preparada i comprovada: `dist/rg35xxsp-cyberdeck-standard-minimal-lpddr3-led-ed24995.img` (6 GiB). SHA256: `443c1d93ef979e1aac94197f3a289d097e9059e46f815f717c79ed0edd22e9aa`. XZ: `a3faebf9a2eb85a1f6019c26e0ae2b0702e5466d8456a716decea07140649256`. Bootloader: `91bab359903b495e5e0026d5123fe9f0c58d49f959e55e6d89b57348a7ffad4f`.
+
+Compilació, checksum SPL, FIT, hashes BOOT, fsck FAT, integritat XZ i comparació byte a byte de MBR/rootfs superats. Registres: `work/boot-failure-lpddr3/checkpoints-{build,pack}.log`. Aquesta variant encara no s'ha gravat ni provat físicament.

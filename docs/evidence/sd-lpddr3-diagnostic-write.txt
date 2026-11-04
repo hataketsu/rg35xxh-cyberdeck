@@ -17,6 +17,7 @@ Registres: work/flash-lpddr3-00ed466/{flash.ps1,imager-write.log,progress.txt,re
 La gravació correcta no valida l'arrencada ni confirma la hipòtesi LPDDR3.
 Prova física posterior: l'usuari informa de pantalla negra i LED d'encesa vermell en lloc de verd.
 Arrencada de Debian NO confirmada. Pendent confirmar si el LED també apareix sense carregador i si és fix o intermitent.
+Actualització posterior: confirmat vermell fix sense carregador; relectura i checkpoints següents a sd-lpddr3-red-led.txt.
 El candidat configura CONFIG_LED_STATUS_BIT=267 (PI11) i STATE=2 (encès fix).
 El pedaç ROCKNIX 0901-dts-rg35xx-2024-fix-led-1-color.patch identifica PI11 com a vermell; el verd és PI12.
 sunxi_board_init() inicialitza aquest LED abans del PMIC i de sunxi_dram_init().

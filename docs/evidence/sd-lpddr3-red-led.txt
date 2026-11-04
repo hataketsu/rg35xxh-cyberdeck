@@ -1,0 +1,21 @@
+2026-11-04 — LPDDR3: LED vermell fix i pantalla negra, sense carregador
+L'usuari confirma que el LED vermell és fix també amb el cable de càrrega desconnectat.
+Coherent amb el checkpoint inicial del SPL (PI11). No acredita que DRAM s'hagi inicialitzat ni localitza exactament l'aturada.
+L'usuari reconnecta la SD de proves de 32 GB per a inspecció de lectura.
+Lectura autoritzada i completada amb FileAccess.Read, identitat/mida/particions comprovades; cap escriptura a la SD.
+Primers 16 MiB idèntics a la imatge lpddr3-diag-00ed466:
+c5559ea7b7b8b134d557b49f7d16d33ef4a8daffac059cbae3b5dd89260e67c0
+Primers 4096 bytes de rootfs idèntics a la imatge:
+a85662a3b61cf6182f412cd63d99c84462bb1c309d228d6caae25ea56bc0cf7c
+Superblock ext4: magic 0xef53, state 0x1 (clean), mount count 0, last mount 0.
+No hi ha evidència de muntatge normal del rootfs. Això no exclou execució parcial del kernel anterior al muntatge.
+Hashes BOOT.SHA256: Image, DTB, boot.scr i boot.cmd correctes.
+fsck.fat -n retorna 1: comptador de clústers lliures desajustat (460697 vs. 460695). Sense altres incidències reportades, sense reparar ni escriure. La causa d'aquest canvi de metadades no està establerta.
+Registres i còpies: work/boot-failure-lpddr3/{read-sd.ps1,result.json,prefix-16MiB.bin,boot-256MiB.bin,root-superblock.bin,boot-validation.log,boot-content.log}.
+
+Següent candidat: mateix perfil LPDDR3 i PMIC, amb checkpoints LED addicionals.
+Vermell: entrada primerenca al SPL, abans de PMIC i DRAM.
+Verd: sunxi_dram_init() ha retornat una mida no nul·la; no és un test exhaustiu de memòria.
+Tots dos: entrada a board_init() d'U-Boot principal; no acredita encara lectura de boot.scr ni inici de Linux.
+Verd i tots dos es mantenen almenys 1 segon abans de continuar. La inicialització posterior de LEDs pot alterar-los.
+El pedaç només s'aplica al build aïllat sp-lpddr3-checkpoints. CONFIG_LOCALVERSION és l'única diferència entre configuracions generades; timings, freqüència i voltatges idèntics al candidat anterior.

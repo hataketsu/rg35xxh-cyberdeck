@@ -14,6 +14,8 @@ Prova amb SD nova, 2026-11-04: s'ha gravat la **minimal ordinària de 6 GiB `e80
 
 S'ha preparat un [candidat diagnòstic LPDDR3](RG35XXSP_MEMORY_DIAGNOSTIC.md) basat en els paràmetres del boot0 original d'aquesta unitat i el perfil upstream. Compilació i estructura verificades. Gravat a la SD de proves de 32 GB amb SHA256 de relectura coincident i expulsió correcta el 2026-11-04; [evidència](evidence/sd-lpddr3-diagnostic-write.txt). L'usuari informa de pantalla negra i LED vermell, coherent amb el LED inicial PI11 activat pel SPL abans de DRAM; arrencada de Debian no confirmada. No substitueix els perfils normals ni constitueix una correcció confirmada.
 
+Actualització de diagnosi: l'usuari confirma LED vermell fix sense carregador. La relectura del candidat LPDDR3 conserva bootloader i hashes BOOT correctes; ext4 continua sense muntatges registrats. S'ha preparat una variant `lpddr3-led-ed24995` amb checkpoints després d'inicialitzar DRAM i en entrar a U-Boot principal, sense canvis de timings ni voltatges. [Evidència i límits](evidence/sd-lpddr3-red-led.txt). Gravació d'aquesta variant i prova física pendents.
+
 ## 2. Fitxers
 
 Inventari complet a [CHANGED_FILES.txt](evidence/CHANGED_FILES.txt). Grups principals:
