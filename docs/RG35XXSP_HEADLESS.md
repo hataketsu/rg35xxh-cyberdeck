@@ -35,3 +35,32 @@ No cal modificar el router ni obrir ports cap a Internet. La primera connexió W
 Referències: [format NetworkManager keyfile](https://networkmanager.pages.freedesktop.org/NetworkManager/NetworkManager/nm-settings-keyfile.html) i [sshd_config de Debian 13](https://manpages.debian.org/trixie/openssh-server/sshd_config.5.en.html).
 
 Comprovació posterior per SSH: kernel 7.0.2 aarch64, 976 MiB de RAM utilitzable, 810 MiB disponibles i cap unitat systemd fallida en aquell instant. [Sortida aportada per l'usuari](evidence/headless-runtime-checks.txt).
+
+## Pas següent: XFCE per SSH
+
+L'instal·lador `scripts/install-xfce-on-device.sh` converteix explícitament el mínim en un escriptori amb LightDM i autologin de l'usuari `cyberdeck`. Usa els mateixos paquets del constructor desktop. Comprova ARM64, DT compatible SP, Debian 13, SSH actiu, configuració SP preexistent, paquets coherents i almenys 2 GiB lliures abans d'instal·lar. Refusa un altre gestor gràfic, una política de serveis existent o un LightDM ja actiu. Conserva BOOT, xarxa, SSH i la política de tapa.
+
+Al terminal **Ubuntu WSL del PC**, copieu-lo (useu la IP coneguda si `.local` no es resol):
+
+```sh
+scp /home/frans/anbernic/rg35xxsp-cyberdeck/scripts/install-xfce-on-device.sh cyberdeck@rg35xxsp.local:~/
+```
+
+A la sessió **SSH de la consola**, amb el carregador connectat:
+
+```sh
+sudo bash ~/install-xfce-on-device.sh --install
+```
+
+L'instal·lador impedeix iniciar serveis a mig procés, prepara XFCE/LightDM, retira la política temporal i inicia LightDM. Després habilita l'arrencada gràfica. No reinicia la consola. Manteniu SSH obert i comproveu físicament escriptori, text, colors i cursor. El fet que el servei s'iniciï no valida la pantalla.
+
+Si la sessió gràfica falla, torneu al mode consola des d'SSH:
+
+```sh
+sudo systemctl disable --now lightdm.service
+sudo systemctl set-default multi-user.target
+```
+
+Diagnòstic: `systemctl status lightdm --no-pager` i `sudo journalctl -b -u lightdm --no-pager -n 100`. Les còpies de configuració prèvia es desen a `/var/lib/cyberdeck/desktop-install/`. No cal regravar la SD per fer aquesta prova.
+
+Validació de l'instal·lador: `bash -n`, ShellCheck i comprovacions estàtiques del projecte correctes; desplegament i XFCE al maquinari encara pendents. Configuració de sessió basada en [LightDM](https://github.com/ubuntu/lightdm/blob/main/data/lightdm.conf).

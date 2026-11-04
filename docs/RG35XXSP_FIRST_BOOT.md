@@ -1,6 +1,6 @@
 # Primer arrencament
 
-Hi ha imatges **minimal i desktop per al panell standard**, compilades i validades estructuralment: [rutes i SHA256](IMPLEMENTATION_STATUS.md#4-imatges-i-sha256). Aquest resultat no valida l'arrencada. Totes les proves físiques són **PENDENTS**.
+Actualització 2026-11-04: s'han validat arrencada mínima, consola llegible i login SSH amb el bootloader LPDDR3 corregit i el panell SP v2; [diagnòstic de panell](RG35XXSP_PANEL_DIAGNOSTIC.md) i [accés remot](RG35XXSP_HEADLESS.md). El sistema real mostra Linux 7.0.2 ARM64, 976 MiB de RAM i cap unitat fallida. XFCE i la resta de funcionalitats continuen pendents de prova física. Les imatges inicials standard de l'[informe de compilació](IMPLEMENTATION_STATUS.md#4-imatges-i-sha256) no incorporen totes aquestes correccions.
 
 1. Conserveu la microSD original i les seves dades. Prepareu una microSD nova d'almenys 8 GB (16 GB dona marge), sense informació que calgui conservar. Per a una prova mínima en una targeta petita, la variant explícita `minimal-compact` ocupa 960 MiB i exigeix almenys 1.006.632.960 bytes reals; vegeu [compilació compacta](RG35XXSP_BUILD.md#minimal-compacta-per-a-una-sd-petita).
 2. Verifiqueu SHA256 i integritat xz. Useu una eina gràfica de gravació que permeti seleccionar una imatge pròpia i validar l'escriptura. Comproveu visualment marca/capacitat del suport de destí: gravar-lo n'esborra el contingut. L'empaquetador no escriu a discos físics. La gravació des de Windows requereix una eina externa i la identificació explícita de la targeta. Si Imager no pot llegir una ruta compartida de WSL, copieu la imatge a una carpeta local de Windows i torneu-ne a comprovar el SHA256 abans de gravar.
@@ -8,7 +8,7 @@ Hi ha imatges **minimal i desktop per al panell standard**, compilades i validad
 4. Arrenqueu amb bateria carregada. No connecteu encara el Heltec. Observeu pantalla i temperatura; deixeu passar almenys un minut per comprovar el possible tall de panell de l'original.
 5. El perfil mínim mostra login de consola: usuari `cyberdeck` i contrasenya escollida. Necessita un teclat USB/OTG; proveu l'enumeració. No hi ha autologin root.
 6. Comproveu `uname -r`, `cat /proc/device-tree/model`, `systemctl --failed`, `lsblk`, `ip link`, `upower -d` i `/sys/class/power_supply/*/uevent`. Registreu els resultats a la checklist.
-7. Apagueu amb `sudo systemctl poweroff`. Després de validar el mínim, graveu separadament la imatge `desktop`. Està configurada per iniciar LightDM directament a XFCE amb l'usuari normal; root continua bloquejat.
+7. A la consola amb mínim i SSH validats, seguiu la [instal·lació de XFCE per SSH](RG35XXSP_HEADLESS.md#pas-següent-xfce-per-ssh). Això conserva la configuració d'arrencada que ja funciona. Per apagar, executeu `sudo systemctl poweroff`.
 
 ## Escriptori
 
