@@ -1,0 +1,20 @@
+2026-11-04 — Actualització de panell SP v2 sobre la SD LPDDR3
+Autorització explícita: «Apply the SP v2 panel update».
+Destí validat: Windows Disk 1, USB Generic STORAGE DEVICE, 31927042048 bytes.
+Actualització de tres fitxers BOOT; bootloader, kernel i rootfs conservats.
+Còpia de seguretat dels originals verificada abans de modificar la SD.
+Fitxers nous escrits, flush i hashes verificats; lock/flush/dismount/eject correctes.
+Estat: UPDATED_AND_VERIFIED; ejected=true; codi de procés 0.
+Finalització: 2026-11-04T12:44:54.6652224+01:00
+sun50i-h700-anbernic-rg35xx-sp.dtb
+  original: 5e2fb4d20800568650044adb048a5ae261b57e8e91790e395d212f5ea8b6891c
+  actualitzat: 7adf01d58efecfd1f89f0f6386dbaa84a810a8ba87b5e7a06316961fa21c5485
+BOOT.SHA256
+  original: a2562a9566dc37bf263068b34ed615c825389f444340409bec8d26c23f60884d
+  actualitzat: 8187ca5cb3f1960f882e829419f853ffd1ae1eb4f36ea02734ec4c82015ad7ee
+BUILD-INFO.txt
+  original: 6d5a500e96c9bd8f0907297f745be49c0b131984a059f99503c781ee7befd188
+  actualitzat: 1a468d0700faa612c15b80e5b149aa6fd113fb77ffbe46fe5595964e72e61a8a
+Registre i originals: work/panel-after-lpddr3/{update-result.json,boot-file-backup/}.
+La SD conserva canvis d’execució al rootfs: el SHA global no és el de la imatge v2 neta.
+Prova física v2 pendent: TF1, TF2 buida, comprovar text llegible i esperar almenys 90 segons.
