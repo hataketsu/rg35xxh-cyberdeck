@@ -15,7 +15,7 @@
 @@ -554,6 +559,8 @@
  #ifdef CONFIG_LED_STATUS
  	if (IS_ENABLED(CONFIG_SPL_DRIVERS_MISC))
- 		status_led_init();
+ 		gpio_direction_output(SUNXI_GPI(11), 1);
 +	/* Clear a green LED left on by a warm reset: SPL starts red only. */
 +	gpio_direction_output(SUNXI_GPI(12), 0);
  #endif

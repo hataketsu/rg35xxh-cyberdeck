@@ -27,6 +27,8 @@ OUT="$OUT-gpio"
 mkdir "$OUT"
 cp -a "$SRC" "$OUT/u-boot"
 cp "$ROOT/config/diagnostics/rg35xxsp-${DRAM}_defconfig" "$OUT/diagnostic_defconfig"
+# Fix the pre-DRAM helper before adding further checkpoints.
+patch --batch --fuzz=0 -d "$OUT/u-boot" -p1 < "$ROOT/patches/u-boot/h700-sp-early-led-no-bss.patch"
 if [[ "$DRAM" == lpddr3 ]]; then
   patch --batch --fuzz=0 -d "$OUT/u-boot" -p1 < "$ROOT/patches/u-boot/h700-lpddr3-phy-byte.patch"
 fi
@@ -37,8 +39,6 @@ fi
 if [[ "$DRAM" == lpddr4 ]]; then
   patch --batch --fuzz=0 -d "$OUT/u-boot" -p1 < "$ROOT/patches/u-boot/h700-sp-diagnostic-power-checkpoint.patch"
 fi
-# Apply after the checkpoint patches; pre-DRAM LEDs must not touch BSS.
-patch --batch --fuzz=0 -d "$OUT/u-boot" -p1 < "$ROOT/patches/u-boot/h700-sp-early-led-no-bss.patch"
 sed -i -e 's/-sp-lpddr3-diag/-sp-lpddr3-gpio/' \
   -e 's/-sp-lpddr3-led/-sp-lpddr3-gpio/' \
   -e 's/-sp-lpddr4-led/-sp-lpddr4-gpio/' "$OUT/diagnostic_defconfig"
