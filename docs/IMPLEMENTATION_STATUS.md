@@ -6,11 +6,11 @@ Port de desenvolupament a `/home/frans/anbernic/rg35xxsp-cyberdeck`, branca **rg
 
 S'han implementat perfils explícits H/SP i variants de panell, espais de treball separats, kernel/mòduls coherents, boot.scr regenerat amb PARTUUID, empaquetat de fitxer imatge amb comprovacions i sumes, rootfs SP Debian 13 minimal/desktop, XFCE fosc amb autologin normal, controls de creueta, política de tapa conservadora, diagnòstic, venv Meshtastic i menú USB/BLE amb confirmació d'enviament. S'ha escrit tota la documentació demanada en català.
 
-Les dues imatges **SP standard minimal i desktop s'han compilat i validat estructuralment**. L'arrencada i totes les funcions físiques continuen **PENDENTS**; no és un port anunciat com a funcional al maquinari.
+Les dues imatges **SP standard minimal i desktop s'han compilat i validat estructuralment**. La minimal ordinària **no arrenca a la unitat de l'usuari**, també amb una SD nova de 32 GB; l'original sí que arrenca. La causa continua en diagnosi. Les funcions físiques no estan validades; no és un port funcional al maquinari.
 
 Actualització 2026-11-04: també s'ha generat `dist/rg35xxsp-cyberdeck-standard-minimal-compact-50f7932.img.xz`, amb una imatge descomprimida de 960 MiB i 234,5 MiB disponibles per a l'usuari. fsck FAT/ext4, comparació de particions, MBR/SPL, integritat xz i SHA256 han passat. SHA256 de l'XZ: `1135ba6988b8985996622d4d4146aa389614f9e8b9cdeb97ac8edcb0540e4ffe`; de la imatge descomprimida: `29aadcb88b1904e0a607ec04db3813e2a6e8549029ea7fddc88bfd4e1f18d484`. Registre: [empaquetat compacte](../dist/image-minimal-compact-live.log). **Gravació física, verificació per relectura i expulsió completades** el 2026-11-04 amb Raspberry Pi Imager 2.0.12, després de confirmació explícita de l'usuari. [Evidència de gravació](evidence/sd-minimal-compact-write.txt). La prova d'arrencada a la consola continua **PENDENT**.
 
-Prova amb SD nova, 2026-11-04: s'ha gravat la **minimal ordinària de 6 GiB `e807755`** a la targeta nova de 32 GB demanada per l'usuari. Raspberry Pi Imager confirma escriptura, SHA256 de relectura coincident i expulsió correcta. [Evidència de la SD nova](evidence/sd-minimal-32gb-write.txt). L'intent anterior amb la SD antiga no va mostrar arrencada; la bateria baixa reportada després impedeix establir-ne la causa. L'arrencada amb la SD nova continua pendent de prova.
+Prova amb SD nova, 2026-11-04: s'ha gravat la **minimal ordinària de 6 GiB `e807755`** a la targeta nova de 32 GB demanada per l'usuari. Raspberry Pi Imager confirma escriptura, SHA256 de relectura coincident i expulsió correcta. [Evidència de la SD nova](evidence/sd-minimal-32gb-write.txt). L'intent anterior amb la SD antiga no va mostrar arrencada; la bateria baixa reportada després impedeix establir-ne la causa. L'usuari confirma que tampoc arrenca amb aquesta SD, mentre l'original funciona. La relectura física confirma bootloader i fitxers BOOT correctes; ext4 no registra cap muntatge. [Diagnosi de la fallada](evidence/sd-minimal-32gb-boot-failure.txt).
 
 ## 2. Fitxers
 
@@ -45,7 +45,7 @@ Inventari complet a [CHANGED_FILES.txt](evidence/CHANGED_FILES.txt). Grups princ
 | Empaquetat sense dispositius | Prova FAT/ext4 real superada; permisos, propietaris i enllaços conservats |
 | Imatges estructuralment validades | Minimal i desktop: fsck FAT/ext4, particions comparades byte a byte, MBR/SPL, xz -t i SHA256 correctes |
 | Contingut empaquetat | PARTUUID boot/fstab coherent, permisos/propietaris conservats, autologin i agent XFCE inspeccionats |
-| Arrencada al maquinari | **PENDENT** |
+| Arrencada al maquinari | **FALLA amb minimal standard, també a la SD nova de 32 GB; causa en diagnosi** |
 | Funcionalitats físiques | **TOTES PENDENTS** |
 
 La primera execució es va aturar al preflight per Docker/sudo/binfmt. Després de preparar Docker i el grup de l'usuari, s'ha reprès la compilació amb `RG_ROOT_BACKEND=docker`. La sessió existent utilitza `sg docker -c 'ordre'`. No cal sudo al host per aquest backend. Els registres anteriors es conserven com a evidència històrica.

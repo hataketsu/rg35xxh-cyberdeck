@@ -1,0 +1,11 @@
+2026-11-04 — Fallada d'arrencada reproduïda amb SD nova
+L'usuari informa: la SD nova de 32 GB amb minimal e807755 no arrenca ni mostra el LED verd; la SD original sí que arrenca.
+Lectura física no destructiva de Windows Disk 1, USB Generic STORAGE DEVICE, 31927042048 bytes. S'ha obert amb FileAccess.Read; cap escriptura, reparació, bloqueig o desmuntatge de la targeta.
+Mostres locals: work/boot-failure-32gb/prefix-16MiB.bin, boot-256MiB.bin, root-superblock.bin.
+Els primers 16 MiB coincideixen byte a byte amb la imatge original. SHA256 d'ambdues regions: 7de941fd2986ad0031fedf3c13c7e275cf513f06958d0e99f239bf7568d64dc7.
+Això inclou MBR, SPL, FIT amb U-Boot/ATF/DTB i el bloc inicial que Imager escriu després de verificar.
+fsck.fat -n de la còpia BOOT: codi 0. Image, DTB SP standard, boot.scr i boot.cmd passen BOOT.SHA256. No hi ha carpeta logs.
+Els primers 4096 bytes d'ext4 són idèntics a la imatge. Magic 0xef53, estat clean (0x1), mount count 0, last mount 0, last write 2026-11-03T22:51:27Z.
+Interpretació: no hi ha evidència que s'hagi muntat l'arrel; la fallada és anterior a l'arrencada normal de Debian. No es pot distingir BROM/SPL/ATF/U-Boot/kernel només amb aquestes dades.
+La manca de LED no localitza per si mateixa l'etapa: el binari actual té CONFIG_SPL_DRIVERS_MISC desactivat, que condiciona status_led_init a sunxi_board_init.
+Causa encara desconeguda. Pròxim pas: comparació en lectura amb bootloader i configuració de maquinari de la SD original que funciona.

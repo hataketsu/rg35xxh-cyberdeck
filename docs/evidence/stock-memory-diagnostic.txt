@@ -1,0 +1,33 @@
+2026-11-04 — Memòria de la SD original i candidat LPDDR3
+Model confirmat per etiqueta: RG35XXSP.
+Original: SD de 62534975488 bytes; lectura no destructiva dels primers 36 MiB (abans de Roms), cap escriptura.
+Boot0 a 8 KiB i còpia a 256 KiB. Capçalera eGON.BT0, 65536 bytes.
+El perfil per defecte a offset boot0+0x38 és tipus 7 (LPDDR3), 672 MHz, amb mida detectada a para2 i valors de timing diferents dels perfils alternatius.
+La taula DRAM.ext també conté perfils DDR3, LPDDR3 i LPDDR4. El DTB estàtic stock /dram declara tipus 8. Per tant, les dades estàtiques no proven de manera absoluta el tipus físic; el perfil per defecte LPDDR3 és una pista forta que justifica una prova separada.
+Decodificació segons apritzel/sunxi-fw commit 2e2aaf484efe2fc0218561d2c4f231f7fd76fb34, sunxi-boot0.c (BOOT0_DRAM_OFS=14, SOC_H616).
+Configuració candidata basada en ROCKNIX 93c889bb853f2a11e51cecb0a9a75221219a2cce, u-boot-DDR3/sources/configs/anbernic_rg35xx_h700_lpddr3_defconfig.
+Es conserven els timings del boot0 per defecte d'aquesta unitat, inclòs TPR11=0x0f121112. DCDC3=1200 mV segons el perfil LPDDR3 upstream; els DT de control U-Boot i Linux han de ser coherents amb 1200000 uV.
+S'aplica el fix upstream de selecció de byte TPR6 per LPDDR3 (>>16 en lloc de >>8), no afecta el camí LPDDR4.
+S'activa CONFIG_SPL_DRIVERS_MISC per inicialitzar el LED d'estat abans del training DRAM. U-Boot v2025.07-rc3 i ATF 2.12.0 es mantenen per limitar variables.
+No s'aplica la política charge-only del ROCKNIX actual; no forma part d'aquesta prova.
+Cap canvi als builds originals H/SP ni a la SD original. El candidat requereix prova física abans de considerar-lo una correcció.
+
+Perfil boot0 per defecte:
+{
+  "profile": "default",
+  "clockMHz": 672,
+  "type": 7,
+  "dx_odt": "0x6060606",
+  "dx_dri": "0xd0d0d0d",
+  "ca_dri": "0x1919",
+  "odt_en": "0x9988eeee",
+  "para1": "0x30fa",
+  "para2": "0x4000000",
+  "tpr0": "0x0",
+  "tpr2": "0x1",
+  "tpr6": "0x2fb08080",
+  "tpr10": "0x402f4489",
+  "tpr11": "0xf121112",
+  "tpr12": "0xd0e0d0e",
+  "tpr13": "0x8c60"
+}
