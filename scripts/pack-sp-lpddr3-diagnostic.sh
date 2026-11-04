@@ -11,6 +11,22 @@ case "$CHECKPOINTS" in
   1) DIAG="$ROOT/work/sp-lpddr3-checkpoints"; variant=lpddr3-led ;;
   *) echo 'RG_DIAG_CHECKPOINTS must be 0 or 1'; exit 1 ;;
 esac
+DRAM=${RG_DIAG_DRAM:-lpddr3}
+voltage=1200000
+power_checkpoint=0
+description=lpddr3-stock-timings
+case "$DRAM" in
+  lpddr3) ;;
+  lpddr4)
+    [[ "$CHECKPOINTS" == 1 ]] || { echo 'LPDDR4 comparison requires checkpoints'; exit 1; }
+    DIAG="$ROOT/work/sp-lpddr4-checkpoints"
+    variant=lpddr4-led
+    voltage=1100000
+    power_checkpoint=1
+    description=lpddr4-original-profile-checkpoints
+    ;;
+  *) echo 'RG_DIAG_DRAM must be lpddr3 or lpddr4'; exit 1 ;;
+esac
 DIST="${RG_DIAG_DIST:-$ROOT/dist}"
 [[ -d "$DIST" && -f "$BASE" && ! -L "$BASE" ]] || exit 1
 case "$DIST" in /dev|/dev/*) echo 'Device destinations are forbidden'; exit 1 ;; esac
@@ -19,6 +35,9 @@ UBOOT="$DIAG/u-boot-sunxi-with-spl.bin"
 [[ -s "$UBOOT" && -f "$DIAG/source-revision.txt" ]] || exit 1
 if [[ "$CHECKPOINTS" == 1 ]]; then
   [[ $(cat "$DIAG/led-checkpoints.txt") == 1 ]] || exit 1
+fi
+if [[ "$DRAM" == lpddr4 ]]; then
+  [[ $(cat "$DIAG/dram-profile.txt") == lpddr4 ]] || exit 1
 fi
 revision="${RG_DIAG_REVISION:?Set the committed packaging revision}"
 [[ "$revision" =~ ^[0-9a-f]{7,40}$ ]] || exit 1
@@ -34,22 +53,25 @@ REG=/soc/i2c@7081400/pmic@34/regulators/dcdc3
 [[ $(fdtget "$DTB" "$REG" regulator-name) == vdd-dram ]] || exit 1
 for prop in regulator-min-microvolt regulator-max-microvolt; do
   [[ $(fdtget -tu "$DTB" "$REG" "$prop") == 1100000 ]] || exit 1
-  fdtput -t u "$DTB" "$REG" "$prop" 1200000
-  [[ $(fdtget -tu "$DTB" "$REG" "$prop") == 1200000 ]] || exit 1
-  [[ $(fdtget -tu "$DIAG/u-boot/u-boot.dtb" "$REG" "$prop") == 1200000 ]] || exit 1
+  if [[ "$DRAM" == lpddr3 ]]; then
+    fdtput -t u "$DTB" "$REG" "$prop" "$voltage"
+  fi
+  [[ $(fdtget -tu "$DTB" "$REG" "$prop") == "$voltage" ]] || exit 1
+  [[ $(fdtget -tu "$DIAG/u-boot/u-boot.dtb" "$REG" "$prop") == "$voltage" ]] || exit 1
 done
 uboot_hash=$(sha256sum "$UBOOT" | cut -d ' ' -f1)
 cat >> "$TMP/BUILD-INFO.txt" <<INFO
-DIAGNOSTIC=lpddr3-stock-timings
+DIAGNOSTIC=$description
 IMAGE_SOURCE=$revision
 BASE_IMAGE_SOURCE=e807755
 BOOTLOADER_SOURCE=$(cat "$DIAG/source-revision.txt")
 BOOTLOADER_SHA256=$uboot_hash
-DRAM=LPDDR3
+DRAM=${DRAM^^}
 DRAM_CLK_MHZ=672
-DRAM_SUPPLY_UV=1200000
+DRAM_SUPPLY_UV=$voltage
 EARLY_SPL_STATUS_LED=yes
 LED_CHECKPOINTS=$CHECKPOINTS
+POWER_CHECKPOINT=$power_checkpoint
 BOOT_STATUS=unverified
 INFO
 (cd "$TMP"; sha256sum Image sun50i-h700-anbernic-rg35xx-sp.dtb boot.scr boot.cmd > BOOT.SHA256)

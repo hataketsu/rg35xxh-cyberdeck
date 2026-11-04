@@ -1,0 +1,26 @@
+--- a/board/sunxi/board.c
++++ b/board/sunxi/board.c
+@@ -637,6 +637,23 @@
+ 	power_failed |= axp_set_sw(IS_ENABLED(CONFIG_AXP_SW_ON));
+ #endif
+ #endif	/* CONFIG_AXPxxx_POWER */
++	/* Diagnostic only: stop with repeated red blinking on PMIC error. */
++	if (power_failed) {
++		while (1) {
++			gpio_direction_output(SUNXI_GPI(11), 0);
++			mdelay(750);
++			gpio_direction_output(SUNXI_GPI(11), 1);
++			mdelay(250);
++		}
++	}
++	/* Two red blinks mark power setup returning without an error. */
++	for (int pulse = 0; pulse < 2; pulse++) {
++		gpio_direction_output(SUNXI_GPI(11), 0);
++		mdelay(250);
++		gpio_direction_output(SUNXI_GPI(11), 1);
++		mdelay(250);
++	}
++	mdelay(1000);
+ 	printf("DRAM:");
+ 	gd->ram_size = sunxi_dram_init();
+ 	printf(" %d MiB\n", (int)(gd->ram_size >> 20));
