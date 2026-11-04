@@ -61,4 +61,4 @@ Imatge preparada: `dist/rg35xxsp-cyberdeck-standard-minimal-lpddr4-led-3ac38e1.i
 
 Compilació real i empaquetat completats amb codi 0; sintaxi i ShellCheck correctes. Configuració de RAM, PMIC i I²C comparada amb la compilació original: idèntica. Kernel, DTB Linux i scripts de boot conserven els hashes de la minimal original; MBR i rootfs comparats byte a byte. fsck FAT, checksum SPL, posició FIT i integritat XZ correctes. Registres: `work/boot-failure-lpddr3-checkpoints/lpddr4-{build,pack,comparison}.log`.
 
-Aquesta variant encara no s'ha gravat ni provat físicament. L'objectiu és comparar els perfils amb punts d'observació equivalents; no es considera una correcció confirmada.
+Aquesta variant s'ha gravat a la SD de proves de 32 GB amb autorització explícita el 2026-11-04: SHA256 de relectura coincident, codi 0 i expulsió correcta. [Evidència](evidence/sd-lpddr4-checkpoints-write.txt). Prova d'arrencada física pendent. L'objectiu és comparar els perfils amb punts d'observació equivalents; no es considera una correcció confirmada.

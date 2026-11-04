@@ -1,0 +1,20 @@
+2026-11-04 — Gravació de la comparació LPDDR4 amb checkpoints de PMIC/DRAM
+Autorització explícita: «32 GB test SD connected; write the LPDDR4 comparison».
+Imatge: rg35xxsp-cyberdeck-standard-minimal-lpddr4-led-3ac38e1.img
+Mida: 6442450944 bytes (6 GiB)
+Destí: Windows Disk 1, Generic STORAGE DEVICE USB, 31927042048 bytes.
+El primer preflight no trobava Disk 1 mentre Windows detectava el suport; cap escriptura en aquell intent.
+Enumeració posterior i revalidació d'identitat/mida/layout correctes abans de gravar; disc no boot/system/readonly/offline.
+La mida exigida exclou la SD original de 62534975488 bytes; original no modificada.
+Eina: Raspberry Pi Imager 2.0.12, signatura vàlida de Raspberry Pi Limited.
+Verificació activada, sense personalització ni habilitació de discos de sistema.
+SHA256 de la còpia temporal i verificació per relectura coincidents:
+229fae619f18237019c96b36fae88d3c4c9ea409bf0471eea1cbac6ec1396033
+Escriptura: 317 segons. Verificació: 193,579 segons.
+Resultat Imager i embolcall: codi 0; result.json SUCCESS.
+Registre natiu: Cycle ended, state: succeeded; expulsió PhysicalDrive1 succeeded: true.
+Finalització: 2026-11-04T10:40:51+01:00.
+Registres: work/flash-lpddr4-led-3ac38e1/{flash.ps1,imager-write.log,progress.txt,result.json,stage.txt,initial-detection-error.json}.
+Prova d'arrencada física d'aquesta variant: PENDENT.
+Observar des de l'encesa: vermell inicial; dos parpelleigs vermells si la configuració PMIC retorna sense error; verd si DRAM retorna mida no nul·la; tots dos LEDs en entrar a U-Boot principal.
+Parpelleig vermell repetit indica retorn d'error del PMIC i aturada diagnòstica abans de DRAM. Els checkpoints no acrediten per si sols l'arrencada de Linux.

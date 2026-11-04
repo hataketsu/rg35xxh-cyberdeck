@@ -16,7 +16,7 @@ S'ha preparat un [candidat diagnòstic LPDDR3](RG35XXSP_MEMORY_DIAGNOSTIC.md) ba
 
 Actualització de diagnosi: l'usuari confirma LED vermell fix sense carregador. La relectura del candidat LPDDR3 conserva bootloader i hashes BOOT correctes; ext4 continua sense muntatges registrats. S'ha preparat una variant `lpddr3-led-ed24995` amb checkpoints després d'inicialitzar DRAM i en entrar a U-Boot principal, sense canvis de timings ni voltatges. [Evidència i límits](evidence/sd-lpddr3-red-led.txt). Aquesta variant s'ha gravat a la SD de proves de 32 GB amb autorització explícita, SHA256 verificat per relectura i expulsió correcta; [evidència de gravació](evidence/sd-lpddr3-checkpoints-write.txt). L'usuari informa novament de vermell fix, sense observar els checkpoints posteriors.
 
-Següent comparació preparada: `lpddr4-led-3ac38e1`, amb els paràmetres LPDDR4 originals i checkpoints LED equivalents, més un indicador del retorn de la configuració del PMIC. La prova LPDDR4 inicial no tenia LED al SPL i no permetia comparar directament l'etapa assolida. Compilació i imatge validades; gravació i prova física pendents. [Detalls i SHA256](RG35XXSP_MEMORY_DIAGNOSTIC.md).
+Comparació `lpddr4-led-3ac38e1`, amb els paràmetres LPDDR4 originals i checkpoints LED equivalents, més un indicador del retorn de la configuració del PMIC. La prova LPDDR4 inicial no tenia LED al SPL i no permetia comparar directament l'etapa assolida. Compilació i imatge validades; gravada a la SD de proves de 32 GB amb autorització explícita, SHA256 verificat per relectura i expulsió correcta. [Evidència de gravació](evidence/sd-lpddr4-checkpoints-write.txt). Prova d'arrencada física pendent. [Detalls i SHA256](RG35XXSP_MEMORY_DIAGNOSTIC.md).
 
 ## 2. Fitxers
 
