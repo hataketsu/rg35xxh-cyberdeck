@@ -12,8 +12,8 @@
  	gd->bd->bi_boot_params = (PHYS_SDRAM_0 + 0x100);
  
  #if !defined(CONFIG_ARM64) && !defined(CONFIG_MACH_SUNIV)
-@@ -554,6 +559,8 @@
- #ifdef CONFIG_LED_STATUS
+@@ -555,6 +560,8 @@
+ 	/* No status_led_init(): its BSS lives in uninitialized DRAM. */
  	if (IS_ENABLED(CONFIG_SPL_DRIVERS_MISC))
  		gpio_direction_output(SUNXI_GPI(11), 1);
 +	/* Clear a green LED left on by a warm reset: SPL starts red only. */
@@ -21,7 +21,7 @@
  #endif
  
  #ifdef CONFIG_SY8106A_POWER
-@@ -635,6 +642,11 @@
+@@ -636,6 +643,11 @@
  	printf(" %d MiB\n", (int)(gd->ram_size >> 20));
  	if (!gd->ram_size)
  		hang();
