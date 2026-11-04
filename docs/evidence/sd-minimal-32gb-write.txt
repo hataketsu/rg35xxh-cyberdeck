@@ -1,0 +1,16 @@
+2026-11-04 — Gravació de minimal ordinària a la SD nova de 32 GB
+Autorització: l'usuari demana detectar la SD nova i gravar-hi la imatge de 6 GB; després demana tornar a obrir el diàleg UAC cancel·lat.
+Imatge: rg35xxsp-cyberdeck-standard-minimal-e807755.img
+Mida: 6442450944 bytes (6 GiB)
+Destí: Windows Disk 1, Generic STORAGE DEVICE USB, 31927042048 bytes, no boot/system, sense readonly/offline.
+Identitat i partició inicial revalidades immediatament abans de l'escriptura. Disc intern no modificat.
+SHA256 local, còpia temporal i relectura de SD: 2067865108e50bcbaea6a904f7977e26a82070e592ec9cc5cd0821c728b53c1f
+Eina: Raspberry Pi Imager 2.0.12, executable amb signatura vàlida de Raspberry Pi Limited.
+Verificació activada. Sense personalització de la imatge ni habilitació de discos de sistema.
+Escriptura: 315 segons. Verificació: 193,749 segons.
+Resultat del registre Imager: Write successful.; Cycle ended, state: succeeded.
+Expulsió: Background eject finished for PhysicalDrive1, succeeded: true.
+L'embolcall PowerShell no va recuperar ExitCode del procés i va informar d'error per aquest valor buit. No s'ha repetit la gravació: el registre natiu confirma escriptura, hash de verificació i expulsió correctes. Es conserven el resultat de l'embolcall i el resultat auditat per separat.
+Registres complets: work/flash-32gb-e807755/imager-write.log, progress.txt, result.json i verified-result.json.
+Particions de la imatge ordinària de 6 GiB; espai restant de la SD sense assignar, sense redimensionament automàtic.
+Arrencada física d'aquesta SD: PENDENT. La gravació no resol ni prova per si mateixa la causa del primer intent fallit amb SD antiga/bateria baixa.

@@ -10,6 +10,8 @@ Les dues imatges **SP standard minimal i desktop s'han compilat i validat estruc
 
 Actualització 2026-11-04: també s'ha generat `dist/rg35xxsp-cyberdeck-standard-minimal-compact-50f7932.img.xz`, amb una imatge descomprimida de 960 MiB i 234,5 MiB disponibles per a l'usuari. fsck FAT/ext4, comparació de particions, MBR/SPL, integritat xz i SHA256 han passat. SHA256 de l'XZ: `1135ba6988b8985996622d4d4146aa389614f9e8b9cdeb97ac8edcb0540e4ffe`; de la imatge descomprimida: `29aadcb88b1904e0a607ec04db3813e2a6e8549029ea7fddc88bfd4e1f18d484`. Registre: [empaquetat compacte](../dist/image-minimal-compact-live.log). **Gravació física, verificació per relectura i expulsió completades** el 2026-11-04 amb Raspberry Pi Imager 2.0.12, després de confirmació explícita de l'usuari. [Evidència de gravació](evidence/sd-minimal-compact-write.txt). La prova d'arrencada a la consola continua **PENDENT**.
 
+Prova amb SD nova, 2026-11-04: s'ha gravat la **minimal ordinària de 6 GiB `e807755`** a la targeta nova de 32 GB demanada per l'usuari. Raspberry Pi Imager confirma escriptura, SHA256 de relectura coincident i expulsió correcta. [Evidència de la SD nova](evidence/sd-minimal-32gb-write.txt). L'intent anterior amb la SD antiga no va mostrar arrencada; la bateria baixa reportada després impedeix establir-ne la causa. L'arrencada amb la SD nova continua pendent de prova.
+
 ## 2. Fitxers
 
 Inventari complet a [CHANGED_FILES.txt](evidence/CHANGED_FILES.txt). Grups principals:
