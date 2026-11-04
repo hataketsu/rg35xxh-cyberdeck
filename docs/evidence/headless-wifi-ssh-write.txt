@@ -1,0 +1,17 @@
+2026-11-04 — Gravació privada Wi-Fi i SSH completada
+Autorització explícita: «Write the Wi-Fi + SSH image».
+SD de proves Windows Disk 1 USB Generic STORAGE DEVICE, 31927042048 bytes.
+Identitat, particions i hash del DTB v2 revalidats abans de gravar.
+Imatge privada de 6442450944 bytes, basada en una còpia nova de la SD que funciona.
+SHA256 de font, còpia Windows i relectura completa de la SD coincidents:
+7d7e20ea4a73500c120b0dfb238e20633187b4a25fd31cfafa649ff8fb6a35a2
+Raspberry Pi Imager amb signatura Raspberry Pi Limited verificada.
+Escriptura: 318 s. Verificació: 193,604 s. Sortida del procés i embolcall: 0.
+Estat natiu succeeded; expulsió PhysicalDrive1 succeeded: true.
+Finalització: 2026-11-04T13:12:19.9593833+01:00
+Còpia temporal Windows amb ACL privada eliminada després de l'èxit.
+Snapshot original i imatge privada conservats a work/headless-wifi-ssh/ (directori 0700, imatges 0600).
+No s'han publicat SSID, contrasenya, PSK ni claus privades.
+BOOT/bootloader LPDDR3/SP v2 idèntics a la SD original de la còpia; rootfs actualitzat.
+Credencials cyberdeck conservades. Wi-Fi autoconnect i SSH configurats, encara pendents de prova física.
+Registres: work/headless-wifi-ssh/flash/{flash.ps1,result.json,imager-write.log,stage.txt,progress.txt}.

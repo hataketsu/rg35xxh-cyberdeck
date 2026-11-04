@@ -18,7 +18,7 @@ SSH usa `ssh.service`, amb autenticació de contrasenya per a `cyberdeck`, root 
 
 Abans de gravar: validar el perfil amb el `nmcli --offline` instal·lat, `sshd -t`, opcions efectives SSH, unitats habilitades, propietat/permisos, paquets ARM64, neteja del chroot, fsck, mida de particions, igualtat del prefix BOOT i SHA256. La imatge personalitzada conté credencials i claus privades: es conserva només al directori privat de treball, no com a artefacte públic a `dist`.
 
-Preparació i validació completades; [evidència i empremta pública SSH](evidence/headless-wifi-ssh-preparation.txt). La imatge privada de 6 GiB conserva íntegrament MBR, bootloader i BOOT de la SD que funciona. Pendent de confirmació explícita per gravar i de prova física de Wi-Fi/SSH.
+Preparació i validació completades; [evidència i empremta pública SSH](evidence/headless-wifi-ssh-preparation.txt). La imatge privada de 6 GiB conserva íntegrament MBR, bootloader i BOOT de la SD que funciona. Gravació autoritzada i completada el 2026-11-04 a les 13:12 +01:00, amb verificació completa i expulsió correcta; [registre](evidence/headless-wifi-ssh-write.txt). Pendent de prova física de Wi-Fi/SSH després de tornar a posar la SD a TF1.
 
 ## Connexió després d'arrencar
 
