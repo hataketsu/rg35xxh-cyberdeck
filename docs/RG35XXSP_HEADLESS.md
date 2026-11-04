@@ -63,4 +63,4 @@ sudo systemctl set-default multi-user.target
 
 Diagnòstic: `systemctl status lightdm --no-pager` i `sudo journalctl -b -u lightdm --no-pager -n 100`. Les còpies de configuració prèvia es desen a `/var/lib/cyberdeck/desktop-install/`. No cal regravar la SD per fer aquesta prova.
 
-Validació de l'instal·lador: `bash -n`, ShellCheck i comprovacions estàtiques del projecte correctes; desplegament i XFCE al maquinari encara pendents. Configuració de sessió basada en [LightDM](https://github.com/ubuntu/lightdm/blob/main/data/lightdm.conf).
+Validació de l'instal·lador: `bash -n`, ShellCheck i comprovacions estàtiques del projecte correctes. L'usuari confirma el primer escriptori XFCE visible i funcional el 2026-11-04, amb certa lentitud; diagnòstic de rendiment i reinici pendents. [Evidència](evidence/xfce-first-desktop.txt). La primera execució va demanar conservar el fitxer de power-manager; es va indicar respondre `N`. L'instal·lador ara passa `--force-confold` a dpkg per conservar automàticament la configuració local. Configuració de sessió basada en [LightDM](https://github.com/ubuntu/lightdm/blob/main/data/lightdm.conf).

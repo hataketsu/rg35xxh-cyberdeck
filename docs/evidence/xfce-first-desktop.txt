@@ -1,0 +1,10 @@
+2026-11-04 — Primer escriptori XFCE al maquinari
+Origen: informació comunicada per l'usuari després d'executar l'instal·lador per SSH.
+Durant dpkg apareix conflicte amb /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml.
+S'indica conservar la configuració existent amb N; no s'ha rebut el registre final de dpkg.
+Resultat: «desktop has opened. It's a bit slow but works».
+Confirma escriptori visible i funcional segons l'usuari; rendiment percebut lent.
+No identifica la causa de lentitud ni valida acceleració gràfica, ús de RAM,
+estat final de totes les unitats, aplicacions, controls o arrencada gràfica després de reiniciar.
+Es demanaran mesures de RAM, càrrega, processos i governor abans d'ajustar rendiment.
+Millora de l'instal·lador: --force-confold preserva conffiles locals i evita el prompt observat.

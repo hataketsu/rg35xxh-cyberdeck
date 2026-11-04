@@ -75,7 +75,8 @@ apt-get -o APT::Update::Error-Mode=any update
 (set -o noclobber; printf '#!/bin/sh\nexit 101\n' > /usr/sbin/policy-rc.d)
 policy_created=1
 chmod 755 /usr/sbin/policy-rc.d
-apt-get install -y --no-remove --no-install-recommends \
+# Keep the SP power-manager configuration when dpkg encounters the package copy.
+apt-get -o Dpkg::Options::=--force-confold install -y --no-remove --no-install-recommends \
   lxpolkit xfce4 xfce4-terminal xfce4-power-manager xfce4-power-manager-plugins \
   lightdm lightdm-gtk-greeter xserver-xorg xserver-xorg-input-libinput \
   dbus-x11 network-manager-gnome blueman thunar gvfs pavucontrol \

@@ -35,7 +35,7 @@ Data inicial: 2026-11-03. Cap consola ni Heltec connectat a aquesta sessió. Emp
 | Panell v2 | Provar només si correspon; registrar revisió | **VALIDAT per arrencada llegible** amb LPDDR3 el 2026-11-04; revisió física del panell no identificada |
 | Estat mínim en execució | RAM, kernel i unitats fallides | **VALIDAT puntualment**: 976 MiB RAM, 810 MiB disponibles, sense swap i 0 unitats fallides; [sortida SSH](evidence/headless-runtime-checks.txt). No substitueix una prova de RAM/estabilitat |
 | Retroil·luminació | brightnessctl, rang llegible i recuperació després DPMS | **PENDENT** |
-| XFCE | LightDM inicia cyberdeck, terminal/Thunar/tema/escala | **PENDENT** |
+| XFCE | LightDM inicia cyberdeck, terminal/Thunar/tema/escala | **PARCIAL**: l'usuari confirma escriptori obert i funcional el 2026-11-04, però lent. Rendiment, aplicacions i reinici pendents; [evidència](evidence/xfce-first-desktop.txt) |
 | Controls | evtest i mapa cursor/clics, mantenir/soltar i combinacions | **PENDENT** |
 | Teclat extern | USB, layout, hotplug, sense captura pel mapper | **PENDENT** |
 | Wi-Fi | Escaneig, credencials, DNS, trànsit i estabilitat 30 min | **PARCIAL**: primera connexió Wi-Fi amb login SSH confirmada per l'usuari el 2026-11-04; falten DNS, reconexió i estabilitat 30 min |
