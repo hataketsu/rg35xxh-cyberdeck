@@ -37,7 +37,7 @@ Data inicial: 2026-11-03. Cap consola ni Heltec connectat a aquesta sessió. Emp
 | XFCE | LightDM inicia cyberdeck, terminal/Thunar/tema/escala | **PENDENT** |
 | Controls | evtest i mapa cursor/clics, mantenir/soltar i combinacions | **PENDENT** |
 | Teclat extern | USB, layout, hotplug, sense captura pel mapper | **PENDENT** |
-| Wi-Fi | Escaneig, credencials, DNS, trànsit i estabilitat 30 min | **PENDENT**: journal detecta ràdio; supplicant afegit a la SD privada, falta provar connexió |
+| Wi-Fi | Escaneig, credencials, DNS, trànsit i estabilitat 30 min | **PARCIAL**: primera connexió Wi-Fi amb login SSH confirmada per l'usuari el 2026-11-04; falten DNS, reconexió i estabilitat 30 min |
 | Bluetooth | Adaptador, aparellament teclat, reconnectar | **PENDENT** |
 | Àudio | Altaveu/auriculars/volum i absència de soroll anormal | **PENDENT** |
 | Bateria | Comparar sysfs i UPower durant ús, sense salt persistent a 0% | **PENDENT** |
@@ -52,7 +52,7 @@ Data inicial: 2026-11-03. Cap consola ni Heltec connectat a aquesta sessió. Emp
 | Meshtastic BLE | Escaneig i info voluntaris; USB continua disponible | **PENDENT** |
 | Missatge de ràdio | Només manual, destí/text confirmats, receptor voluntari | **PENDENT** |
 | Apagada | Escriptori i botó, esperar aturada, reiniciar sense fsck inesperat | **PENDENT** |
-| Seguretat | Root bloquejat, sudo amb contrasenya; SSH desactivat a imatges genèriques, activat explícitament a la SD privada només per cyberdeck | **PARCIAL**: configuració fora de línia verificada; autenticació real pendent |
+| Seguretat | Root bloquejat, sudo amb contrasenya; SSH desactivat a imatges genèriques, activat explícitament a la SD privada només per cyberdeck | **PARCIAL**: configuració fora de línia verificada i primer login SSH confirmat; falta comprovar sudo i política de ports al sistema en execució |
 | Consum | Repòs, ús i tapa; tensió/càrrega sense alterar | **PENDENT** |
 | Regressió H | Arrencada, mòduls i escriptori del perfil original | **PENDENT** |
 

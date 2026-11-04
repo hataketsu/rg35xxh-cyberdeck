@@ -18,7 +18,7 @@ SSH usa `ssh.service`, amb autenticació de contrasenya per a `cyberdeck`, root 
 
 Abans de gravar: validar el perfil amb el `nmcli --offline` instal·lat, `sshd -t`, opcions efectives SSH, unitats habilitades, propietat/permisos, paquets ARM64, neteja del chroot, fsck, mida de particions, igualtat del prefix BOOT i SHA256. La imatge personalitzada conté credencials i claus privades: es conserva només al directori privat de treball, no com a artefacte públic a `dist`.
 
-Preparació i validació completades; [evidència i empremta pública SSH](evidence/headless-wifi-ssh-preparation.txt). La imatge privada de 6 GiB conserva íntegrament MBR, bootloader i BOOT de la SD que funciona. Gravació autoritzada i completada el 2026-11-04 a les 13:12 +01:00, amb verificació completa i expulsió correcta; [registre](evidence/headless-wifi-ssh-write.txt). Pendent de prova física de Wi-Fi/SSH després de tornar a posar la SD a TF1.
+Preparació i validació completades; [evidència i empremta pública SSH](evidence/headless-wifi-ssh-preparation.txt). La imatge privada de 6 GiB conserva íntegrament MBR, bootloader i BOOT de la SD que funciona. Gravació autoritzada i completada el 2026-11-04 a les 13:12 +01:00, amb verificació completa i expulsió correcta; [registre](evidence/headless-wifi-ssh-write.txt). L'usuari confirma la primera connexió SSH reeixida el mateix dia («I'm in!»): connectivitat Wi-Fi i autenticació remota verificades en aquesta prova.
 
 ## Connexió després d'arrencar
 
@@ -30,6 +30,6 @@ ssh cyberdeck@rg35xxsp.local
 
 Si el nom `.local` no es resol, utilitzeu la IP mostrada al router per `rg35xxsp`: `ssh cyberdeck@ADREÇA_IP`. La primera connexió mostra l'empremta del servidor; compareu-la amb la registrada durant la preparació. Introduïu la contrasenya que vau escollir per a `cyberdeck`. No es mostren caràcters mentre s'escriu.
 
-No cal modificar el router ni obrir ports cap a Internet. Queden pendents de prova física l'associació Wi-Fi, DHCP, resolució de nom, autenticació SSH i estabilitat.
+No cal modificar el router ni obrir ports cap a Internet. La primera connexió Wi-Fi i autenticació SSH estan confirmades per l'usuari. Queden pendents la verificació detallada de DHCP/DNS, resolució `.local`, reconexió després de reiniciar i estabilitat prolongada.
 
 Referències: [format NetworkManager keyfile](https://networkmanager.pages.freedesktop.org/NetworkManager/NetworkManager/nm-settings-keyfile.html) i [sshd_config de Debian 13](https://manpages.debian.org/trixie/openssh-server/sshd_config.5.en.html).

@@ -15,3 +15,7 @@ No s'han publicat SSID, contrasenya, PSK ni claus privades.
 BOOT/bootloader LPDDR3/SP v2 idèntics a la SD original de la còpia; rootfs actualitzat.
 Credencials cyberdeck conservades. Wi-Fi autoconnect i SSH configurats, encara pendents de prova física.
 Registres: work/headless-wifi-ssh/flash/{flash.ps1,result.json,imager-write.log,stage.txt,progress.txt}.
+
+Resultat físic posterior, 2026-11-04: l'usuari confirma «I'm in!» després de les instruccions SSH.
+Primera connexió Wi-Fi i autenticació SSH al maquinari confirmades per l'usuari.
+No s'ha capturat la sessió: no es dedueix si ha emprat .local o IP, ni es valida estabilitat prolongada.
