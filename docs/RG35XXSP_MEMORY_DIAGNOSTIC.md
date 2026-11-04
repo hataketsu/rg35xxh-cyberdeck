@@ -29,4 +29,6 @@ Registres: `work/boot-failure-32gb/lpddr3-build.log` i `lpddr3-pack.log`. No s'h
 
 ## Validació física pendent
 
+El 2026-11-04 s'ha gravat aquest candidat a la SD de proves de 32 GB amb autorització explícita. Raspberry Pi Imager ha verificat el SHA256 per relectura i ha expulsat la targeta correctament; codi de sortida 0. [Evidència de gravació](evidence/sd-lpddr3-diagnostic-write.txt).
+
 Aquest candidat **no està validat al maquinari**. Cal provar-lo a la SD de proves, amb bateria carregada, TF1, TF2 buida i apagada completa abans del canvi. Observar si apareix un LED, pantalla o consola; el LED per si sol només acredita un canvi de comportament inicial, no l'arrencada de Debian. Conservar l'original com a recuperació.

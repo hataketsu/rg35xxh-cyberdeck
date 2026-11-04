@@ -1,0 +1,18 @@
+2026-11-04 — Gravació del candidat diagnòstic LPDDR3 a la SD de proves de 32 GB
+Autorització explícita: «32 GB test card connected; write the diagnostic image».
+Imatge: rg35xxsp-cyberdeck-standard-minimal-lpddr3-diag-00ed466.img
+Mida: 6442450944 bytes (6 GiB)
+Destí: Windows Disk 1, Generic STORAGE DEVICE USB, 31927042048 bytes.
+Identitat, mida, particions i absència de flags boot/system/readonly/offline comprovades abans de gravar.
+La mida exigida exclou la SD original de 62534975488 bytes; original no modificada.
+SHA256 de la còpia temporal i verificació per relectura coincidents:
+48f7c8ab252eb7e7b8a90d2834b2fd1444a29f02d2180c746ed196bc5a74c5e9
+Eina: Raspberry Pi Imager 2.0.12, signatura vàlida de Raspberry Pi Limited.
+Verificació activada; sense personalització ni habilitació de discos de sistema.
+Escriptura: 317 segons. Verificació: 193,897 segons.
+Resultat: procés Imager i embolcall amb codi 0; result.json SUCCESS.
+Registre Imager: Cycle ended, state: succeeded; expulsió de PhysicalDrive1 succeeded: true.
+Finalització: 2026-11-04T09:31:48+01:00.
+Registres: work/flash-lpddr3-00ed466/{flash.ps1,imager-write.log,progress.txt,result.json,stage.txt}.
+La gravació correcta no valida l'arrencada ni confirma la hipòtesi LPDDR3.
+Prova física amb aquest candidat: PENDENT.

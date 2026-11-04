@@ -12,7 +12,7 @@ Actualització 2026-11-04: també s'ha generat `dist/rg35xxsp-cyberdeck-standard
 
 Prova amb SD nova, 2026-11-04: s'ha gravat la **minimal ordinària de 6 GiB `e807755`** a la targeta nova de 32 GB demanada per l'usuari. Raspberry Pi Imager confirma escriptura, SHA256 de relectura coincident i expulsió correcta. [Evidència de la SD nova](evidence/sd-minimal-32gb-write.txt). L'intent anterior amb la SD antiga no va mostrar arrencada; la bateria baixa reportada després impedeix establir-ne la causa. L'usuari confirma que tampoc arrenca amb aquesta SD, mentre l'original funciona. La relectura física confirma bootloader i fitxers BOOT correctes; ext4 no registra cap muntatge. [Diagnosi de la fallada](evidence/sd-minimal-32gb-boot-failure.txt).
 
-S'ha preparat un [candidat diagnòstic LPDDR3](RG35XXSP_MEMORY_DIAGNOSTIC.md) basat en els paràmetres del boot0 original d'aquesta unitat i el perfil upstream. Compilació i estructura verificades; pendent de prova física. No substitueix els perfils normals ni constitueix una correcció confirmada.
+S'ha preparat un [candidat diagnòstic LPDDR3](RG35XXSP_MEMORY_DIAGNOSTIC.md) basat en els paràmetres del boot0 original d'aquesta unitat i el perfil upstream. Compilació i estructura verificades. Gravat a la SD de proves de 32 GB amb SHA256 de relectura coincident i expulsió correcta el 2026-11-04; [evidència](evidence/sd-lpddr3-diagnostic-write.txt). Pendent de prova física d'arrencada. No substitueix els perfils normals ni constitueix una correcció confirmada.
 
 ## 2. Fitxers
 
@@ -90,18 +90,18 @@ Hi ha DTB parcials a `work/dts-audit/`; les seves sumes són a [DTB.SHA256](evid
 - Només s'han generat imatges completes SP standard. V2 i H tenen configuracions i DTB comprovats, però no imatges completes validades en aquesta sessió.
 - La recepta específica H700 selecciona Linux 7.0.2; la 6.15.6 genèrica no s'aplica. Es va resoldre aquesta ambigüitat abans de compilar els DTS.
 - A XFCE 4.20, tapa «no fer res» és el valor **4**, no 0 (0 és DPMS). S'ha comprovat al [codi d'XFCE](https://github.com/xfce-mirror/xfce4-power-manager/blob/xfce4-power-manager-4.20.0/common/xfpm-enum-glib.h) i configurat abans de la primera sessió.
-- Els rails de PMIC de la SP no s'han retocat. El problema de panell als ~30 s de la H podria requerir investigació a SP; no es pot donar per resolt.
+- Els perfils normals conserven els rails de PMIC de la SP. Només el candidat diagnòstic LPDDR3 ajusta DCDC3 a 1200 mV, coherent als DT d'U-Boot i Linux. El problema de panell als ~30 s de la H podria requerir investigació a SP; no es pot donar per resolt.
 - No hi ha detecció automàtica de panell, suspensió de tapa, redimensionament automàtic de SD ni garantia de càrrega simultània en host OTG.
 - El menú Meshtastic i mapper estan provats lògicament, però falta executar-los amb evdev/USB/BLE reals.
 - No hi ha reproductibilitat bit a bit: APT i dependències transitives pip varien. El rootfs H històric conserva credencials/serveis insegurs; les millores de seguretat descrites són del perfil SP.
 
 ## 6. Primer arrencament i properes accions
 
-1. Docker, binfmt i el hash privat ja estan preparats; les instruccions per reproduir l'entorn són a [WSL2_SETUP.md](WSL2_SETUP.md). Cap canvi de Windows s'ha fet automàticament.
-2. Escollir la imatge `minimal` standard de la taula anterior per a la primera prova; conservar la desktop per a després. Per reproduir-les, seguir [RG35XXSP_BUILD.md](RG35XXSP_BUILD.md).
-3. Verificar SHA256 i gravar **manualment una microSD nova**, amb eina gràfica i confirmació del suport. Conservar intacta l'original.
+1. Docker, binfmt i el hash privat ja estan preparats; les instruccions per reproduir l'entorn són a [WSL2_SETUP.md](WSL2_SETUP.md). La instal·lació d'Imager a Windows i les gravacions s'han fet amb autorització explícita.
+2. Provar el candidat diagnòstic LPDDR3 ja gravat a la SD de 32 GB, atesa la fallada de la minimal ordinària. Conservar la desktop per a després. Per reproduir les imatges ordinàries, seguir [RG35XXSP_BUILD.md](RG35XXSP_BUILD.md).
+3. Amb la consola apagada i bateria carregada, posar la SD de proves a TF1 i deixar TF2 buida. Conservar intacta l'original.
 4. Validar boot, panell, energia, teclat i apagada abans de passar al perfil desktop. Per un panell incompatible, provar una imatge v2 separada seguint la guia.
 5. Validar USB OTG abans de connectar Heltec; consultar info/nodes sense enviar text. BLE és opcional.
 6. Completar [TEST_CHECKLIST.md](TEST_CHECKLIST.md): arrencada, pantalla, retroil·luminació, XFCE, controls, teclat, Wi-Fi, Bluetooth, àudio, bateria, càrrega, tapa, USB, Heltec, Meshtastic i apagada continuen **PENDENTS**.
 
-Guia detallada: [RG35XXSP_FIRST_BOOT.md](RG35XXSP_FIRST_BOOT.md). No s'ha escrit en cap targeta SD ni disc físic ni s'ha enviat cap missatge de ràdio.
+Guia detallada: [RG35XXSP_FIRST_BOOT.md](RG35XXSP_FIRST_BOOT.md). S'han gravat només les SD de proves autoritzades; la SD original no s'ha modificat ni s'ha enviat cap missatge de ràdio.
